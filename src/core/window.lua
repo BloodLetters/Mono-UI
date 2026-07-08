@@ -1,6 +1,8 @@
 local utils = require("./utils")
+local Players = utils.Players
 local Workspace = utils.Workspace
 local monoFont = utils.monoFont
+local getIcon = require("./lucide")
 local getGuiParent = utils.getGuiParent
 local make = utils.make
 local addCorner = utils.addCorner
@@ -21,6 +23,13 @@ local Slider = require("../components/Slider")
 
 local function CreateWindow(options)
 	options = options or {}
+	local normalSize = options.Size or getResponsiveWindowSize()
+	local animatingIntro = true
+	local preOpenedCallback = nil
+	local closedCallback = nil
+	local minimizedCallback = nil
+	local isPreOpenedDone = false
+	
 	local screenGui = make("ScreenGui", {
 		Name = options.Name or "MonoWindow",
 		ResetOnSpawn = false,
@@ -32,7 +41,8 @@ local function CreateWindow(options)
 		Name = "Window",
 		AnchorPoint = Vector2.new(0.5, 0.5),
 		Position = options.Position or UDim2.fromScale(0.5, 0.5),
-		Size = options.Size or getResponsiveWindowSize(),
+		Size = UDim2.fromOffset(0, 0), -- Start at 0 size
+		ClipsDescendants = true,
 		BackgroundColor3 = Color3.fromRGB(16, 16, 18),
 		BackgroundTransparency = 0.03,
 		BorderSizePixel = 0,
@@ -44,6 +54,7 @@ local function CreateWindow(options)
 		Name = "TopBar",
 		BackgroundTransparency = 1,
 		Size = UDim2.new(1, 0, 0, 48),
+		Visible = false,
 		Parent = window,
 	})
 	local hasWindowIcon = options.Icon ~= nil and tostring(options.Icon) ~= ""
@@ -115,6 +126,7 @@ local function CreateWindow(options)
 		Size = UDim2.new(1, - 24, 1, - 68),
 		BackgroundColor3 = Color3.fromRGB(20, 20, 24),
 		BorderSizePixel = 0,
+		Visible = false,
 		Parent = window,
 	})
 	addCorner(content, 10)
@@ -195,19 +207,200 @@ local function CreateWindow(options)
 	pageHolder.ZIndex = 1
 	local function updateWindowSize()
 		if options.Size == nil then
-			window.Size = getResponsiveWindowSize()
+			local newSize = getResponsiveWindowSize()
+			if animatingIntro then
+				normalSize = newSize
+			else
+				window.Size = newSize
+			end
 		end
 	end
 	updateWindowSize()
 	if Workspace.CurrentCamera then
 		Workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(updateWindowSize)
 	end
+
+	-- Opening animation sequence (Minimised -> Loading with username & custom messages -> Normal size)
+	task.defer(function()
+		local introSize = UDim2.fromOffset(280, 140)
+		
+		-- 1. Tween from 0 to introSize
+		local sizeTween1 = utils.tween(window, { Size = introSize }, 0.5)
+		sizeTween1:Play()
+		sizeTween1.Completed:Wait()
+		
+		-- Create Intro Frame
+		local introFrame = make("Frame", {
+			Name = "IntroFrame",
+			Size = UDim2.fromScale(1, 1),
+			BackgroundTransparency = 1,
+			Parent = window,
+		})
+		
+		-- Hello Text
+		local displayName = Players.LocalPlayer and (Players.LocalPlayer.DisplayName or Players.LocalPlayer.Name) or "User"
+		local helloLabel = make("TextLabel", {
+			Name = "HelloLabel",
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			Position = UDim2.new(0.5, 0, 0.5, 12),
+			Size = UDim2.new(1, -24, 0, 20),
+			BackgroundTransparency = 1,
+			Text = "Hello, " .. displayName,
+			TextTransparency = 1,
+			Parent = introFrame,
+		})
+		applyFont(helloLabel, 16, Color3.fromRGB(242, 242, 242), Enum.TextXAlignment.Center)
+
+		-- Custom Loading Message Text
+		local loadingMessageLabel = make("TextLabel", {
+			Name = "LoadingMessage",
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			Position = UDim2.new(0.5, 0, 0.5, 34),
+			Size = UDim2.new(1, -24, 0, 16),
+			BackgroundTransparency = 1,
+			Text = "Loading components...",
+			TextTransparency = 1,
+			Parent = introFrame,
+		})
+		applyFont(loadingMessageLabel, 12, Color3.fromRGB(150, 150, 160), Enum.TextXAlignment.Center)
+		
+		-- Loading Image (loader-2)
+		local loaderImage = nil
+		local ok, loaderAsset = pcall(getIcon, "loader-2")
+		if ok and loaderAsset and loaderAsset.id then
+			loaderImage = make("ImageLabel", {
+				Name = "Loader",
+				AnchorPoint = Vector2.new(0.5, 0.5),
+				Position = UDim2.new(0.5, 0, 0.5, -24),
+				Size = UDim2.fromOffset(36, 36),
+				BackgroundTransparency = 1,
+				Image = "rbxassetid://" .. loaderAsset.id,
+				ImageRectOffset = loaderAsset.imageRectOffset,
+				ImageRectSize = loaderAsset.imageRectSize,
+				ImageColor3 = Color3.fromRGB(0, 162, 255), -- vibrant accent blue
+				ImageTransparency = 1,
+				Parent = introFrame,
+			})
+		end
+		
+		-- Fade in elements
+		local fadeTween = utils.tween(helloLabel, { TextTransparency = 0 }, 0.4)
+		fadeTween:Play()
+		utils.tween(loadingMessageLabel, { TextTransparency = 0 }, 0.4):Play()
+		if loaderImage then
+			utils.tween(loaderImage, { ImageTransparency = 0 }, 0.4):Play()
+		end
+		
+		-- Spin loading indicator
+		local RunService = game:GetService("RunService")
+		local spinConnection
+		if loaderImage then
+			spinConnection = RunService.RenderStepped:Connect(function(dt)
+				loaderImage.Rotation = (loaderImage.Rotation + 240 * dt) % 360
+			end)
+		end
+		
+		-- Trigger PreOpened Callback if present, passing an event helper object
+		if preOpenedCallback then
+			local eventObj = {
+				message = function(text)
+					loadingMessageLabel.Text = tostring(text)
+				end,
+				done = function()
+					isPreOpenedDone = true
+				end
+			}
+			task.spawn(preOpenedCallback, eventObj)
+			local elapsed = 0
+			-- Wait up to 15 seconds for done to be called
+			while not isPreOpenedDone and elapsed < 15 do
+				task.wait()
+				elapsed = elapsed + 0.03
+			end
+		else
+			task.wait(1.8)
+		end
+		
+		-- Fade out elements
+		local fadeOutTween = utils.tween(helloLabel, { TextTransparency = 1 }, 0.4)
+		fadeOutTween:Play()
+		utils.tween(loadingMessageLabel, { TextTransparency = 1 }, 0.4):Play()
+		if loaderImage then
+			utils.tween(loaderImage, { ImageTransparency = 1 }, 0.4):Play()
+		end
+		
+		task.wait(0.4)
+		
+		-- Clean up intro
+		if spinConnection then
+			spinConnection:Disconnect()
+		end
+		introFrame:Destroy()
+		
+		-- Enable normal size tracking
+		animatingIntro = false
+		
+		-- 2. Tween to normalSize
+		local sizeTween2 = utils.tween(window, { Size = normalSize }, 0.6)
+		sizeTween2:Play()
+		sizeTween2.Completed:Wait()
+		
+		-- 3. Show normal window components
+		topBar.Visible = true
+		content.Visible = true
+	end)
 	local windowObject = {
 		ScreenGui = screenGui,
 		Frame = window,
 		Content = content,
 		Tabs = {},
 		ActiveTab = nil,
+	}
+	
+	-- PreOpened namespace and Events system
+	windowObject.PreOpened = {
+		done = function()
+			isPreOpenedDone = true
+		end
+	}
+
+	windowObject.event = {
+		PreOpened = function(arg)
+			if type(arg) == "function" then
+				preOpenedCallback = arg
+			elseif type(arg) == "table" then
+				for _, v in pairs(arg) do
+					if type(v) == "function" then
+						preOpenedCallback = v
+						break
+					end
+				end
+			end
+		end,
+		Closed = function(arg)
+			if type(arg) == "function" then
+				closedCallback = arg
+			elseif type(arg) == "table" then
+				for _, v in pairs(arg) do
+					if type(v) == "function" then
+						closedCallback = v
+						break
+					end
+				end
+			end
+		end,
+		Minimized = function(arg)
+			if type(arg) == "function" then
+				minimizedCallback = arg
+			elseif type(arg) == "table" then
+				for _, v in pairs(arg) do
+					if type(v) == "function" then
+						minimizedCallback = v
+						break
+					end
+				end
+			end
+		end,
 	}
 	local floatingButton = make("TextButton", {
 		Name = "FloatingRestore",
@@ -358,10 +551,16 @@ local function CreateWindow(options)
 	end
 	closeButton.MouseButton1Click:Connect(function()
 		screenGui.Enabled = false
+		if closedCallback then
+			task.spawn(closedCallback)
+		end
 	end)
 	local function setMinimized(minimized)
 		window.Visible = not minimized
 		floatingButton.Visible = minimized
+		if minimized and minimizedCallback then
+			task.spawn(minimizedCallback)
+		end
 	end
 	local floatingDragging = false
 	local floatingDragStart

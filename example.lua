@@ -1,4 +1,4 @@
-local MonoUI = require("./init")
+local MonoUI = loadstring(game:HttpGet("http://localhost:6767/mono-ui.luau"))()
 
 local window = MonoUI.CreateWindow({
 	Title = "mono ui",
@@ -6,6 +6,26 @@ local window = MonoUI.CreateWindow({
 	Size = UDim2.fromOffset(580, 380),
 	Icon = "shield", -- Optional window icon (using Lucide preset)
 })
+
+-- Register premium GUI events
+window.event.PreOpened(function(event)
+	print("[MonoUI] PreOpened event triggered! Simulating loading...")
+	event.message("Library Boot up")
+	task.wait(1.2)
+	event.message("Loading local configs...")
+	task.wait(1.0)
+	event.message("Library Loaded")
+	task.wait(0.5)
+	event.done() -- Proceed to the opening intro animation
+end)
+
+window.event.Closed(function()
+	print("[MonoUI] GUI Closed!")
+end)
+
+window.event.Minimized(function()
+	print("[MonoUI] GUI Minimized!")
+end)
 
 local tab1 = window:CreateTab({
 	text = "Combat",
