@@ -1,10 +1,15 @@
-# MonoUI - Dark Theme Looks UI
-**MonoUI** is a modern, premium, and highly customizable UI library for Roblox. It features a sleek glassmorphic dark-theme design, Lucide icon support, smooth animations, auto-configuration saving/loading, automatic script re-execution upon teleportation, and live search filtering.
+<center>
+<h1>MonoUI - Dark Theme Looks UI</h1>
+<img src="./assets/console.png" title="Sample tab"></img>
+</center>
+
+**MonoUI** is a modern, and highly customizable UI library for Roblox. It features a sleek glassmorphic dark-theme design, Lucide icon support, smooth animations, auto-configuration saving/loading, automatic script re-execution upon teleportation, and live search filtering.
 
 ## 🚀 Getting Started
 To load MonoUI in your executor, run the following `loadstring`:
 ```lua
-local MonoUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/mono-ui/main/dist/mono-ui.luau"))()
+local MonoUI = loadstring(game:HttpGet("https://github.com/BloodLetters/mono-ui/releases/latest/download/Release.luau"))()
+
 ```
 
 ## ✨ Features
@@ -17,7 +22,7 @@ local MonoUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/YOUR_G
 *   **🎯 Skeletal Hitbox Selector**: Advanced interactive skeleton selection system
 
 ## 🛠️ Complete Example Code
-You can view the full demonstration implementation by checking the file [example.lua](file:///e:/Project/mono-ui/example.lua).
+You can view the full demonstration implementation by checking the file [example.lua](./example.lua).
 
 ## 🔒 License
 This library is licensed under the MIT License. Feel free to fork, modify, and integrate into your scripts!
