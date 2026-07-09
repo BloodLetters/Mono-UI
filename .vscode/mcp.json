@@ -1,0 +1,10 @@
+{
+	"servers": {
+		"mono-ui": {
+			"type": "stdio",
+			"command": "python",
+			"args": ["MCP/server.py"],
+			"env": {}
+		}
+	}
+}

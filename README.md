@@ -6,7 +6,7 @@
 **MonoUI** is a modern, and highly customizable UI library for Roblox. It features a sleek glassmorphic dark-theme design, Lucide icon support, smooth animations, auto-configuration saving/loading, automatic script re-execution upon teleportation, and live search filtering.
 
 ## 🚀 Getting Started
-To load MonoUI in your executor, run the following `loadstring`:
+To load MonoUI, run the following `loadstring`:
 ```lua
 local MonoUI = loadstring(game:HttpGet("https://github.com/BloodLetters/mono-ui/releases/latest/download/Release.luau"))()
 
@@ -20,6 +20,7 @@ local MonoUI = loadstring(game:HttpGet("https://github.com/BloodLetters/mono-ui/
 *   **🔔 Sliding Notifications**: Beautiful toast notification cards in the bottom-right corner with EasingStyle bounce-back animations.
 *   **🖥️ Watermark Overlay**: Stats HUD showing FPS, Ping (measured in-engine), and local clock time.
 *   **🎯 Skeletal Hitbox Selector**: Advanced interactive skeleton selection system
+*   **🤖 Build up with MCP**: Use your model to develop your script using our included MCP
 
 ## 🛠️ Complete Example Code
 You can view the full demonstration implementation by checking the file [example.lua](./example.lua).
