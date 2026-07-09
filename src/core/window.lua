@@ -518,8 +518,7 @@ end
 						pcall(queue, code)
 					end
 				end))
-				local logUrl = type(autoExecUrl) == "table" and (autoExecUrl.Url or autoExecUrl.url or "table-config") or (autoExecUrl or "default demo")
-				windowObject:QueueLog("SUCCESS", "AutoExec registered successfully for URL: " .. logUrl)
+				windowObject:QueueLog("SUCCESS", "AutoExec registered successfully")
 			end
 		else
 			warn("[MonoUI] AutoExec Not Supported")
