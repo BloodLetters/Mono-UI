@@ -109,6 +109,8 @@ def process_file(filepath):
             modified = True
 
     if modified and new_content != content:
+        new_content = new_content.replace('Packages:FindFirstChild("Promise")', 'false')
+        
         with open(filepath, "w", encoding="utf-8") as f:
             f.write(new_content)
         print(f"Processed: {os.path.relpath(filepath, ROOT_DIR)}")
