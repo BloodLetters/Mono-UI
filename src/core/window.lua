@@ -470,7 +470,43 @@ local function CreateWindow(options)
 		if queue then
 			local code
 			if autoExecUrl then
-				code = string.format("loadstring(game:HttpGet('%s'))()", autoExecUrl)
+				if type(autoExecUrl) == "string" then
+					code = string.format("loadstring(game:HttpGet('%s'))()", autoExecUrl)
+				elseif type(autoExecUrl) == "table" then
+					local url = autoExecUrl.Url or autoExecUrl.url or ""
+					local method = autoExecUrl.Method or autoExecUrl.method or "GET"
+					local headers = autoExecUrl.Headers or autoExecUrl.headers or {}
+					local body = autoExecUrl.Body or autoExecUrl.body
+					local HttpService = game:GetService("HttpService")
+					local headersJson = HttpService:JSONEncode(headers)
+
+					if body then
+						code = string.format([[
+local req = (syn and syn.request or http_request or request)({
+    Url = %q,
+    Method = %q,
+    Headers = %s,
+    Body = %q
+})
+if req.Success and req.Body then
+    local fn, err = loadstring(req.Body)
+    if fn then fn() else warn("[MonoUI] AutoExec chunk error:", err) end
+end
+]], url, method, headersJson, tostring(body))
+					else
+						code = string.format([[
+local req = (syn and syn.request or http_request or request)({
+    Url = %q,
+    Method = %q,
+    Headers = %s
+})
+if req.Success and req.Body then
+    local fn, err = loadstring(req.Body)
+    if fn then fn() else warn("[MonoUI] AutoExec chunk error:", err) end
+end
+]], url, method, headersJson)
+					end
+				end
 			else
 				code = type(autoExec) == "string" and autoExec or "loadstring(game:HttpGet('http://localhost:6767/demo'))()"
 			end
@@ -482,7 +518,8 @@ local function CreateWindow(options)
 						pcall(queue, code)
 					end
 				end))
-				windowObject:QueueLog("SUCCESS", "AutoExec registered successfully for URL: " .. (autoExecUrl or "default demo"))
+				local logUrl = type(autoExecUrl) == "table" and (autoExecUrl.Url or autoExecUrl.url or "table-config") or (autoExecUrl or "default demo")
+				windowObject:QueueLog("SUCCESS", "AutoExec registered successfully for URL: " .. logUrl)
 			end
 		else
 			warn("[MonoUI] AutoExec Not Supported")

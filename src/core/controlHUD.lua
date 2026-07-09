@@ -48,7 +48,6 @@ local function getHUDGui()
 	padding.PaddingRight = UDim.new(0, 8)
 	padding.Parent = container
 
-	-- Make it draggable
 	connectDrag(container, container)
 
 	return screenGui, container
@@ -58,7 +57,6 @@ function controlHUD.create(buttons)
 	buttons = buttons or {}
 	local _, hudContainer = getHUDGui()
 
-	-- Clear old elements and disconnect listeners
 	for _, item in ipairs(buttonsList) do
 		if item.conn1 then item.conn1:Disconnect() end
 		if item.conn2 then item.conn2:Disconnect() end
@@ -109,12 +107,10 @@ function controlHUD.create(buttons)
 				targetIcon = Color3.fromRGB(140, 140, 150)
 			end
 
-			-- Clear old icon
 			for _, child in ipairs(iconContainer:GetChildren()) do
 				child:Destroy()
 			end
 
-			-- Redraw icon
 			utils.createIcon(iconName, iconContainer, UDim2.fromOffset(18, 18), UDim2.fromOffset(8, 8), targetIcon)
 
 			if animate then
