@@ -26,6 +26,9 @@ jobs:
       - name: Install dependencies (Wally)
         run: wally install
         
+      - name: Fix Wally Requires for Darklua
+        run: python requires.py
+        
       - name: Build with Darklua
         run: darklua process src/init.lua Release.luau
         
