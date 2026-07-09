@@ -100,7 +100,19 @@ function watermark.set(options)
 				end
 				
 				local timeStr = os.date("%H:%M:%S")
-				local statsText = string.format("%s | %d FPS | %dms | %s", customText, currentFps, ping, timeStr)
+				
+				-- Get player coordinates
+				local Players = game:GetService("Players")
+				local LocalPlayer = Players.LocalPlayer
+				local char = LocalPlayer and LocalPlayer.Character
+				local hrp = char and char:FindFirstChild("HumanoidRootPart")
+				local coordStr = "N/A"
+				if hrp then
+					local pos = hrp.Position
+					coordStr = string.format("%d, %d, %d", math.floor(pos.X), math.floor(pos.Y), math.floor(pos.Z))
+				end
+				
+				local statsText = string.format("%s | Pos: %s | %d FPS | %dms | %s", customText, coordStr, currentFps, ping, timeStr)
 				
 				local textWidth = label.TextBounds.X
 				if textWidth > 0 then
@@ -108,7 +120,7 @@ function watermark.set(options)
 				end
 				
 				label.Text = statsText
-				task.wait(0.5)
+				task.wait(0.1)
 			end
 			
 			if fpsConnection then

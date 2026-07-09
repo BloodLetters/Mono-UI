@@ -3,6 +3,7 @@ local make = utils.make
 local addCorner = utils.addCorner
 local addStroke = utils.addStroke
 local applyFont = utils.applyFont
+local tween = utils.tween
 
 return function(page, args)
 	args = args or {}

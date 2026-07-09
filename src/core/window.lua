@@ -464,10 +464,16 @@ local function CreateWindow(options)
 	end
 
 	local autoExec = options.AutoExec
-	if autoExec then
+	local autoExecUrl = options.AutoExecUrl
+	if autoExec or autoExecUrl then
 		local queue = queue_on_teleport or (syn and syn.queue_on_teleport) or (fluxus and fluxus.queue_on_teleport)
 		if queue then
-			local code = type(autoExec) == "string" and autoExec or "loadstring(game:HttpGet('http://localhost:6767/demo'))()"
+			local code
+			if autoExecUrl then
+				code = string.format("loadstring(game:HttpGet('%s'))()", autoExecUrl)
+			else
+				code = type(autoExec) == "string" and autoExec or "loadstring(game:HttpGet('http://localhost:6767/demo'))()"
+			end
 			local Players = game:GetService("Players")
 			local LocalPlayer = Players.LocalPlayer
 			if LocalPlayer then
@@ -476,7 +482,7 @@ local function CreateWindow(options)
 						pcall(queue, code)
 					end
 				end))
-				windowObject:QueueLog("SUCCESS", "AutoExec registered successfully.")
+				windowObject:QueueLog("SUCCESS", "AutoExec registered successfully for URL: " .. (autoExecUrl or "default demo"))
 			end
 		else
 			warn("[MonoUI] AutoExec Not Supported")
@@ -566,8 +572,8 @@ local function CreateWindow(options)
 	local floatingButton = make("TextButton", {
 		Name = "FloatingRestore",
 		Visible = false,
-		AnchorPoint = Vector2.new(0.5, 0.5),
-		Position = UDim2.fromScale(0.5, 0.5),
+		AnchorPoint = Vector2.new(0.5, 0),
+		Position = UDim2.new(0.5, 0, 0, 15),
 		Size = UDim2.fromOffset(36, 36),
 		BackgroundColor3 = Color3.fromRGB(240, 240, 240),
 		BorderSizePixel = 0,
