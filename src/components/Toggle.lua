@@ -31,39 +31,39 @@ return function(page, args)
 	applyFont(label, 14, Color3.fromRGB(232, 232, 236), Enum.TextXAlignment.Left)
 	
 	local toggleButton = make("TextButton", {
-		Size = UDim2.fromOffset(48, 22),
+		Size = UDim2.fromOffset(56, 28),
 		AnchorPoint = Vector2.new(1, 0.5),
-		Position = UDim2.new(1, - 12, 0.5, 0),
+		Position = UDim2.new(1, -12, 0.5, 0),
 		BackgroundColor3 = Color3.fromRGB(34, 34, 40),
 		BorderSizePixel = 0,
 		AutoButtonColor = false,
 		Text = "",
 		Parent = toggleRow,
 	})
-	addCorner(toggleButton, 12)
+	addCorner(toggleButton, 14)
 	
 	local knob = make("Frame", {
-		Size = UDim2.fromOffset(16, 16),
-		Position = UDim2.fromOffset(3, 3),
+		Size = UDim2.fromOffset(20, 20),
+		Position = UDim2.fromOffset(4, 4),
 		BackgroundColor3 = Color3.fromRGB(235, 235, 235),
 		BorderSizePixel = 0,
 		Parent = toggleButton,
 	})
-	addCorner(knob, 8)
+	addCorner(knob, 10)
 	
 	local state = defaultValue == true
 	local function render()
 		local activeColor = Color3.fromRGB(235, 235, 235)
 		local inactiveColor = Color3.fromRGB(34, 34, 40)
 		toggleButton.BackgroundColor3 = state and activeColor or inactiveColor
-		knob.Position = state and UDim2.fromOffset(29, 3) or UDim2.fromOffset(3, 3)
+		knob.Position = state and UDim2.fromOffset(32, 4) or UDim2.fromOffset(4, 4)
 		knob.BackgroundColor3 = state and Color3.fromRGB(18, 18, 20) or Color3.fromRGB(235, 235, 235)
 	end
 	
 	toggleButton.MouseButton1Click:Connect(function()
 		state = not state
 		tween(toggleButton, {BackgroundColor3 = state and Color3.fromRGB(0, 162, 255) or Color3.fromRGB(34, 34, 40)}, 0.2):Play()
-		tween(knob, {Position = state and UDim2.fromOffset(29, 3) or UDim2.fromOffset(3, 3)}, 0.2):Play()
+		tween(knob, {Position = state and UDim2.fromOffset(32, 4) or UDim2.fromOffset(4, 4)}, 0.2):Play()
 		if callback then callback(state) end
 	end)
 	

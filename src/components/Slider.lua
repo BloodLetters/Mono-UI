@@ -48,32 +48,32 @@ return function(page, args)
 	local trackHolder = make("Frame", {
 		AnchorPoint = Vector2.new(1, 0.5),
 		Position = UDim2.new(1, - 64, 0.5, 0),
-		Size = UDim2.fromOffset(80, 8),
+		Size = UDim2.fromOffset(80, 10),
 		BackgroundColor3 = Color3.fromRGB(22, 22, 26),
 		BorderSizePixel = 0,
 		Parent = sliderRow,
 	})
-	addCorner(trackHolder, 4)
+	addCorner(trackHolder, 5)
 	
 	local fill = make("Frame", {
-		Size = UDim2.fromOffset(0, 8),
+		Size = UDim2.fromOffset(0, 10),
 		BorderSizePixel = 0,
 		Parent = trackHolder,
 	})
-	addCorner(fill, 4)
+	addCorner(fill, 5)
 	utils.registerTheme(fill, "BackgroundColor3", "AccentColor")
 	
 	local thumb = make("TextButton", {
 		AnchorPoint = Vector2.new(0.5, 0.5),
-		Position = UDim2.fromOffset(0, 4),
-		Size = UDim2.fromOffset(14, 14),
+		Position = UDim2.fromOffset(0, 5),
+		Size = UDim2.fromOffset(22, 22),
 		BackgroundColor3 = Color3.fromRGB(235, 235, 240),
 		BorderSizePixel = 0,
 		Text = "",
 		AutoButtonColor = false,
 		Parent = trackHolder,
 	})
-	addCorner(thumb, 7)
+	addCorner(thumb, 11)
 	
 	local currentValue = defaultValue
 	local dragging = false
@@ -88,8 +88,8 @@ return function(page, args)
 		local ratio = (value - min) / (max - min)
 		local trackWidth = trackHolder.AbsoluteSize.X
 		local thumbPos = ratio * trackWidth
-		fill.Size = UDim2.fromOffset(math.max(0, thumbPos), 8)
-		thumb.Position = UDim2.fromOffset(math.max(7, math.min(trackWidth - 7, thumbPos)), 4)
+		fill.Size = UDim2.fromOffset(math.max(0, thumbPos), 10)
+		thumb.Position = UDim2.fromOffset(math.max(11, math.min(trackWidth - 11, thumbPos)), 5)
 		valueLabel.Text = tostring(math.floor(value * 10) / 10)
 		if callback then
 			callback(value)

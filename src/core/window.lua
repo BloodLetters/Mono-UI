@@ -119,9 +119,9 @@ local function CreateWindow(options)
 	})
 	local closeButton = make("TextButton", {
 		Name = "Close",
-		AnchorPoint = Vector2.new(1, 0),
-		Position = UDim2.new(1, - 12, 0, 12),
-		Size = UDim2.fromOffset(24, 24),
+		AnchorPoint = Vector2.new(1, 0.5),
+		Position = UDim2.new(1, -10, 0.5, 0),
+		Size = UDim2.fromOffset(30, 30),
 		BackgroundColor3 = Color3.fromRGB(26, 26, 30),
 		BorderSizePixel = 0,
 		Text = "x",
@@ -129,7 +129,7 @@ local function CreateWindow(options)
 		Parent = topBar,
 	})
 	applyFont(closeButton, 16, Color3.fromRGB(220, 220, 220), Enum.TextXAlignment.Center)
-	addCorner(closeButton, 7)
+	addCorner(closeButton, 8)
 	closeButton.MouseEnter:Connect(function()
 		tween(closeButton, {BackgroundColor3 = Color3.fromRGB(255, 60, 60)}, 0.2):Play()
 	end)
@@ -139,9 +139,9 @@ local function CreateWindow(options)
 
 	local minimizeButton = make("TextButton", {
 		Name = "Minimize",
-		AnchorPoint = Vector2.new(1, 0),
-		Position = UDim2.new(1, - 42, 0, 12),
-		Size = UDim2.fromOffset(24, 24),
+		AnchorPoint = Vector2.new(1, 0.5),
+		Position = UDim2.new(1, -46, 0.5, 0),
+		Size = UDim2.fromOffset(30, 30),
 		BackgroundColor3 = Color3.fromRGB(26, 26, 30),
 		BorderSizePixel = 0,
 		Text = "_",
@@ -149,7 +149,7 @@ local function CreateWindow(options)
 		Parent = topBar,
 	})
 	applyFont(minimizeButton, 16, Color3.fromRGB(220, 220, 220), Enum.TextXAlignment.Center)
-	addCorner(minimizeButton, 7)
+	addCorner(minimizeButton, 8)
 	minimizeButton.MouseEnter:Connect(function()
 		tween(minimizeButton, {BackgroundColor3 = Color3.fromRGB(60, 60, 68)}, 0.2):Play()
 	end)
@@ -159,34 +159,36 @@ local function CreateWindow(options)
 
 	local searchContainer = make("Frame", {
 		Name = "SearchContainer",
-		Position = UDim2.new(1, -210, 0, 12),
-		Size = UDim2.fromOffset(130, 24),
+		AnchorPoint = Vector2.new(1, 0.5),
+		Position = UDim2.new(1, -92, 0.5, 0),
+		Size = UDim2.fromOffset(150, 32),
 		BackgroundColor3 = Color3.fromRGB(24, 24, 28),
 		BorderSizePixel = 0,
 		Active = true,
 		Parent = topBar,
 	})
-	addCorner(searchContainer, 6)
+	addCorner(searchContainer, 8)
 	addStroke(searchContainer, Color3.fromRGB(60, 60, 68), 0.6, 1)
 
 	local searchIcon = make("Frame", {
 		Name = "SearchIcon",
-		Position = UDim2.fromOffset(6, 4),
-		Size = UDim2.fromOffset(16, 16),
+		AnchorPoint = Vector2.new(0, 0.5),
+		Position = UDim2.new(0, 8, 0.5, 0),
+		Size = UDim2.fromOffset(18, 18),
 		BackgroundTransparency = 1,
 		Parent = searchContainer,
 	})
-	utils.createIcon("search", searchIcon, UDim2.fromOffset(14, 14), UDim2.fromOffset(1, 1), Color3.fromRGB(150, 150, 160))
+	utils.createIcon("search", searchIcon, UDim2.fromOffset(16, 16), UDim2.fromOffset(1, 1), Color3.fromRGB(150, 150, 160))
 
 	local searchBox = make("TextBox", {
 		Name = "SearchBox",
-		Position = UDim2.fromOffset(24, 0),
-		Size = UDim2.new(1, -28, 1, 0),
+		Position = UDim2.fromOffset(30, 0),
+		Size = UDim2.new(1, -34, 1, 0),
 		BackgroundTransparency = 1,
 		Text = "",
 		PlaceholderText = "Search...",
 		PlaceholderColor3 = Color3.fromRGB(110, 110, 120),
-		TextSize = 11,
+		TextSize = 13,
 		TextColor3 = Color3.fromRGB(230, 230, 235),
 		TextXAlignment = Enum.TextXAlignment.Left,
 		ClearTextOnFocus = false,
@@ -194,7 +196,7 @@ local function CreateWindow(options)
 		Selectable = true,
 		Parent = searchContainer,
 	})
-	applyFont(searchBox, 11, Color3.fromRGB(230, 230, 235), Enum.TextXAlignment.Left)
+	applyFont(searchBox, 13, Color3.fromRGB(230, 230, 235), Enum.TextXAlignment.Left)
 
 	searchContainer.InputBegan:Connect(function(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then

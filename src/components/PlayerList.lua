@@ -125,7 +125,7 @@ return function(page, args)
 
 		local playerRow = make("Frame", {
 			Name = player.Name,
-			Size = UDim2.new(1, 0, 0, 32),
+			Size = UDim2.new(1, 0, 0, 44),
 			BackgroundColor3 = Color3.fromRGB(22, 22, 26),
 			BorderSizePixel = 0,
 			Parent = scroll,
@@ -140,12 +140,12 @@ return function(page, args)
 			Text = player.DisplayName or player.Name,
 			Parent = playerRow,
 		})
-		applyFont(nameLabel, 12, Color3.fromRGB(220, 220, 225), Enum.TextXAlignment.Left)
+		applyFont(nameLabel, 14, Color3.fromRGB(220, 220, 225), Enum.TextXAlignment.Left)
 
 		local tpBtn = make("TextButton", {
 			Name = "TP",
-			Position = UDim2.new(1, -100, 0.5, -10),
-			Size = UDim2.fromOffset(44, 20),
+			Position = UDim2.new(1, -106, 0.5, -18),
+			Size = UDim2.fromOffset(50, 36),
 			BackgroundColor3 = Color3.fromRGB(30, 30, 36),
 			BorderSizePixel = 0,
 			Text = "TP",
@@ -153,7 +153,7 @@ return function(page, args)
 		})
 		addCorner(tpBtn, 4)
 		addStroke(tpBtn, Color3.fromRGB(50, 50, 58), 0.5, 1)
-		applyFont(tpBtn, 10, Color3.fromRGB(220, 220, 225), Enum.TextXAlignment.Center)
+		applyFont(tpBtn, 14, Color3.fromRGB(220, 220, 225), Enum.TextXAlignment.Center)
 
 		tpBtn.MouseButton1Click:Connect(function()
 			teleportTo(player)
@@ -161,8 +161,8 @@ return function(page, args)
 
 		local espBtn = make("TextButton", {
 			Name = "ESP",
-			Position = UDim2.new(1, -48, 0.5, -10),
-			Size = UDim2.fromOffset(40, 20),
+			Position = UDim2.new(1, -50, 0.5, -18),
+			Size = UDim2.fromOffset(44, 36),
 			BackgroundColor3 = Color3.fromRGB(30, 30, 36),
 			BorderSizePixel = 0,
 			Text = "ESP",
@@ -170,7 +170,7 @@ return function(page, args)
 		})
 		addCorner(espBtn, 4)
 		local espStroke = addStroke(espBtn, Color3.fromRGB(50, 50, 58), 0.5, 1)
-		applyFont(espBtn, 10, Color3.fromRGB(220, 220, 225), Enum.TextXAlignment.Center)
+		applyFont(espBtn, 14, Color3.fromRGB(220, 220, 225), Enum.TextXAlignment.Center)
 
 		espBtn.MouseButton1Click:Connect(function()
 			local isEspActive = not (espStates[player] == true)

@@ -1,19 +1,31 @@
 local MonoUI = loadstring(game:HttpGet("http://localhost:6767/mono-ui.luau"))()
 
--- Enable Sleek Watermark & Stats Overlay
 MonoUI.SetWatermark({
 	visible = true,
 	text = "MonoUI Premium",
 })
 
--- Send initial load notifications
 task.spawn(function()
 	task.wait(0.5)
 	MonoUI.Notify({
 		title = "System Initialized",
 		content = "MonoUI has successfully loaded all modular assets.",
 		icon = "check-circle",
+		duration = 5,
+	})
+	task.wait(0.3)
+	MonoUI.Notify({
+		title = "Config Loaded",
+		content = "Found and applied saved configuration file.",
+		icon = "settings",
 		duration = 4,
+	})
+	task.wait(0.3)
+	MonoUI.Notify({
+		title = "AutoExec Ready",
+		content = "Persistence script queued for next teleport.",
+		icon = "zap",
+		duration = 3,
 	})
 end)
 
@@ -24,11 +36,9 @@ local window = MonoUI.CreateWindow({
 	Icon = "shield",
 	ConfigName = "mono_demo_config",
 	AutoSave = true,
-	AutoExec = true, -- Fitur AutoExec Aktif!
+	AutoExec = true,
 })
 
-
--- Logger setup first so other components can log to it
 local consoleTab = window:CreateTab({
 	text = "Console",
 	icon = "terminal",
@@ -42,7 +52,6 @@ local logger = consoleTab:CreateLogger({
 	height = 280,
 })
 
--- Register premium GUI events
 window.event.PreOpened(function(event)
 	logger:Log("INFO", "PreOpened event triggered!")
 	event.message("Booting MonoUI Library...")
@@ -62,7 +71,6 @@ window.event.Minimized(function()
 	logger:Log("INFO", "Main GUI minimized.")
 end)
 
--- Combat Tab
 local tab1 = window:CreateTab({
 	text = "Combat",
 	icon = "swords",
@@ -120,7 +128,6 @@ tab1:CreateButton({
 	end
 })
 
--- Settings Tab
 local tab2 = window:CreateTab({
 	text = "Settings",
 	icon = "settings",
@@ -155,7 +162,6 @@ tab2:CreateSection({
 	text = "UI Theme & Toggle"
 })
 
--- Color Picker for Accent Theme Color (Real-time Theme Customizer!)
 tab2:CreateColorPicker({
 	text = "Accent Color",
 	default = Color3.fromRGB(0, 162, 255),
@@ -172,7 +178,6 @@ tab2:CreateColorPicker({
 	end
 })
 
--- Keybind Selector to toggle GUI open state
 local visibleState = true
 tab2:CreateKeybind({
 	text = "Toggle Menu Key",
@@ -191,7 +196,6 @@ tab2:CreateKeybind({
 	end
 })
 
--- Players Tab
 local playersTab = window:CreateTab({
 	text = "Players",
 	icon = "users",
@@ -206,7 +210,6 @@ playersTab:CreatePlayerList({
 	height = 280,
 })
 
--- Unused original tabs to preserve demo aesthetic
 window:CreateTab({
 	text = "Profile",
 	icon = "user",
@@ -219,7 +222,6 @@ window:CreateTab({
 
 logger:Log("SUCCESS", "All tabs loaded successfully!")
 
--- Create Draggable Floating Control HUD (with icons only, rounded, changes colors on state)
 MonoUI.CreateControlHUD({
 	{
 		icon = "swords",

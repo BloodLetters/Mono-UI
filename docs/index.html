@@ -4,30 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MonoUI — Premium Roblox UI Library Docs</title>
-    <meta name="description"
-        content="Sleek, modular, and premium Roblox UI library with auto-saving, live search, and autoexec support.">
-    <!-- Google Fonts -->
+    <title>MonoUI — Documentation</title>
+    <meta name="description" content="Official API documentation for MonoUI — a premium Roblox UI library.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap"
         rel="stylesheet">
-    <!-- Prism.js Tomorrow Night Theme for Code Highlighting -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
-    <!-- Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-one-dark.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <!-- Background glow grids for futuristic cyber aesthetics -->
-    <div class="glow-bg">
-        <div class="glow-circle glow-blue"></div>
-        <div class="glow-circle glow-purple"></div>
-    </div>
-
-    <!-- Header -->
+    <!-- Navbar -->
     <header class="navbar" id="navbar">
         <div class="nav-left">
             <div class="brand">
@@ -39,7 +29,7 @@
         <div class="nav-right">
             <div class="search-wrapper">
                 <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                <input type="text" id="doc-search" placeholder="Search API docs...">
+                <input type="text" id="doc-search" placeholder="Search docs...">
             </div>
             <a href="https://github.com/YOUR_GITHUB_USERNAME/mono-ui" target="_blank" class="github-link"
                 id="github-link">
@@ -49,454 +39,1064 @@
     </header>
 
     <div class="main-layout">
+        <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <nav class="sidebar-nav">
+
                 <div class="nav-group">
                     <span class="group-title">Getting Started</span>
                     <a href="#introduction" class="nav-item active" id="nav-intro"><i
                             class="fa-solid fa-circle-info"></i> Introduction</a>
-                    <a href="#getting-started" class="nav-item" id="nav-boot"><i class="fa-solid fa-rocket"></i>
-                        Loadstring Boot</a>
-                    <a href="#features" class="nav-item" id="nav-feat"><i class="fa-solid fa-star"></i> Key Features</a>
+                    <a href="#getting-started" class="nav-item" id="nav-boot"><i class="fa-solid fa-rocket"></i> Quick
+                        Start</a>
+                    <a href="#features" class="nav-item" id="nav-feat"><i class="fa-solid fa-star"></i> Features</a>
                 </div>
+
                 <div class="nav-group">
-                    <span class="group-title">Core APIs</span>
+                    <span class="group-title">Core</span>
                     <a href="#create-window" class="nav-item" id="nav-window"><i
                             class="fa-solid fa-window-maximize"></i> CreateWindow</a>
-                    <a href="#notifications" class="nav-item" id="nav-notify"><i class="fa-solid fa-bell"></i> Notify
-                        Toast</a>
-                    <a href="#watermark" class="nav-item" id="nav-watermark"><i class="fa-solid fa-chart-line"></i>
+                    <a href="#notifications" class="nav-item" id="nav-notify"><i class="fa-solid fa-bell"></i>
+                        Notify</a>
+                    <a href="#watermark" class="nav-item" id="nav-wm"><i class="fa-solid fa-chart-line"></i>
                         SetWatermark</a>
                     <a href="#control-hud" class="nav-item" id="nav-hud"><i class="fa-solid fa-sliders"></i>
                         CreateControlHUD</a>
                 </div>
+
                 <div class="nav-group">
-                    <span class="group-title">Layout & Structure</span>
+                    <span class="group-title">Layout</span>
                     <a href="#create-tab" class="nav-item" id="nav-tab"><i class="fa-solid fa-folder-open"></i>
                         CreateTab</a>
                     <a href="#create-section" class="nav-item" id="nav-section"><i class="fa-solid fa-grip-lines"></i>
                         CreateSection</a>
                 </div>
+
                 <div class="nav-group">
                     <span class="group-title">Components</span>
-                    <a href="#toggle" class="nav-item" id="nav-toggle"><i class="fa-solid fa-toggle-on"></i> Toggle
-                        Button</a>
-                    <a href="#slider" class="nav-item" id="nav-slider"><i class="fa-solid fa-sliders"></i> Numeric
-                        Slider</a>
+                    <a href="#toggle" class="nav-item" id="nav-toggle"><i class="fa-solid fa-toggle-on"></i> Toggle</a>
+                    <a href="#slider" class="nav-item" id="nav-slider"><i class="fa-solid fa-sliders"></i> Slider</a>
                     <a href="#dropdown" class="nav-item" id="nav-dropdown"><i class="fa-solid fa-caret-down"></i>
-                        Dropdown Select</a>
-                    <a href="#input" class="nav-item" id="nav-input"><i class="fa-solid fa-keyboard"></i> Text Input</a>
-                    <a href="#button" class="nav-item" id="nav-button"><i class="fa-solid fa-square-check"></i> Button
-                        Clicker</a>
-                    <a href="#colorpicker" class="nav-item" id="nav-color"><i class="fa-solid fa-palette"></i> Color
-                        Picker</a>
-                    <a href="#keybind" class="nav-item" id="nav-keybind"><i class="fa-solid fa-keyboard"></i> Keybind
-                        Capturer</a>
-                    <a href="#targetbody" class="nav-item" id="nav-body"><i class="fa-solid fa-child"></i> Skeletal
-                        Target</a>
-                    <a href="#playerlist" class="nav-item" id="nav-players"><i class="fa-solid fa-users"></i> Player
-                        List & ESP</a>
-                    <a href="#logger" class="nav-item" id="nav-logger"><i class="fa-solid fa-terminal"></i> In-App
-                        Console</a>
+                        Dropdown</a>
+                    <a href="#input" class="nav-item" id="nav-input"><i class="fa-solid fa-keyboard"></i> Input</a>
+                    <a href="#button" class="nav-item" id="nav-button"><i class="fa-solid fa-square-check"></i>
+                        Button</a>
+                    <a href="#colorpicker" class="nav-item" id="nav-color"><i class="fa-solid fa-palette"></i>
+                        ColorPicker</a>
+                    <a href="#keybind" class="nav-item" id="nav-keybind"><i class="fa-solid fa-keyboard"></i>
+                        Keybind</a>
+                    <a href="#targetbody" class="nav-item" id="nav-body"><i class="fa-solid fa-child"></i>
+                        TargetBody</a>
+                    <a href="#playerlist" class="nav-item" id="nav-players"><i class="fa-solid fa-users"></i>
+                        PlayerList</a>
+                    <a href="#logger" class="nav-item" id="nav-logger"><i class="fa-solid fa-terminal"></i> Logger</a>
                 </div>
+
                 <div class="nav-group">
                     <span class="group-title">Examples</span>
-                    <a href="#full-code" class="nav-item" id="nav-example"><i class="fa-solid fa-code"></i> Complete
+                    <a href="#full-code" class="nav-item" id="nav-example"><i class="fa-solid fa-code"></i> Full
                         Script</a>
                 </div>
+
             </nav>
         </aside>
 
-        <!-- Main Documentation Container -->
+        <!-- Main Content -->
         <main class="content-container">
+
+            <!-- Introduction -->
             <section id="introduction" class="doc-section">
-                <h1>🌌 MonoUI Library Documentation</h1>
-                <p class="lead-text">Welcome to the official developer documentation for MonoUI. MonoUI is a
-                    state-of-the-art, high-performance, dark-mode Roblox UI library focusing on beautiful aesthetics,
-                    modular expansion, auto-saving configurations, and live search filtering.</p>
+                <div class="breadcrumb">
+                    <span class="current">Getting Started</span>
+                </div>
+                <div class="section-label">Overview</div>
+                <h1>MonoUI Documentation</h1>
+                <p class="lead-text">A premium, modular Roblox UI library with dark-mode aesthetics, auto-saving config,
+                    live search, and autoexec support.</p>
                 <div class="alert note">
                     <i class="fa-solid fa-lightbulb alert-icon"></i>
-                    <div class="alert-content">
-                        <strong>Tip:</strong> All interactive components automatically sync their values with the global
-                        configuration database when modified.
-                    </div>
+                    <div>All interactive components automatically sync their values to the global config when modified.
+                        Use <code>flag</code> to identify each element.</div>
                 </div>
             </section>
 
+            <!-- Quick Start -->
             <section id="getting-started" class="doc-section">
-                <h2>🚀 Getting Started</h2>
-                <p>To initialize MonoUI in your script executor, paste and run the following loadstring bootstrapper:
-                </p>
+                <div class="breadcrumb">
+                    <a href="#introduction">Getting Started</a>
+                    <span class="sep">›</span>
+                    <span class="current">Quick Start</span>
+                </div>
+                <div class="section-label">Setup</div>
+                <h2>Quick Start</h2>
+                <p>Paste the loadstring bootstrapper into your script executor to initialize MonoUI.</p>
                 <div class="code-container">
-                    <button class="copy-btn" data-clipboard-target="#code-boot"><i class="fa-regular fa-copy"></i>
-                        Copy</button>
-                    <pre><code class="language-lua" id="code-boot">local MonoUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/mono-ui/main/dist/mono-ui.luau"))()</code></pre>
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">local MonoUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/YOUR_USERNAME/mono-ui/main/dist/mono-ui.luau"))()</code></pre>
                 </div>
             </section>
 
+            <!-- Features -->
             <section id="features" class="doc-section">
-                <h2>✨ Key Features</h2>
+                <div class="breadcrumb">
+                    <a href="#introduction">Getting Started</a>
+                    <span class="sep">›</span>
+                    <span class="current">Features</span>
+                </div>
+                <div class="section-label">Overview</div>
+                <h2>Features</h2>
+                <p>MonoUI ships with a full suite of UI primitives and productivity features out of the box.</p>
                 <div class="features-grid">
                     <div class="feature-card">
                         <i class="fa-solid fa-magnifying-glass feature-icon"></i>
-                        <h3>Global Search Filter</h3>
-                        <p>A built-in Live Search Bar inside the TopBar filters components instantly as you type.</p>
-                    </div>
-                    <div class="feature-card">
-                        <i class="fa-solid fa-arrows-to-eye feature-icon"></i>
-                        <h3>Draggable Control HUD</h3>
-                        <p>Rounded HUD carrying setting toggles. Supports safe drag-threshold triggers.</p>
-                    </div>
-                    <div class="feature-card">
-                        <i class="fa-solid fa-rotate feature-icon"></i>
-                        <h3>AutoExec Teleportation</h3>
-                        <p>Automatically queues execution on server hops using <code>queue_on_teleport</code>.</p>
+                        <h3>Live Search</h3>
+                        <p>Built-in search bar filters components in real-time as you type.</p>
                     </div>
                     <div class="feature-card">
                         <i class="fa-solid fa-floppy-disk feature-icon"></i>
-                        <h3>Automatic Save & Load</h3>
-                        <p>Auto-serializes element configurations, including Color3 and KeyCodes.</p>
+                        <h3>Auto Save & Load</h3>
+                        <p>Serializes all component states including Color3 and KeyCodes.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fa-solid fa-rotate feature-icon"></i>
+                        <h3>AutoExec</h3>
+                        <p>Queues script re-execution on server teleport automatically.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fa-solid fa-arrows-to-eye feature-icon"></i>
+                        <h3>Control HUD</h3>
+                        <p>Draggable floating quick-toggle HUD with icon-only buttons.</p>
                     </div>
                 </div>
             </section>
 
+            <!-- CreateWindow -->
             <section id="create-window" class="doc-section">
-                <h2>🪟 CreateWindow</h2>
-                <p>Creates the core glassmorphic container instance for your library controls.</p>
+                <div class="breadcrumb">
+                    <span class="current">Core</span>
+                    <span class="sep">›</span>
+                    <span class="current">CreateWindow</span>
+                </div>
+                <div class="section-label">Core API</div>
+                <h2>CreateWindow</h2>
+                <p>Creates the main window container. Must be called before creating any tabs or components.</p>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Argument</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Title</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Window title displayed in the top bar.</td>
+                        </tr>
+                        <tr>
+                            <td>Subtitle</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Subtitle text below the title.</td>
+                        </tr>
+                        <tr>
+                            <td>Size</td>
+                            <td><span class="type type-table">UDim2</span></td>
+                            <td>Window dimensions.</td>
+                        </tr>
+                        <tr>
+                            <td>Icon</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Lucide icon name shown in the corner.</td>
+                        </tr>
+                        <tr>
+                            <td>ConfigName</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Filename key used for config persistence.</td>
+                        </tr>
+                        <tr>
+                            <td>AutoSave</td>
+                            <td><span class="type type-boolean">boolean</span></td>
+                            <td>Auto-saves component state changes.</td>
+                        </tr>
+                        <tr>
+                            <td>AutoExec</td>
+                            <td><span class="type type-boolean">boolean</span></td>
+                            <td>Re-executes script on teleport via <code>queue_on_teleport</code>.</td>
+                        </tr>
+                    </tbody>
+                </table>
                 <div class="code-container">
-                    <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
                     <pre><code class="language-lua">local window = MonoUI.CreateWindow({
-    Title = "mono ui",
-    Subtitle = "premium modular library",
-    Size = UDim2.fromOffset(600, 400),
-    Icon = "shield",
-    ConfigName = "mono_demo_config", -- Saved as mono_demo_config.json
-    AutoSave = true,                 -- Saves component changes instantly
-    AutoExec = true                  -- Automatically reload script on teleport
+    Title      = "mono ui",
+    Subtitle   = "premium modular library",
+    Size       = UDim2.fromOffset(600, 400),
+    Icon       = "shield",
+    ConfigName = "my_config",
+    AutoSave   = true,
+    AutoExec   = true,
 })</code></pre>
                 </div>
             </section>
 
+            <!-- Notify -->
             <section id="notifications" class="doc-section">
-                <h2>🔔 Notify Toast</h2>
-                <p>Spawns a translucent toast notification card in the bottom-right corner of the screen.</p>
+                <div class="breadcrumb">
+                    <span class="current">Core</span>
+                    <span class="sep">›</span>
+                    <span class="current">Notify</span>
+                </div>
+                <div class="section-label">Core API</div>
+                <h2>Notify</h2>
+                <p>Spawns a toast notification card in the bottom-right corner. Multiple calls stack automatically.</p>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Argument</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>title</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Bold heading text of the notification.</td>
+                        </tr>
+                        <tr>
+                            <td>content</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Body message shown below the title.</td>
+                        </tr>
+                        <tr>
+                            <td>icon</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Lucide icon name rendered on the left.</td>
+                        </tr>
+                        <tr>
+                            <td>duration</td>
+                            <td><span class="type type-number">number</span></td>
+                            <td>Seconds before auto-dismiss (default: 4).</td>
+                        </tr>
+                    </tbody>
+                </table>
                 <div class="code-container">
-                    <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
                     <pre><code class="language-lua">MonoUI.Notify({
-    title = "System Alert",
-    content = "MonoUI has loaded successfully.",
-    icon = "check-circle",
-    duration = 4
+    title    = "System Alert",
+    content  = "MonoUI has loaded successfully.",
+    icon     = "check-circle",
+    duration = 4,
 })</code></pre>
                 </div>
             </section>
 
+            <!-- SetWatermark -->
             <section id="watermark" class="doc-section">
-                <h2>🖥️ SetWatermark</h2>
-                <p>Displays a floating utility overlay tracking execution stats, ping, and local system clock.</p>
+                <div class="breadcrumb">
+                    <span class="current">Core</span>
+                    <span class="sep">›</span>
+                    <span class="current">SetWatermark</span>
+                </div>
+                <div class="section-label">Core API</div>
+                <h2>SetWatermark</h2>
+                <p>Displays a floating overlay showing custom text, FPS counter, ping, and system time.</p>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Argument</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>visible</td>
+                            <td><span class="type type-boolean">boolean</span></td>
+                            <td>Whether the watermark is shown.</td>
+                        </tr>
+                        <tr>
+                            <td>text</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Custom label shown in the watermark bar.</td>
+                        </tr>
+                    </tbody>
+                </table>
                 <div class="code-container">
-                    <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
                     <pre><code class="language-lua">MonoUI.SetWatermark({
     visible = true,
-    text = "MonoUI Premium v1.0"
+    text    = "MonoUI Premium",
 })</code></pre>
                 </div>
             </section>
 
+            <!-- CreateControlHUD -->
             <section id="control-hud" class="doc-section">
-                <h2>🎛️ CreateControlHUD</h2>
-                <p>Creates a small draggable rounded quick settings menu carrying icons only.</p>
+                <div class="breadcrumb">
+                    <span class="current">Core</span>
+                    <span class="sep">›</span>
+                    <span class="current">CreateControlHUD</span>
+                </div>
+                <div class="section-label">Core API</div>
+                <h2>CreateControlHUD</h2>
+                <p>Creates a small draggable icon-only quick-toggle HUD. Each entry is a toggle button.</p>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Argument</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>icon</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Lucide icon name for this HUD button.</td>
+                        </tr>
+                        <tr>
+                            <td>default</td>
+                            <td><span class="type type-boolean">boolean</span></td>
+                            <td>Initial active state of the toggle.</td>
+                        </tr>
+                        <tr>
+                            <td>callback</td>
+                            <td><span class="type type-function">function</span></td>
+                            <td>Called with <code>active: boolean</code> on toggle.</td>
+                        </tr>
+                    </tbody>
+                </table>
                 <div class="code-container">
-                    <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
                     <pre><code class="language-lua">MonoUI.CreateControlHUD({
-    {
-        icon = "swords",
-        default = false,
-        callback = function(active)
-            print("Silent Aim: " .. tostring(active))
-        end
-    },
-    {
-        icon = "eye",
-        default = true,
-        callback = function(active)
-            print("ESP: " .. tostring(active))
-        end
-    }
+    { icon = "swords", default = false, callback = function(v) print("Aim:", v) end },
+    { icon = "eye",    default = true,  callback = function(v) print("ESP:", v) end },
 })</code></pre>
                 </div>
             </section>
 
+            <!-- CreateTab -->
             <section id="create-tab" class="doc-section">
-                <h2>📂 CreateTab</h2>
-                <p>Appends a navigation tab item to the window sidebar.</p>
-                <div class="code-container">
-                    <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
-                    <pre><code class="language-lua">local combatTab = window:CreateTab({
-    text = "Combat",
-    icon = "swords"
-})</code></pre>
+                <div class="breadcrumb">
+                    <span class="current">Layout</span>
+                    <span class="sep">›</span>
+                    <span class="current">CreateTab</span>
                 </div>
-            </section>
-
-            <section id="create-section" class="doc-section">
-                <h2>🗂️ CreateSection</h2>
-                <p>Groups consecutive components together under a section banner.</p>
+                <div class="section-label">Layout</div>
+                <h2>CreateTab</h2>
+                <p>Appends a navigation tab to the window sidebar. Returns a tab object used to add components.</p>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Argument</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>text</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Label displayed in the sidebar.</td>
+                        </tr>
+                        <tr>
+                            <td>icon</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Lucide icon shown next to the label.</td>
+                        </tr>
+                    </tbody>
+                </table>
                 <div class="code-container">
-                    <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
-                    <pre><code class="language-lua">combatTab:CreateSection({
-    text = "Combat Hacks"
-})</code></pre>
-                </div>
-            </section>
-
-            <section id="toggle" class="doc-section">
-                <h2>🔘 Toggle Button</h2>
-                <p>A simple on/off switch component.</p>
-                <div class="code-container">
-                    <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
-                    <pre><code class="language-lua">tab1:CreateToggle({
-    text = "Silent Aim",
-    default = false,
-    flag = "silent_aim_state",
-    callback = function(state)
-        print("Silent Aim: " .. (state and "ENABLED" or "DISABLED"))
-    end
-})</code></pre>
-                </div>
-            </section>
-
-            <section id="slider" class="doc-section">
-                <h2>🎚️ Numeric Slider</h2>
-                <p>A draggable range input slider with support for decimals and unit suffixes.</p>
-                <div class="code-container">
-                    <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
-                    <pre><code class="language-lua">tab1:CreateSlider({
-    text = "FOV Range",
-    min = 10,
-    max = 200,
-    default = 90,
-    decimals = 1,              -- Float value spacing
-    suffix = "°",              -- Suffix character
-    flag = "aimbot_fov",
-    callback = function(value)
-        print("FOV Range set to: " .. value)
-    end
-})</code></pre>
-                </div>
-            </section>
-
-            <section id="dropdown" class="doc-section">
-                <h2>🔽 Dropdown Select</h2>
-                <p>A collapsed scrollable select list supporting single or multiple selections.</p>
-                <div class="code-container">
-                    <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
-                    <pre><code class="language-lua">tab1:CreateDropdown({
-    text = "Target Mode",
-    list = {"Distance", "FOV", "Health"},
-    default = "Distance",
-    multiple = false,
-    flag = "target_mode",
-    callback = function(selection)
-        print("Selected: " .. tostring(selection[1] or selection))
-    end
-})</code></pre>
-                </div>
-            </section>
-
-            <section id="input" class="doc-section">
-                <h2>🔤 Text Input</h2>
-                <p>A focusable text box allowing players to type strings.</p>
-                <div class="code-container">
-                    <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
-                    <pre><code class="language-lua">tab1:CreateInput({
-    text = "Aimbot Key",
-    placeholder = "Type text...",
-    default = "Headshot",
-    flag = "aimbot_key_text",
-    callback = function(value)
-        print("Aimbot text value set to: " .. value)
-    end
-})</code></pre>
-                </div>
-            </section>
-
-            <section id="button" class="doc-section">
-                <h2>🖱️ Button Clicker</h2>
-                <p>Standard clickable trigger button.</p>
-                <div class="code-container">
-                    <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
-                    <pre><code class="language-lua">tab1:CreateButton({
-    text = "Reset Settings",
-    callback = function()
-        print("Settings reset successfully.")
-    end
-})</code></pre>
-                </div>
-            </section>
-
-            <section id="colorpicker" class="doc-section">
-                <h2>🎨 Color Picker</h2>
-                <p>Provides a visual color selector pop-up canvas.</p>
-                <div class="code-container">
-                    <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
-                    <pre><code class="language-lua">tab1:CreateColorPicker({
-    text = "ESP Color",
-    default = Color3.fromRGB(0, 162, 255),
-    flag = "esp_theme_color",
-    callback = function(color)
-        print("ESP Theme Color updated: ", color)
-    end
-})</code></pre>
-                </div>
-            </section>
-
-            <section id="keybind" class="doc-section">
-                <h2>⌨️ Keybind Capturer</h2>
-                <p>Allows users to register custom keyboard binds. Supports pressing Escape to clear.</p>
-                <div class="code-container">
-                    <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
-                    <pre><code class="language-lua">tab1:CreateKeybind({
-    text = "Menu Toggle Key",
-    default = Enum.KeyCode.RightControl,
-    flag = "menu_toggle_key",
-    callback = function(key)
-        print("Pressed hotkey: " .. key.Name)
-    end
-})</code></pre>
-                </div>
-            </section>
-
-            <section id="targetbody" class="doc-section">
-                <h2>🎯 Skeletal Target Selection</h2>
-                <p>Advanced interactive R6 body layout selection. Limbs can be toggled or disabled.</p>
-                <div class="code-container">
-                    <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
-                    <pre><code class="language-lua">tab1:CreateTargetBody({
-    text = "Target Limbs",
-    default = {"Head", "Torso"},
-    disabledParts = {"RightArm", "LeftArm"},
-    flag = "body_parts",
-    callback = function(selectedParts)
-        print("Active parts: " .. table.concat(selectedParts, ", "))
-    end
-})</code></pre>
-                </div>
-            </section>
-
-            <section id="playerlist" class="doc-section">
-                <h2>👥 Player List & ESP</h2>
-                <p>Generates a list of active players in the server. Clicking TP teleports your character, while ESP
-                    turns on highlights.</p>
-                <div class="code-container">
-                    <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
-                    <pre><code class="language-lua">tab1:CreatePlayerList({
-    text = "Active Server Players",
-    height = 280
-})</code></pre>
-                </div>
-            </section>
-
-            <section id="logger" class="doc-section">
-                <h2>🖥️ In-App Console</h2>
-                <p>Creates an in-app console widget showing activity logs.</p>
-                <div class="code-container">
-                    <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
-                    <pre><code class="language-lua">local logger = tab1:CreateLogger({
-    text = "Console Output Logs",
-    height = 280
-})
-
--- Logger syntax:
-logger:Log("INFO", "Starting engine...")
-logger:Log("SUCCESS", "ESP fully loaded.")
-logger:Log("WARNING", "Server lag detected.")
-logger:Log("ERROR", "Access denied.")</code></pre>
-                </div>
-            </section>
-
-            <section id="full-code" class="doc-section">
-                <h2>💻 Complete Script Example</h2>
-                <p>This is a complete script using all the custom methods in the library:</p>
-                <div class="code-container">
-                    <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
-                    <pre><code class="language-lua">local MonoUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/mono-ui/main/dist/mono-ui.luau"))()
-
--- Configure stats overlay
-MonoUI.SetWatermark({
-    visible = true,
-    text = "MonoUI Premium",
-})
-
--- Create main window
-local window = MonoUI.CreateWindow({
-    Title = "mono ui",
-    Subtitle = "premium modular library",
-    Size = UDim2.fromOffset(600, 400),
-    Icon = "shield",
-    ConfigName = "mono_demo_config",
-    AutoSave = true,
-    AutoExec = true,
-})
-
--- Setup console tab
-local consoleTab = window:CreateTab({
-    text = "Console",
-    icon = "terminal",
-})
-consoleTab:CreateSection({
-    text = "System Action Logs"
-})
-local logger = consoleTab:CreateLogger({
-    text = "Mono Console Output",
-    height = 280,
-})
-
--- Setup combat tab
-local combatTab = window:CreateTab({
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">local tab = window:CreateTab({
     text = "Combat",
     icon = "swords",
-})
-combatTab:CreateSection({
-    text = "Combat Hacks"
-})
-combatTab:CreateToggle({
-    text = "Silent Aim",
-    default = false,
-    flag = "silent_aim",
-    callback = function(state)
-        logger:Log("INFO", "Silent Aim toggled: " .. tostring(state))
-    end
-})
-
--- Setup floating Control HUD
-MonoUI.CreateControlHUD({
-    {
-        icon = "swords",
-        default = false,
-        callback = function(active)
-            logger:Log("INFO", "HUD - Silent Aim: " .. tostring(active))
-        end
-    },
-    {
-        icon = "eye",
-        default = true,
-        callback = function(active)
-            logger:Log("INFO", "HUD - ESP: " .. tostring(active))
-        end
-    }
 })</code></pre>
                 </div>
             </section>
+
+            <!-- CreateSection -->
+            <section id="create-section" class="doc-section">
+                <div class="breadcrumb">
+                    <span class="current">Layout</span>
+                    <span class="sep">›</span>
+                    <span class="current">CreateSection</span>
+                </div>
+                <div class="section-label">Layout</div>
+                <h2>CreateSection</h2>
+                <p>Inserts a visual section divider with a label to group related components.</p>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Argument</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>text</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Section heading label.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">tab:CreateSection({ text = "Combat Hacks" })</code></pre>
+                </div>
+            </section>
+
+            <!-- Toggle -->
+            <section id="toggle" class="doc-section">
+                <div class="breadcrumb">
+                    <span class="current">Components</span>
+                    <span class="sep">›</span>
+                    <span class="current">Toggle</span>
+                </div>
+                <div class="section-label">Components</div>
+                <h2>Toggle</h2>
+                <p>A checkbox-style switch for boolean values. State is persisted to config when a flag is provided.</p>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Argument</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>text</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Label for the toggle.</td>
+                        </tr>
+                        <tr>
+                            <td>default</td>
+                            <td><span class="type type-boolean">boolean</span></td>
+                            <td>Initial state (true/false).</td>
+                        </tr>
+                        <tr>
+                            <td>flag</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Unique key for config saving.</td>
+                        </tr>
+                        <tr>
+                            <td>callback</td>
+                            <td><span class="type type-function">function</span></td>
+                            <td>Fires with the new boolean state.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">tab:CreateToggle({
+    text     = "Silent Aim",
+    default  = false,
+    flag     = "silent_aim",
+    callback = function(state)
+        print("Silent Aim:", state)
+    end,
+})</code></pre>
+                </div>
+            </section>
+
+            <!-- Slider -->
+            <section id="slider" class="doc-section">
+                <div class="breadcrumb">
+                    <span class="current">Components</span>
+                    <span class="sep">›</span>
+                    <span class="current">Slider</span>
+                </div>
+                <div class="section-label">Components</div>
+                <h2>Slider</h2>
+                <p>A draggable range input with min/max bounds and optional decimal precision.</p>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Argument</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>text</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Label for the slider row.</td>
+                        </tr>
+                        <tr>
+                            <td>min</td>
+                            <td><span class="type type-number">number</span></td>
+                            <td>Minimum value of the range.</td>
+                        </tr>
+                        <tr>
+                            <td>max</td>
+                            <td><span class="type type-number">number</span></td>
+                            <td>Maximum value of the range.</td>
+                        </tr>
+                        <tr>
+                            <td>default</td>
+                            <td><span class="type type-number">number</span></td>
+                            <td>Initial value.</td>
+                        </tr>
+                        <tr>
+                            <td>flag</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Unique key for config saving.</td>
+                        </tr>
+                        <tr>
+                            <td>callback</td>
+                            <td><span class="type type-function">function</span></td>
+                            <td>Fires with the current numeric value.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">tab:CreateSlider({
+    text     = "FOV Range",
+    min      = 10,
+    max      = 200,
+    default  = 90,
+    flag     = "aimbot_fov",
+    callback = function(value)
+        print("FOV:", value)
+    end,
+})</code></pre>
+                </div>
+            </section>
+
+            <!-- Dropdown -->
+            <section id="dropdown" class="doc-section">
+                <div class="breadcrumb">
+                    <span class="current">Components</span>
+                    <span class="sep">›</span>
+                    <span class="current">Dropdown</span>
+                </div>
+                <div class="section-label">Components</div>
+                <h2>Dropdown</h2>
+                <p>A collapsed select list supporting single or multiple selections from a list of options.</p>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Argument</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>text</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Label for the dropdown row.</td>
+                        </tr>
+                        <tr>
+                            <td>list</td>
+                            <td><span class="type type-table">table</span></td>
+                            <td>Array of string options.</td>
+                        </tr>
+                        <tr>
+                            <td>default</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Pre-selected option.</td>
+                        </tr>
+                        <tr>
+                            <td>multiple</td>
+                            <td><span class="type type-boolean">boolean</span></td>
+                            <td>Allow multi-select if true.</td>
+                        </tr>
+                        <tr>
+                            <td>flag</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Unique key for config saving.</td>
+                        </tr>
+                        <tr>
+                            <td>callback</td>
+                            <td><span class="type type-function">function</span></td>
+                            <td>Fires with selected value(s) as a table.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">tab:CreateDropdown({
+    text     = "Target Mode",
+    list     = { "Distance", "FOV", "Health" },
+    default  = "Distance",
+    multiple = false,
+    flag     = "target_mode",
+    callback = function(selection)
+        print("Selected:", selection[1])
+    end,
+})</code></pre>
+                </div>
+            </section>
+
+            <!-- Input -->
+            <section id="input" class="doc-section">
+                <div class="breadcrumb">
+                    <span class="current">Components</span>
+                    <span class="sep">›</span>
+                    <span class="current">Input</span>
+                </div>
+                <div class="section-label">Components</div>
+                <h2>Input</h2>
+                <p>A focusable text box allowing the user to type a string value.</p>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Argument</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>text</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Label displayed beside the input.</td>
+                        </tr>
+                        <tr>
+                            <td>placeholder</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Placeholder hint inside the text field.</td>
+                        </tr>
+                        <tr>
+                            <td>default</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Pre-filled value on load.</td>
+                        </tr>
+                        <tr>
+                            <td>flag</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Unique key for config saving.</td>
+                        </tr>
+                        <tr>
+                            <td>callback</td>
+                            <td><span class="type type-function">function</span></td>
+                            <td>Fires with the submitted string on Enter.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">tab:CreateInput({
+    text        = "Custom Tag",
+    placeholder = "Enter text...",
+    default     = "",
+    flag        = "custom_tag",
+    callback    = function(value)
+        print("Tag set to:", value)
+    end,
+})</code></pre>
+                </div>
+            </section>
+
+            <!-- Button -->
+            <section id="button" class="doc-section">
+                <div class="breadcrumb">
+                    <span class="current">Components</span>
+                    <span class="sep">›</span>
+                    <span class="current">Button</span>
+                </div>
+                <div class="section-label">Components</div>
+                <h2>Button</h2>
+                <p>A standard clickable trigger button. Fires callback on each press.</p>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Argument</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>text</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Button row label and action label.</td>
+                        </tr>
+                        <tr>
+                            <td>callback</td>
+                            <td><span class="type type-function">function</span></td>
+                            <td>Fires on click with no arguments.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">tab:CreateButton({
+    text     = "Reset Settings",
+    callback = function()
+        print("Settings reset.")
+    end,
+})</code></pre>
+                </div>
+            </section>
+
+            <!-- ColorPicker -->
+            <section id="colorpicker" class="doc-section">
+                <div class="breadcrumb">
+                    <span class="current">Components</span>
+                    <span class="sep">›</span>
+                    <span class="current">ColorPicker</span>
+                </div>
+                <div class="section-label">Components</div>
+                <h2>ColorPicker</h2>
+                <p>A visual color selector pop-up with hue/saturation canvas. Fires in real-time as the user drags.</p>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Argument</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>text</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Label for the color picker row.</td>
+                        </tr>
+                        <tr>
+                            <td>default</td>
+                            <td><span class="type type-color3">Color3</span></td>
+                            <td>Initial color value.</td>
+                        </tr>
+                        <tr>
+                            <td>flag</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Unique key for config saving.</td>
+                        </tr>
+                        <tr>
+                            <td>callback</td>
+                            <td><span class="type type-function">function</span></td>
+                            <td>Fires with the new <code>Color3</code> on change.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">tab:CreateColorPicker({
+    text     = "ESP Color",
+    default  = Color3.fromRGB(0, 162, 255),
+    flag     = "esp_color",
+    callback = function(color)
+        print("Color:", color)
+    end,
+})</code></pre>
+                </div>
+            </section>
+
+            <!-- Keybind -->
+            <section id="keybind" class="doc-section">
+                <div class="breadcrumb">
+                    <span class="current">Components</span>
+                    <span class="sep">›</span>
+                    <span class="current">Keybind</span>
+                </div>
+                <div class="section-label">Components</div>
+                <h2>Keybind</h2>
+                <p>Records a keyboard shortcut from the user. Press <code>Escape</code> to clear the binding.</p>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Argument</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>text</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Label for the keybind row.</td>
+                        </tr>
+                        <tr>
+                            <td>default</td>
+                            <td><span class="type type-keycode">KeyCode</span></td>
+                            <td>Default key binding.</td>
+                        </tr>
+                        <tr>
+                            <td>flag</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Unique key for config saving.</td>
+                        </tr>
+                        <tr>
+                            <td>callback</td>
+                            <td><span class="type type-function">function</span></td>
+                            <td>Fires with the registered <code>KeyCode</code> when pressed.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">tab:CreateKeybind({
+    text     = "Toggle Menu",
+    default  = Enum.KeyCode.RightControl,
+    flag     = "menu_key",
+    callback = function(key)
+        print("Key pressed:", key.Name)
+    end,
+})</code></pre>
+                </div>
+            </section>
+
+            <!-- TargetBody -->
+            <section id="targetbody" class="doc-section">
+                <div class="breadcrumb">
+                    <span class="current">Components</span>
+                    <span class="sep">›</span>
+                    <span class="current">TargetBody</span>
+                </div>
+                <div class="section-label">Components</div>
+                <h2>TargetBody</h2>
+                <p>An interactive R6 body-part selector. Individual limbs can be toggled or disabled entirely.</p>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Argument</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>text</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Section label.</td>
+                        </tr>
+                        <tr>
+                            <td>default</td>
+                            <td><span class="type type-table">table</span></td>
+                            <td>Array of initially selected part names.</td>
+                        </tr>
+                        <tr>
+                            <td>disabledParts</td>
+                            <td><span class="type type-table">table</span></td>
+                            <td>Array of part names that cannot be toggled.</td>
+                        </tr>
+                        <tr>
+                            <td>flag</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Unique key for config saving.</td>
+                        </tr>
+                        <tr>
+                            <td>callback</td>
+                            <td><span class="type type-function">function</span></td>
+                            <td>Fires with an array of currently selected parts.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">tab:CreateTargetBody({
+    text          = "Hitbox Parts",
+    default       = { "Head", "Torso" },
+    disabledParts = { "RightArm", "LeftArm" },
+    flag          = "hitbox_parts",
+    callback      = function(parts)
+        print("Parts:", table.concat(parts, ", "))
+    end,
+})</code></pre>
+                </div>
+            </section>
+
+            <!-- PlayerList -->
+            <section id="playerlist" class="doc-section">
+                <div class="breadcrumb">
+                    <span class="current">Components</span>
+                    <span class="sep">›</span>
+                    <span class="current">PlayerList</span>
+                </div>
+                <div class="section-label">Components</div>
+                <h2>PlayerList</h2>
+                <p>Renders a live scrollable list of all players in the server. Each row has a TP (teleport) and ESP
+                    (highlight) button.</p>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Argument</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>text</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Header label above the list.</td>
+                        </tr>
+                        <tr>
+                            <td>height</td>
+                            <td><span class="type type-number">number</span></td>
+                            <td>Pixel height of the scrollable area.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">tab:CreatePlayerList({
+    text   = "Active Players",
+    height = 280,
+})</code></pre>
+                </div>
+            </section>
+
+            <!-- Logger -->
+            <section id="logger" class="doc-section">
+                <div class="breadcrumb">
+                    <span class="current">Components</span>
+                    <span class="sep">›</span>
+                    <span class="current">Logger</span>
+                </div>
+                <div class="section-label">Components</div>
+                <h2>Logger</h2>
+                <p>An in-app console widget that displays color-coded activity logs. Supports INFO, SUCCESS, WARNING,
+                    and ERROR levels.</p>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Argument</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>text</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Console panel header label.</td>
+                        </tr>
+                        <tr>
+                            <td>height</td>
+                            <td><span class="type type-number">number</span></td>
+                            <td>Pixel height of the log area.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">local log = tab:CreateLogger({ text = "Console", height = 280 })
+
+log:Log("INFO",    "Script loaded.")
+log:Log("SUCCESS", "ESP enabled.")
+log:Log("WARNING", "High ping detected.")
+log:Log("ERROR",   "Target not found.")</code></pre>
+                </div>
+            </section>
+
+            <!-- Full Example -->
+            <section id="full-code" class="doc-section">
+                <div class="breadcrumb">
+                    <span class="current">Examples</span>
+                    <span class="sep">›</span>
+                    <span class="current">Full Script</span>
+                </div>
+                <div class="section-label">Examples</div>
+                <h2>Full Script</h2>
+                <p>A complete working example using all major MonoUI features.</p>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">local MonoUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/YOUR_USERNAME/mono-ui/main/dist/mono-ui.luau"))()
+
+MonoUI.SetWatermark({ visible = true, text = "MonoUI Premium" })
+
+local window = MonoUI.CreateWindow({
+    Title      = "mono ui",
+    Subtitle   = "premium modular library",
+    Size       = UDim2.fromOffset(600, 400),
+    Icon       = "shield",
+    ConfigName = "my_config",
+    AutoSave   = true,
+    AutoExec   = true,
+})
+
+-- Console tab
+local consoleTab = window:CreateTab({ text = "Console", icon = "terminal" })
+consoleTab:CreateSection({ text = "System Logs" })
+local logger = consoleTab:CreateLogger({ text = "Output", height = 280 })
+
+-- Combat tab
+local combatTab = window:CreateTab({ text = "Combat", icon = "swords" })
+combatTab:CreateSection({ text = "Aimbot" })
+combatTab:CreateToggle({
+    text = "Silent Aim", default = false, flag = "silent_aim",
+    callback = function(v) logger:Log("INFO", "Silent Aim: " .. tostring(v)) end,
+})
+combatTab:CreateSlider({
+    text = "FOV", min = 10, max = 200, default = 90, flag = "fov",
+    callback = function(v) logger:Log("INFO", "FOV: " .. v) end,
+})
+
+logger:Log("SUCCESS", "All tabs loaded.")</code></pre>
+                </div>
+            </section>
+
         </main>
     </div>
 
-    <!-- Footer -->
     <footer class="footer">
-        <p>&copy; 2026 MonoUI. Built with premium design standards. MIT License.</p>
+        &copy; 2026 MonoUI — MIT License
     </footer>
 
-    <!-- Prism JS for Code Highlighting -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-lua.min.js"></script>
     <script src="app.js"></script>

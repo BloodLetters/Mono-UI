@@ -52,7 +52,7 @@ return function(page, args)
 		Text = currentKey == Enum.KeyCode.None and "[None]" or currentKey.Name,
 		Parent = bindBtn,
 	})
-	applyFont(btnLabel, 11, Color3.fromRGB(200, 200, 210), Enum.TextXAlignment.Center)
+	applyFont(btnLabel, 13, Color3.fromRGB(200, 200, 210), Enum.TextXAlignment.Center)
 
 	local function updateBtnText()
 		btnLabel.Text = binding and "[Press Key]" or (currentKey == Enum.KeyCode.None and "[None]" or currentKey.Name)
