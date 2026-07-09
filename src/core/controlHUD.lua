@@ -186,7 +186,6 @@ function controlHUD.create(buttons)
 		})
 	end
 
-	-- Connect to theme color changes to refresh active buttons
 	local themeConn
 	themeConn = utils.onThemeChanged(function(key, color)
 		if key == "AccentColor" then

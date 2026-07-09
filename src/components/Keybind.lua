@@ -13,7 +13,6 @@ return function(page, args)
 	
 	local binding = false
 
-	-- UI Row
 	local row = make("Frame", {
 		Name = bindText .. "KeybindRow",
 		Size = UDim2.new(1, 0, 0, 40),
@@ -61,7 +60,6 @@ return function(page, args)
 		btnLabel.TextColor3 = textColor
 	end
 
-	-- Listen for key presses globally to trigger callback
 	local globalConnection
 	globalConnection = utils.UserInputService.InputBegan:Connect(function(input, processed)
 		if processed then return end
@@ -74,7 +72,6 @@ return function(page, args)
 		end
 	end)
 
-	-- Handle binding state
 	bindBtn.MouseButton1Click:Connect(function()
 		if binding then return end
 		binding = true
@@ -83,7 +80,6 @@ return function(page, args)
 		local connection
 		connection = utils.UserInputService.InputBegan:Connect(function(input)
 			if input.UserInputType == Enum.UserInputType.Keyboard then
-				-- Accept key (except Escape to cancel/clear)
 				if input.KeyCode == Enum.KeyCode.Escape then
 					currentKey = Enum.KeyCode.None
 				else

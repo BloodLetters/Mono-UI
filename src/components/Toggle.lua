@@ -62,10 +62,9 @@ return function(page, args)
 	
 	toggleButton.MouseButton1Click:Connect(function()
 		state = not state
-		render()
-		if callback then
-			callback(state)
-		end
+		tween(toggleButton, {BackgroundColor3 = state and Color3.fromRGB(0, 162, 255) or Color3.fromRGB(34, 34, 40)}, 0.2):Play()
+		tween(knob, {Position = state and UDim2.fromOffset(29, 3) or UDim2.fromOffset(3, 3)}, 0.2):Play()
+		if callback then callback(state) end
 	end)
 	
 	render()

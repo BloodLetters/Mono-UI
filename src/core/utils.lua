@@ -8,7 +8,6 @@ local playerGui = player:WaitForChild("PlayerGui")
 
 local monoFont = Font.new("rbxasset://fonts/families/RobotoMono.json", Enum.FontWeight.Regular, Enum.FontStyle.Normal)
 
--- Import the local Lucide icon resolver module
 local getIcon = require("./lucide")
 
 local utils = {}
@@ -40,7 +39,6 @@ function utils.createIcon(icon, parent, size, position, color)
 		return nil
 	end
 
-	-- Try loading using local getIcon function (returns spritesheet mapping)
 	local ok, asset = pcall(getIcon, icon)
 	if ok and asset and asset.id then
 		local imageLabel = utils.make("ImageLabel", {
@@ -57,7 +55,6 @@ function utils.createIcon(icon, parent, size, position, color)
 		return imageLabel
 	end
 
-	-- Fallback to direct asset strings or numeric IDs
 	local iconAsset = utils.getIconAsset(icon)
 	if iconAsset then
 		local imageLabel = utils.make("ImageLabel", {
@@ -71,7 +68,6 @@ function utils.createIcon(icon, parent, size, position, color)
 		})
 		return imageLabel
 	else
-		-- It's a text/emoji icon
 		local textLabel = utils.make("TextLabel", {
 			Name = "Icon",
 			Size = size or UDim2.fromScale(1, 1),
@@ -185,7 +181,6 @@ function utils.getResponsiveWindowSize()
 	return UDim2.fromOffset(width, height)
 end
 
--- CENTRALIZED THEME REGISTRY
 utils.theme = {
 	AccentColor = Color3.fromRGB(0, 162, 255),
 	BackgroundColor = Color3.fromRGB(16, 16, 18),

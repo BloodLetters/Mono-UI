@@ -14,6 +14,7 @@ local getResponsiveWindowSize = utils.getResponsiveWindowSize
 local notification = require("./notification")
 local watermark = require("./watermark")
 local controlHUD = require("./controlHUD")
+local Janitor = require("../../Packages/janitor")
 
 -- Components
 local Toggle = require("../components/Toggle")
@@ -30,6 +31,7 @@ local PlayerList = require("../components/PlayerList")
 
 local function CreateWindow(options)
 	options = options or {}
+	local windowJanitor = Janitor.new()
 	local normalSize = options.Size or getResponsiveWindowSize()
 	local animatingIntro = true
 	local preOpenedCallback = nil
@@ -37,7 +39,6 @@ local function CreateWindow(options)
 	local minimizedCallback = nil
 	local isPreOpenedDone = false
 
-	-- Config system variables
 	local autoSave = options.AutoSave ~= false
 	local configName = options.ConfigName or "mono_config"
 	local windowObject = nil
@@ -49,17 +50,27 @@ local function CreateWindow(options)
 		DisplayOrder = options.DisplayOrder or 1000,
 		Parent = getGuiParent(),
 	})
+	windowJanitor:Add(screenGui)
+	windowJanitor:LinkToInstance(screenGui)
+	
 	local window = make("Frame", {
 		Name = "Window",
 		AnchorPoint = Vector2.new(0.5, 0.5),
 		Position = options.Position or UDim2.fromScale(0.5, 0.5),
-		Size = UDim2.fromOffset(0, 0), -- Start at 0 size
+		Size = UDim2.fromOffset(0, 0),
+		Visible = true,
 		ClipsDescendants = true,
 		BackgroundColor3 = Color3.fromRGB(16, 16, 18),
 		BackgroundTransparency = 0.03,
 		BorderSizePixel = 0,
 		Parent = screenGui,
 	})
+	
+	task.defer(function()
+		local t = utils.TweenService:Create(window, TweenInfo.new(0.5, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {Size = normalSize})
+		t:Play()
+	end)
+
 	addCorner(window, 12)
 	local windowStroke = addStroke(window, Color3.fromRGB(72, 72, 80), 0.3, 1)
 	local topBar = make("Frame", {
@@ -119,6 +130,13 @@ local function CreateWindow(options)
 	})
 	applyFont(closeButton, 16, Color3.fromRGB(220, 220, 220), Enum.TextXAlignment.Center)
 	addCorner(closeButton, 7)
+	closeButton.MouseEnter:Connect(function()
+		tween(closeButton, {BackgroundColor3 = Color3.fromRGB(255, 60, 60)}, 0.2):Play()
+	end)
+	closeButton.MouseLeave:Connect(function()
+		tween(closeButton, {BackgroundColor3 = Color3.fromRGB(26, 26, 30)}, 0.2):Play()
+	end)
+
 	local minimizeButton = make("TextButton", {
 		Name = "Minimize",
 		AnchorPoint = Vector2.new(1, 0),
@@ -132,6 +150,12 @@ local function CreateWindow(options)
 	})
 	applyFont(minimizeButton, 16, Color3.fromRGB(220, 220, 220), Enum.TextXAlignment.Center)
 	addCorner(minimizeButton, 7)
+	minimizeButton.MouseEnter:Connect(function()
+		tween(minimizeButton, {BackgroundColor3 = Color3.fromRGB(60, 60, 68)}, 0.2):Play()
+	end)
+	minimizeButton.MouseLeave:Connect(function()
+		tween(minimizeButton, {BackgroundColor3 = Color3.fromRGB(26, 26, 30)}, 0.2):Play()
+	end)
 
 	local searchContainer = make("Frame", {
 		Name = "SearchContainer",
@@ -297,19 +321,16 @@ local function CreateWindow(options)
 	end
 	updateWindowSize()
 	if Workspace.CurrentCamera then
-		Workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(updateWindowSize)
+		windowJanitor:Add(Workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(updateWindowSize))
 	end
 
-	-- Opening animation sequence (Minimised -> Loading with username & custom messages -> Normal size)
 	task.defer(function()
 		local introSize = UDim2.fromOffset(280, 140)
 		
-		-- 1. Tween from 0 to introSize
 		local sizeTween1 = utils.tween(window, { Size = introSize }, 0.5)
 		sizeTween1:Play()
 		sizeTween1.Completed:Wait()
 		
-		-- Create Intro Frame
 		local introFrame = make("Frame", {
 			Name = "IntroFrame",
 			Size = UDim2.fromScale(1, 1),
@@ -317,7 +338,6 @@ local function CreateWindow(options)
 			Parent = window,
 		})
 		
-		-- Hello Text
 		local displayName = Players.LocalPlayer and (Players.LocalPlayer.DisplayName or Players.LocalPlayer.Name) or "User"
 		local helloLabel = make("TextLabel", {
 			Name = "HelloLabel",
@@ -331,7 +351,6 @@ local function CreateWindow(options)
 		})
 		applyFont(helloLabel, 16, Color3.fromRGB(242, 242, 242), Enum.TextXAlignment.Center)
 
-		-- Custom Loading Message Text
 		local loadingMessageLabel = make("TextLabel", {
 			Name = "LoadingMessage",
 			AnchorPoint = Vector2.new(0.5, 0.5),
@@ -344,7 +363,6 @@ local function CreateWindow(options)
 		})
 		applyFont(loadingMessageLabel, 12, Color3.fromRGB(150, 150, 160), Enum.TextXAlignment.Center)
 		
-		-- Loading Image (loader-2)
 		local loaderImage = nil
 		local ok, loaderAsset = pcall(getIcon, "loader-2")
 		if ok and loaderAsset and loaderAsset.id then
@@ -363,7 +381,6 @@ local function CreateWindow(options)
 			})
 		end
 		
-		-- Fade in elements
 		local fadeTween = utils.tween(helloLabel, { TextTransparency = 0 }, 0.4)
 		fadeTween:Play()
 		utils.tween(loadingMessageLabel, { TextTransparency = 0 }, 0.4):Play()
@@ -371,7 +388,6 @@ local function CreateWindow(options)
 			utils.tween(loaderImage, { ImageTransparency = 0 }, 0.4):Play()
 		end
 		
-		-- Spin loading indicator
 		local RunService = game:GetService("RunService")
 		local spinConnection
 		if loaderImage then
@@ -380,7 +396,6 @@ local function CreateWindow(options)
 			end)
 		end
 		
-		-- Trigger PreOpened Callback if present, passing an event helper object
 		if preOpenedCallback then
 			local eventObj = {
 				message = function(text)
@@ -392,7 +407,6 @@ local function CreateWindow(options)
 			}
 			task.spawn(preOpenedCallback, eventObj)
 			local elapsed = 0
-			-- Wait up to 15 seconds for done to be called
 			while not isPreOpenedDone and elapsed < 15 do
 				task.wait()
 				elapsed = elapsed + 0.03
@@ -401,7 +415,6 @@ local function CreateWindow(options)
 			task.wait(1.8)
 		end
 		
-		-- Fade out elements
 		local fadeOutTween = utils.tween(helloLabel, { TextTransparency = 1 }, 0.4)
 		fadeOutTween:Play()
 		utils.tween(loadingMessageLabel, { TextTransparency = 1 }, 0.4):Play()
@@ -411,21 +424,16 @@ local function CreateWindow(options)
 		
 		task.wait(0.4)
 		
-		-- Clean up intro
 		if spinConnection then
 			spinConnection:Disconnect()
 		end
 		introFrame:Destroy()
 		
-		-- Enable normal size tracking
 		animatingIntro = false
-		
-		-- 2. Tween to normalSize
 		local sizeTween2 = utils.tween(window, { Size = normalSize }, 0.6)
 		sizeTween2:Play()
 		sizeTween2.Completed:Wait()
 		
-		-- 3. Show normal window components
 		topBar.Visible = true
 		content.Visible = true
 	end)
@@ -453,7 +461,6 @@ local function CreateWindow(options)
 		end
 	end
 
-	-- AutoExec system
 	local autoExec = options.AutoExec
 	if autoExec then
 		local queue = queue_on_teleport or (syn and syn.queue_on_teleport) or (fluxus and fluxus.queue_on_teleport)
@@ -462,11 +469,11 @@ local function CreateWindow(options)
 			local Players = game:GetService("Players")
 			local LocalPlayer = Players.LocalPlayer
 			if LocalPlayer then
-				LocalPlayer.OnTeleport:Connect(function(state)
+				windowJanitor:Add(LocalPlayer.OnTeleport:Connect(function(state)
 					if state == Enum.TeleportState.Started or state == Enum.TeleportState.InProgress then
 						pcall(queue, code)
 					end
-				end)
+				end))
 				windowObject:QueueLog("SUCCESS", "AutoExec registered successfully.")
 			end
 		else
@@ -510,7 +517,6 @@ local function CreateWindow(options)
 		return false
 	end
 	
-	-- PreOpened namespace and Events system
 	windowObject.PreOpened = {
 		done = function()
 			isPreOpenedDone = true
@@ -905,10 +911,7 @@ local function CreateWindow(options)
 		end
 		return tab
 	end
-	local function cleanUpAllScreens()
-		if screenGui then
-			pcall(function() screenGui:Destroy() end)
-		end
+	windowJanitor:Add(function()
 		pcall(function()
 			watermark.set({ visible = false })
 		end)
@@ -929,6 +932,10 @@ local function CreateWindow(options)
 				end
 			end
 		end
+	end)
+
+	local function cleanUpAllScreens()
+		windowJanitor:Destroy()
 	end
 
 	closeButton.MouseButton1Click:Connect(function()
@@ -948,7 +955,7 @@ local function CreateWindow(options)
 	local floatingDragStart
 	local floatingStartPosition
 	local floatingMoved = false
-	floatingButton.InputBegan:Connect(function(input)
+	windowJanitor:Add(floatingButton.InputBegan:Connect(function(input)
 		if input.UserInputType ~= Enum.UserInputType.MouseButton1 and input.UserInputType ~= Enum.UserInputType.Touch then
 			return
 		end
@@ -956,8 +963,8 @@ local function CreateWindow(options)
 		floatingMoved = false
 		floatingDragStart = input.Position
 		floatingStartPosition = floatingButton.Position
-	end)
-	utils.UserInputService.InputChanged:Connect(function(input)
+	end))
+	windowJanitor:Add(utils.UserInputService.InputChanged:Connect(function(input)
 		if not floatingDragging then
 			return
 		end
@@ -970,22 +977,22 @@ local function CreateWindow(options)
 		end
 		floatingButton.Position = UDim2.new(
 			floatingStartPosition.X.Scale, floatingStartPosition.X.Offset + delta.X, floatingStartPosition.Y.Scale, floatingStartPosition.Y.Offset + delta.Y)
-	end)
-	utils.UserInputService.InputEnded:Connect(function(input)
+	end))
+	windowJanitor:Add(utils.UserInputService.InputEnded:Connect(function(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 			floatingDragging = false
 		end
-	end)
-	minimizeButton.MouseButton1Click:Connect(function()
+	end))
+	windowJanitor:Add(minimizeButton.MouseButton1Click:Connect(function()
 		setMinimized(true)
-	end)
-	floatingButton.MouseButton1Click:Connect(function()
+	end))
+	windowJanitor:Add(floatingButton.MouseButton1Click:Connect(function()
 		if floatingMoved then
 			floatingMoved = false
 			return
 		end
 		setMinimized(false)
-	end)
+	end))
 	connectDrag(topBar, window)
 	window.BackgroundTransparency = 1
 	windowStroke.Transparency = 1
@@ -1007,9 +1014,8 @@ local function CreateWindow(options)
 		end
 	end
 
-	-- Auto-load config if it exists
 	task.spawn(function()
-		task.wait(0.1) -- small wait to ensure all elements are created and can be updated
+		task.wait(0.1)
 		windowObject:LoadConfig()
 	end)
 

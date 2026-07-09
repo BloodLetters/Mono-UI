@@ -20,7 +20,7 @@ local function getWatermarkGui()
 	screenGui = make("ScreenGui", {
 		Name = "MonoWatermark",
 		ResetOnSpawn = false,
-		DisplayOrder = 99998, -- Right below notifications
+		DisplayOrder = 99998,
 		Parent = utils.getGuiParent(),
 	})
 	
@@ -70,7 +70,6 @@ function watermark.set(options)
 
 	local _, watermarkCard, label = getWatermarkGui()
 	
-	-- Start update loop if not running
 	if not isUpdating then
 		isUpdating = true
 		task.spawn(function()
@@ -81,7 +80,6 @@ function watermark.set(options)
 			local fpsCount = 0
 			local currentFps = 60
 			
-			-- RenderStepped to calculate FPS
 			local fpsConnection
 			fpsConnection = RunService.RenderStepped:Connect(function()
 				fpsCount = fpsCount + 1
@@ -93,7 +91,6 @@ function watermark.set(options)
 				end
 			end)
 			
-			-- Loop to update stats text
 			while isUpdating and label and label.Parent do
 				local ping = 0
 				local network = Stats:FindFirstChild("Network")
@@ -105,7 +102,6 @@ function watermark.set(options)
 				local timeStr = os.date("%H:%M:%S")
 				local statsText = string.format("%s | %d FPS | %dms | %s", customText, currentFps, ping, timeStr)
 				
-				-- Adjust size dynamically to fit the text length
 				local textWidth = label.TextBounds.X
 				if textWidth > 0 then
 					watermarkCard.Size = UDim2.fromOffset(textWidth + 24, 28)

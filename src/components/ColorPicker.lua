@@ -29,7 +29,6 @@ return function(page, screenGui, args)
 
 	local currentColor = defaultColor
 
-	-- === ROW UTAMA ===
 	local pickerRow = make("Frame", {
 		Name = (pickerText or "Color") .. "Row",
 		Size = UDim2.new(1, 0, 0, 40),
@@ -74,7 +73,6 @@ return function(page, screenGui, args)
 	})
 	applyFont(hexLabel, 11, contrastColor(currentColor), Enum.TextXAlignment.Center)
 
-	-- === FUNGSI UPDATE UI ===
 	local function updateColorDisplay(col)
 		currentColor = col
 		colorBox.BackgroundColor3 = col
@@ -88,7 +86,6 @@ return function(page, screenGui, args)
 		end
 	end
 
-	-- === POPUP STATE ===
 	local pickerOpen = false
 	local pickerPopup
 	local popupBody
@@ -130,7 +127,6 @@ return function(page, screenGui, args)
 		setSliderVisual(popupRSlider, popupRFill, popupRThumb, popupRLabel, popupR, 255)
 		setSliderVisual(popupGSlider, popupGFill, popupGThumb, popupGLabel, popupG, 255)
 		setSliderVisual(popupBSlider, popupBFill, popupBThumb, popupBLabel, popupB, 255)
-		-- Update gradient pada masing-masing track
 		local rGrad = popupRSlider:FindFirstChildOfClass("UIGradient")
 		local gGrad = popupGSlider:FindFirstChildOfClass("UIGradient")
 		local bGrad = popupBSlider:FindFirstChildOfClass("UIGradient")
@@ -165,7 +161,6 @@ return function(page, screenGui, args)
 		fireCallback(col)
 	end
 
-	-- === OPEN POPUP ===
 	local function openPicker()
 		if pickerOpen then
 			closePicker()
@@ -198,7 +193,6 @@ return function(page, screenGui, args)
 		addCorner(pickerPopup, 8)
 		addStroke(pickerPopup, Color3.fromRGB(55, 55, 65), 0.4, 1)
 
-		-- Body container dengan padding
 		popupBody = make("Frame", {
 			Name = "Body",
 			Size = UDim2.new(1, -20, 1, -20),
@@ -208,7 +202,6 @@ return function(page, screenGui, args)
 			Parent = pickerPopup,
 		})
 
-		-- TITLE
 		local popupTitle = make("TextLabel", {
 			Name = "Title",
 			BackgroundTransparency = 1,
@@ -222,7 +215,6 @@ return function(page, screenGui, args)
 		})
 		applyFont(popupTitle, 10, Color3.fromRGB(130, 130, 140), Enum.TextXAlignment.Left)
 
-		-- PREVIEW (kanan atas)
 		popupPreview = make("Frame", {
 			Name = "Preview",
 			Position = UDim2.fromOffset(182, 0),
@@ -248,8 +240,6 @@ return function(page, screenGui, args)
 		})
 		applyFont(popupHexLabel, 11, Color3.fromRGB(170, 170, 180), Enum.TextXAlignment.Center)
 
-		-- === RGB SLIDERS SECTION ===
-		-- R
 		local rLabel = make("TextLabel", {
 			BackgroundTransparency = 1,
 			Position = UDim2.fromOffset(0, 24),
@@ -312,7 +302,6 @@ return function(page, screenGui, args)
 		})
 		applyFont(popupRLabel, 11, Color3.fromRGB(170, 170, 180), Enum.TextXAlignment.Right)
 
-		-- G
 		local gLabel = make("TextLabel", {
 			BackgroundTransparency = 1,
 			Position = UDim2.fromOffset(0, 50),
@@ -375,7 +364,6 @@ return function(page, screenGui, args)
 		})
 		applyFont(popupGLabel, 11, Color3.fromRGB(170, 170, 180), Enum.TextXAlignment.Right)
 
-		-- B
 		local bLabel = make("TextLabel", {
 			BackgroundTransparency = 1,
 			Position = UDim2.fromOffset(0, 76),
@@ -509,7 +497,6 @@ return function(page, screenGui, args)
 		refreshPopupSliders()
 	end
 
-	-- === SLIDER DRAG (per slider) ===
 	local function makeSliderDraggable(track, component)
 		local draggingThis = false
 
@@ -546,7 +533,6 @@ return function(page, screenGui, args)
 		end)
 	end
 
-	-- === CLICK OUTSIDE TO CLOSE ===
 	UserInputService.InputBegan:Connect(function(input)
 		if not pickerOpen then return end
 		if input.UserInputType ~= Enum.UserInputType.MouseButton1 and input.UserInputType ~= Enum.UserInputType.Touch then return end
@@ -559,7 +545,6 @@ return function(page, screenGui, args)
 		end
 	end)
 
-	-- === OPEN ON CLICK ===
 	colorBox.MouseButton1Click:Connect(function()
 		local wasJustClosed = not pickerOpen
 		openPicker()

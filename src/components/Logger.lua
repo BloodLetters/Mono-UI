@@ -100,10 +100,7 @@ return function(page, args)
 		label.RichText = true
 		label.TextSize = 14
 		
-		-- Let AutomaticSize handle the height of logRow
 		logRow.AutomaticSize = Enum.AutomaticSize.Y
-
-		-- Force scroll to bottom
 		task.defer(function()
 			scroll.CanvasPosition = Vector2.new(0, scroll.AbsoluteCanvasSize.Y)
 		end)

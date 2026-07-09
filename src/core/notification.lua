@@ -18,7 +18,7 @@ local function getNotificationGui()
 	screenGui = make("ScreenGui", {
 		Name = "MonoNotification",
 		ResetOnSpawn = false,
-		DisplayOrder = 99999, -- Stay on top of everything
+		DisplayOrder = 99999,
 		Parent = utils.getGuiParent(),
 	})
 	
@@ -49,7 +49,6 @@ function notification.notify(args)
 
 	local _, holder = getNotificationGui()
 
-	-- Card container
 	local card = make("Frame", {
 		Name = "Card",
 		Size = UDim2.new(1, 0, 0, 68),
@@ -63,7 +62,6 @@ function notification.notify(args)
 	local stroke = addStroke(card, Color3.fromRGB(60, 60, 68), 0.6, 1)
 	utils.registerTheme(stroke, "Color", "AccentColor")
 
-	-- Icon container
 	local iconContainer = make("Frame", {
 		Name = "IconContainer",
 		Position = UDim2.fromOffset(12, 14),
@@ -73,7 +71,6 @@ function notification.notify(args)
 	})
 	utils.createIcon(iconText, iconContainer, UDim2.fromOffset(20, 20), UDim2.fromOffset(2, 2), Color3.fromRGB(235, 235, 240))
 
-	-- Text labels container
 	local textFrame = make("Frame", {
 		Name = "TextFrame",
 		Position = UDim2.fromOffset(46, 10),
@@ -120,18 +117,15 @@ function notification.notify(args)
 	})
 	utils.registerTheme(progressBar, "BackgroundColor3", "AccentColor")
 
-	-- Enter animation (slide in from right)
 	card.Position = UDim2.new(1, 300, 0, 0)
 	local enterTween = tween(card, { Position = UDim2.new(0, 0, 0, 0) }, 0.35, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
 	enterTween:Play()
 	enterTween.Completed:Wait()
 
-	-- Animate progress bar shrinking
 	local progressTween = tween(progressBar, { Size = UDim2.new(0, 0, 1, 0) }, duration, Enum.EasingStyle.Linear)
 	progressTween:Play()
 	progressTween.Completed:Wait()
 
-	-- Exit animation (slide out to right)
 	local exitTween = tween(card, { Position = UDim2.new(1, 300, 0, 0) }, 0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
 	exitTween:Play()
 	exitTween.Completed:Wait()

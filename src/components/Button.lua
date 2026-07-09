@@ -69,9 +69,10 @@ return function(page, args)
 	end)
 	
 	actionButton.MouseButton1Click:Connect(function()
-		if callback then
-			callback()
-		end
+		tween(actionButton, {BackgroundColor3 = Color3.fromRGB(80, 80, 90)}, 0.05):Play()
+		task.wait(0.1)
+		tween(actionButton, {BackgroundColor3 = Color3.fromRGB(100, 100, 110)}, 0.05):Play()
+		if callback then callback() end
 	end)
 	
 	return actionButton

@@ -8,10 +8,9 @@ local tween = utils.tween
 return function(page, args)
 	args = args or {}
 	local titleText = args.text or "Target Body Parts"
-	local isMultiple = args.multiple ~= false -- default to true (multiple selection)
+	local isMultiple = args.multiple ~= false
 	local callback = args.callback
 	
-	-- Parse disabled parts
 	local disabled = {}
 	if type(args.disabledParts) == "table" then
 		for _, part in ipairs(args.disabledParts) do
@@ -21,7 +20,6 @@ return function(page, args)
 		disabled[args.disabledParts] = true
 	end
 
-	-- Parse default selections
 	local selected = {}
 	if type(args.default) == "table" then
 		for _, part in ipairs(args.default) do
@@ -35,10 +33,9 @@ return function(page, args)
 		end
 	end
 
-	-- Container frame for the entire component
 	local container = make("Frame", {
 		Name = "TargetBodyContainer",
-		Size = UDim2.new(1, 0, 0, 240), -- 240 height gives room for header + body model
+		Size = UDim2.new(1, 0, 0, 240),
 		BackgroundColor3 = Color3.fromRGB(24, 24, 28),
 		BorderSizePixel = 0,
 		Parent = page,
@@ -46,7 +43,6 @@ return function(page, args)
 	addCorner(container, 10)
 	addStroke(container, Color3.fromRGB(60, 60, 68), 0.65, 1)
 
-	-- Header Title
 	local titleLabel = make("TextLabel", {
 		Name = "Title",
 		BackgroundTransparency = 1,
@@ -58,7 +54,6 @@ return function(page, args)
 	})
 	applyFont(titleLabel, 14, Color3.fromRGB(232, 232, 236), Enum.TextXAlignment.Left)
 
-	-- Column 1: Body Model Frame (centered in the left half of the container)
 	local bodyFrame = make("Frame", {
 		Name = "BodyFrame",
 		AnchorPoint = Vector2.new(0.5, 0),
@@ -89,7 +84,6 @@ return function(page, args)
 		return list
 	end
 
-	-- Column 2: List Holder (centered in the right half of the container)
 	local listHolder = make("Frame", {
 		Name = "SelectedList",
 		AnchorPoint = Vector2.new(0.5, 0),
@@ -105,7 +99,6 @@ return function(page, args)
 	listLayout.Parent = listHolder
 
 	local function updateSelectedList()
-		-- Clear previous elements
 		for _, child in ipairs(listHolder:GetChildren()) do
 			if child:IsA("Frame") then
 				child:Destroy()
@@ -144,7 +137,6 @@ return function(page, args)
 					Parent = listHolder,
 				})
 
-				-- Dot indicator
 				local dot = make("Frame", {
 					Size = UDim2.fromOffset(8, 8),
 					Position = UDim2.new(0, 4, 0.5, -4),
@@ -154,7 +146,6 @@ return function(page, args)
 				addCorner(dot, 4)
 				utils.registerTheme(dot, "BackgroundColor3", "AccentColor")
 
-				-- Text label
 				local lbl = make("TextLabel", {
 					Position = UDim2.fromOffset(20, 0),
 					Size = UDim2.new(1, -20, 1, 0),
@@ -208,14 +199,12 @@ return function(page, args)
 		if isMultiple then
 			selected[name] = not selected[name]
 		else
-			-- Deselect all others
 			for k in pairs(selected) do
 				selected[k] = nil
 			end
 			selected[name] = true
 		end
 
-		-- Update visual for all parts
 		for partName in pairs(partButtons) do
 			updatePartVisual(partName)
 		end
@@ -270,7 +259,6 @@ return function(page, args)
 		end)
 	end
 
-	-- Connect to theme changes to redraw target parts
 	utils.onThemeChanged(function(key, color)
 		if key == "AccentColor" then
 			for partName in pairs(partButtons) do
@@ -279,7 +267,6 @@ return function(page, args)
 		end
 	end)
 
-	-- Initialize list visual
 	updateSelectedList()
 
 	local customObject = {

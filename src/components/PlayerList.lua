@@ -83,7 +83,6 @@ return function(page, args)
 		if state then
 			local function applyHighlight(char)
 				if not char then return end
-				-- Avoid duplicate highlights
 				local existing = char:FindFirstChild("MonoESP")
 				if existing then existing:Destroy() end
 
@@ -122,7 +121,7 @@ return function(page, args)
 
 	local function addPlayerRow(player)
 		if playerRows[player] then return end
-		if player == Players.LocalPlayer then return end -- Don't list self
+		if player == Players.LocalPlayer then return end
 
 		local playerRow = make("Frame", {
 			Name = player.Name,
@@ -143,7 +142,6 @@ return function(page, args)
 		})
 		applyFont(nameLabel, 12, Color3.fromRGB(220, 220, 225), Enum.TextXAlignment.Left)
 
-		-- Teleport Button
 		local tpBtn = make("TextButton", {
 			Name = "TP",
 			Position = UDim2.new(1, -100, 0.5, -10),
@@ -161,7 +159,6 @@ return function(page, args)
 			teleportTo(player)
 		end)
 
-		-- ESP Toggle Button
 		local espBtn = make("TextButton", {
 			Name = "ESP",
 			Position = UDim2.new(1, -48, 0.5, -10),
@@ -197,7 +194,6 @@ return function(page, args)
 		toggleESP(player, false)
 	end
 
-	-- Initialize list
 	for _, p in ipairs(Players:GetPlayers()) do
 		addPlayerRow(p)
 	end
@@ -205,7 +201,6 @@ return function(page, args)
 	local addedConn = Players.PlayerAdded:Connect(addPlayerRow)
 	local removingConn = Players.PlayerRemoving:Connect(removePlayerRow)
 
-	-- Update ESP highlight colors if the theme accent changes
 	local themeConn
 	themeConn = utils.onThemeChanged(function(key, color)
 		if key == "AccentColor" then
