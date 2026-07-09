@@ -11,6 +11,9 @@ local applyFont = utils.applyFont
 local tween = utils.tween
 local connectDrag = utils.connectDrag
 local getResponsiveWindowSize = utils.getResponsiveWindowSize
+local notification = require("./notification")
+local watermark = require("./watermark")
+local controlHUD = require("./controlHUD")
 
 -- Components
 local Toggle = require("../components/Toggle")
@@ -20,6 +23,10 @@ local Dropdown = require("../components/Dropdown")
 local Button = require("../components/Button")
 local ColorPicker = require("../components/ColorPicker")
 local Slider = require("../components/Slider")
+local TargetBody = require("../components/TargetBody")
+local Keybind = require("../components/Keybind")
+local Logger = require("../components/Logger")
+local PlayerList = require("../components/PlayerList")
 
 local function CreateWindow(options)
 	options = options or {}
@@ -29,6 +36,11 @@ local function CreateWindow(options)
 	local closedCallback = nil
 	local minimizedCallback = nil
 	local isPreOpenedDone = false
+
+	-- Config system variables
+	local autoSave = options.AutoSave ~= false
+	local configName = options.ConfigName or "mono_config"
+	local windowObject = nil
 	
 	local screenGui = make("ScreenGui", {
 		Name = options.Name or "MonoWindow",
@@ -120,6 +132,74 @@ local function CreateWindow(options)
 	})
 	applyFont(minimizeButton, 16, Color3.fromRGB(220, 220, 220), Enum.TextXAlignment.Center)
 	addCorner(minimizeButton, 7)
+
+	local searchContainer = make("Frame", {
+		Name = "SearchContainer",
+		Position = UDim2.new(1, -210, 0, 12),
+		Size = UDim2.fromOffset(130, 24),
+		BackgroundColor3 = Color3.fromRGB(24, 24, 28),
+		BorderSizePixel = 0,
+		Active = true,
+		Parent = topBar,
+	})
+	addCorner(searchContainer, 6)
+	addStroke(searchContainer, Color3.fromRGB(60, 60, 68), 0.6, 1)
+
+	local searchIcon = make("Frame", {
+		Name = "SearchIcon",
+		Position = UDim2.fromOffset(6, 4),
+		Size = UDim2.fromOffset(16, 16),
+		BackgroundTransparency = 1,
+		Parent = searchContainer,
+	})
+	utils.createIcon("search", searchIcon, UDim2.fromOffset(14, 14), UDim2.fromOffset(1, 1), Color3.fromRGB(150, 150, 160))
+
+	local searchBox = make("TextBox", {
+		Name = "SearchBox",
+		Position = UDim2.fromOffset(24, 0),
+		Size = UDim2.new(1, -28, 1, 0),
+		BackgroundTransparency = 1,
+		Text = "",
+		PlaceholderText = "Search...",
+		PlaceholderColor3 = Color3.fromRGB(110, 110, 120),
+		TextSize = 11,
+		TextColor3 = Color3.fromRGB(230, 230, 235),
+		TextXAlignment = Enum.TextXAlignment.Left,
+		ClearTextOnFocus = false,
+		Active = true,
+		Selectable = true,
+		Parent = searchContainer,
+	})
+	applyFont(searchBox, 11, Color3.fromRGB(230, 230, 235), Enum.TextXAlignment.Left)
+
+	searchContainer.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			searchBox:CaptureFocus()
+		end
+	end)
+
+	local function applySearch()
+		local query = searchBox.Text:lower()
+		local activeTab = windowObject.ActiveTab
+		if not activeTab then return end
+		
+		for _, child in ipairs(activeTab.Page:GetChildren()) do
+			if child:IsA("Frame") then
+				local textLabel = child:FindFirstChildWhichIsA("TextLabel", true)
+				local text = textLabel and textLabel.Text:lower() or ""
+				local name = child.Name:lower()
+				
+				if query == "" or string.find(text, query, 1, true) or string.find(name, query, 1, true) then
+					child.Visible = true
+				else
+					child.Visible = false
+				end
+			end
+		end
+	end
+
+	searchBox:GetPropertyChangedSignal("Text"):Connect(applySearch)
+
 	local content = make("Frame", {
 		Name = "Content",
 		Position = UDim2.fromOffset(12, 56),
@@ -349,13 +429,86 @@ local function CreateWindow(options)
 		topBar.Visible = true
 		content.Visible = true
 	end)
-	local windowObject = {
+	windowObject = {
 		ScreenGui = screenGui,
 		Frame = window,
 		Content = content,
 		Tabs = {},
 		ActiveTab = nil,
+		Notify = notification.notify,
+		SetWatermark = watermark.set,
+		SetThemeColor = utils.setThemeColor,
+		CreateControlHUD = controlHUD.create,
+		Flags = {},
+		Components = {},
+		QueuedLogs = {},
+		AutoSave = autoSave,
+		ConfigName = configName,
 	}
+
+	function windowObject:QueueLog(level, message)
+		table.insert(self.QueuedLogs, { level = level, message = message })
+		if self.LoggerComponent then
+			self.LoggerComponent:Log(level, message)
+		end
+	end
+
+	-- AutoExec system
+	local autoExec = options.AutoExec
+	if autoExec then
+		local queue = queue_on_teleport or (syn and syn.queue_on_teleport) or (fluxus and fluxus.queue_on_teleport)
+		if queue then
+			local code = type(autoExec) == "string" and autoExec or "loadstring(game:HttpGet('http://localhost:6767/demo'))()"
+			local Players = game:GetService("Players")
+			local LocalPlayer = Players.LocalPlayer
+			if LocalPlayer then
+				LocalPlayer.OnTeleport:Connect(function(state)
+					if state == Enum.TeleportState.Started or state == Enum.TeleportState.InProgress then
+						pcall(queue, code)
+					end
+				end)
+				windowObject:QueueLog("SUCCESS", "AutoExec registered successfully.")
+			end
+		else
+			warn("[MonoUI] AutoExec Not Supported")
+			windowObject:QueueLog("ERROR", "AutoExec Not Supported by this executor.")
+		end
+	end
+
+	function windowObject:SaveConfig(name)
+		name = name or self.ConfigName or "mono_config"
+		local HttpService = game:GetService("HttpService")
+		local success, err = pcall(function()
+			if writefile then
+				writefile(name .. ".json", HttpService:JSONEncode(self.Flags))
+			end
+		end)
+		return success, err
+	end
+
+	function windowObject:LoadConfig(name)
+		name = name or self.ConfigName or "mono_config"
+		local HttpService = game:GetService("HttpService")
+		if not readfile or not isfile or not isfile(name .. ".json") then return false end
+		
+		local success, data = pcall(function()
+			return HttpService:JSONDecode(readfile(name .. ".json"))
+		end)
+		
+		if success and type(data) == "table" then
+			for flag, value in pairs(data) do
+				self.Flags[flag] = value
+				local comp = self.Components[flag]
+				if comp then
+					pcall(function()
+						comp:Set(value)
+					end)
+				end
+			end
+			return true
+		end
+		return false
+	end
 	
 	-- PreOpened namespace and Events system
 	windowObject.PreOpened = {
@@ -432,6 +585,9 @@ local function CreateWindow(options)
 			end
 		end
 		windowObject.ActiveTab = tab
+		if searchBox then
+			searchBox.Text = ""
+		end
 	end
 	
 	function windowObject:CreateTab(args)
@@ -499,7 +655,29 @@ local function CreateWindow(options)
 		}
 		
 		function tab:CreateToggle(tArgs)
-			return Toggle(self.Page, tArgs)
+			tArgs = tArgs or {}
+			local originalCallback = tArgs.callback
+			if tArgs.flag then
+				tArgs.callback = function(val)
+					windowObject.Flags[tArgs.flag] = val
+					if windowObject.AutoSave then
+						windowObject:SaveConfig()
+					end
+					if originalCallback then
+						originalCallback(val)
+					end
+				end
+			end
+			local comp = Toggle(self.Page, tArgs)
+			if tArgs.flag then
+				windowObject.Components[tArgs.flag] = comp
+				if windowObject.Flags[tArgs.flag] ~= nil then
+					comp:Set(windowObject.Flags[tArgs.flag])
+				else
+					windowObject.Flags[tArgs.flag] = comp:Get()
+				end
+			end
+			return comp
 		end
 		
 		function tab:CreateSection(sArgs)
@@ -507,11 +685,55 @@ local function CreateWindow(options)
 		end
 		
 		function tab:CreateInput(iArgs)
-			return Input(self.Page, iArgs)
+			iArgs = iArgs or {}
+			local originalCallback = iArgs.callback
+			if iArgs.flag then
+				iArgs.callback = function(val)
+					windowObject.Flags[iArgs.flag] = val
+					if windowObject.AutoSave then
+						windowObject:SaveConfig()
+					end
+					if originalCallback then
+						originalCallback(val)
+					end
+				end
+			end
+			local comp = Input(self.Page, iArgs)
+			if iArgs.flag then
+				windowObject.Components[iArgs.flag] = comp
+				if windowObject.Flags[iArgs.flag] ~= nil then
+					comp:Set(windowObject.Flags[iArgs.flag])
+				else
+					windowObject.Flags[iArgs.flag] = comp:Get()
+				end
+			end
+			return comp
 		end
 		
 		function tab:CreateDropdown(dArgs)
-			return Dropdown(self.Page, dArgs)
+			dArgs = dArgs or {}
+			local originalCallback = dArgs.callback
+			if dArgs.flag then
+				dArgs.callback = function(val)
+					windowObject.Flags[dArgs.flag] = val
+					if windowObject.AutoSave then
+						windowObject:SaveConfig()
+					end
+					if originalCallback then
+						originalCallback(val)
+					end
+				end
+			end
+			local comp = Dropdown(self.Page, dArgs)
+			if dArgs.flag then
+				windowObject.Components[dArgs.flag] = comp
+				if windowObject.Flags[dArgs.flag] ~= nil then
+					comp:Set(windowObject.Flags[dArgs.flag])
+				else
+					windowObject.Flags[dArgs.flag] = comp:Get()
+				end
+			end
+			return comp
 		end
 		
 		function tab:CreateButton(bArgs)
@@ -519,11 +741,145 @@ local function CreateWindow(options)
 		end
 		
 		function tab:CreateColorPicker(cArgs)
-			return ColorPicker(self.Page, windowObject.ScreenGui, cArgs)
+			cArgs = cArgs or {}
+			local originalCallback = cArgs.callback
+			if cArgs.flag then
+				cArgs.callback = function(color)
+					windowObject.Flags[cArgs.flag] = { color.R, color.G, color.B }
+					if windowObject.AutoSave then
+						windowObject:SaveConfig()
+					end
+					if originalCallback then
+						originalCallback(color)
+					end
+				end
+			end
+			local comp = ColorPicker(self.Page, windowObject.ScreenGui, cArgs)
+			if cArgs.flag then
+				windowObject.Components[cArgs.flag] = {
+					Set = function(_, val)
+						if type(val) == "table" and #val == 3 then
+							comp:Set(Color3.new(val[1], val[2], val[3]))
+						end
+					end,
+					Get = function()
+						local color = comp:Get()
+						return { color.R, color.G, color.B }
+					end
+				}
+				if windowObject.Flags[cArgs.flag] ~= nil then
+					local val = windowObject.Flags[cArgs.flag]
+					comp:Set(Color3.new(val[1], val[2], val[3]))
+				else
+					local color = comp:Get()
+					windowObject.Flags[cArgs.flag] = { color.R, color.G, color.B }
+				end
+			end
+			return comp
 		end
 		
 		function tab:CreateSlider(slArgs)
-			return Slider(self.Page, slArgs)
+			slArgs = slArgs or {}
+			local originalCallback = slArgs.callback
+			if slArgs.flag then
+				slArgs.callback = function(val)
+					windowObject.Flags[slArgs.flag] = val
+					if windowObject.AutoSave then
+						windowObject:SaveConfig()
+					end
+					if originalCallback then
+						originalCallback(val)
+					end
+				end
+			end
+			local comp = Slider(self.Page, slArgs)
+			if slArgs.flag then
+				windowObject.Components[slArgs.flag] = comp
+				if windowObject.Flags[slArgs.flag] ~= nil then
+					comp:Set(windowObject.Flags[slArgs.flag])
+				else
+					windowObject.Flags[slArgs.flag] = comp:Get()
+				end
+			end
+			return comp
+		end
+
+		function tab:CreateTargetBody(tbArgs)
+			tbArgs = tbArgs or {}
+			local originalCallback = tbArgs.callback
+			if tbArgs.flag then
+				tbArgs.callback = function(parts)
+					windowObject.Flags[tbArgs.flag] = parts
+					if windowObject.AutoSave then
+						windowObject:SaveConfig()
+					end
+					if originalCallback then
+						originalCallback(parts)
+					end
+				end
+			end
+			local comp = TargetBody(self.Page, tbArgs)
+			if tbArgs.flag then
+				windowObject.Components[tbArgs.flag] = comp
+				if windowObject.Flags[tbArgs.flag] ~= nil then
+					comp:Set(windowObject.Flags[tbArgs.flag])
+				else
+					windowObject.Flags[tbArgs.flag] = comp:Get()
+				end
+			end
+			return comp
+		end
+
+		function tab:CreateKeybind(kbArgs)
+			kbArgs = kbArgs or {}
+			local originalCallback = kbArgs.callback
+			if kbArgs.flag then
+				kbArgs.callback = function(key)
+					windowObject.Flags[kbArgs.flag] = key.Name
+					if windowObject.AutoSave then
+						windowObject:SaveConfig()
+					end
+					if originalCallback then
+						originalCallback(key)
+					end
+				end
+			end
+			local comp = Keybind(self.Page, kbArgs)
+			if kbArgs.flag then
+				windowObject.Components[kbArgs.flag] = {
+					Set = function(_, keyName)
+						pcall(function()
+							comp:Set(Enum.KeyCode[keyName])
+						end)
+					end,
+					Get = function()
+						return comp:Get().Name
+					end
+				}
+				if windowObject.Flags[kbArgs.flag] ~= nil then
+					local keyName = windowObject.Flags[kbArgs.flag]
+					pcall(function()
+						comp:Set(Enum.KeyCode[keyName])
+					end)
+				else
+					windowObject.Flags[kbArgs.flag] = comp:Get().Name
+				end
+			end
+			return comp
+		end
+
+		function tab:CreateLogger(lgArgs)
+			local comp = Logger(self.Page, lgArgs)
+			windowObject.LoggerComponent = comp
+			for _, item in ipairs(windowObject.QueuedLogs) do
+				comp:Log(item.level, item.message)
+			end
+			windowObject.QueuedLogs = {}
+			return comp
+		end
+
+		function tab:CreatePlayerList(plArgs)
+			return PlayerList(self.Page, plArgs)
 		end
 
 		tabButton.MouseButton1Click:Connect(function()
@@ -549,8 +905,34 @@ local function CreateWindow(options)
 		end
 		return tab
 	end
+	local function cleanUpAllScreens()
+		if screenGui then
+			pcall(function() screenGui:Destroy() end)
+		end
+		pcall(function()
+			watermark.set({ visible = false })
+		end)
+		pcall(function()
+			controlHUD.setVisible(false)
+		end)
+		local CoreGui = game:GetService("CoreGui")
+		local PlayerGui = Players.LocalPlayer and Players.LocalPlayer:FindFirstChildOfClass("PlayerGui")
+		for _, parent in ipairs({CoreGui, PlayerGui}) do
+			if parent then
+				local monoNotif = parent:FindFirstChild("MonoNotification")
+				if monoNotif then
+					pcall(function() monoNotif:Destroy() end)
+				end
+				local monoControl = parent:FindFirstChild("MonoControlHUD")
+				if monoControl then
+					pcall(function() monoControl:Destroy() end)
+				end
+			end
+		end
+	end
+
 	closeButton.MouseButton1Click:Connect(function()
-		screenGui.Enabled = false
+		cleanUpAllScreens()
 		if closedCallback then
 			task.spawn(closedCallback)
 		end
@@ -616,7 +998,7 @@ local function CreateWindow(options)
 		}, 0.18):Play()
 	end)
 	function windowObject:Destroy()
-		screenGui:Destroy()
+		cleanUpAllScreens()
 	end
 	function windowObject:SetVisible(value)
 		screenGui.Enabled = value == true
@@ -624,6 +1006,13 @@ local function CreateWindow(options)
 			setMinimized(false)
 		end
 	end
+
+	-- Auto-load config if it exists
+	task.spawn(function()
+		task.wait(0.1) -- small wait to ensure all elements are created and can be updated
+		windowObject:LoadConfig()
+	end)
+
 	return windowObject
 end
 

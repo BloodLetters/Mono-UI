@@ -57,11 +57,11 @@ return function(page, args)
 	
 	local fill = make("Frame", {
 		Size = UDim2.fromOffset(0, 8),
-		BackgroundColor3 = Color3.fromRGB(100, 100, 110),
 		BorderSizePixel = 0,
 		Parent = trackHolder,
 	})
 	addCorner(fill, 4)
+	utils.registerTheme(fill, "BackgroundColor3", "AccentColor")
 	
 	local thumb = make("TextButton", {
 		AnchorPoint = Vector2.new(0.5, 0.5),

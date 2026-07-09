@@ -22,7 +22,7 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_error(404, 'File Not Found: dist/mono-ui.luau')
         elif self.path == '/demo':
             # Serve the demo script (modifying local require to fetch from this local server)
-            example_path = os.path.join(DIRECTORY, 'src', 'example.lua')
+            example_path = os.path.join(DIRECTORY, 'example.lua')
             if os.path.exists(example_path):
                 with open(example_path, 'r', encoding='utf-8') as f:
                     content = f.read()

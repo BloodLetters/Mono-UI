@@ -145,7 +145,10 @@ function utils.connectDrag(handle, target)
 	local dragging = false
 	local dragStart
 	local startPosition
-	handle.InputBegan:Connect(function(input)
+	handle.InputBegan:Connect(function(input, processed)
+		if processed then
+			return
+		end
 		if input.UserInputType ~= Enum.UserInputType.MouseButton1 and input.UserInputType ~= Enum.UserInputType.Touch then
 			return
 		end
@@ -180,6 +183,47 @@ function utils.getResponsiveWindowSize()
 	local width = math.clamp(math.floor(viewport.X * 0.46), 520, 780)
 	local height = math.clamp(math.floor(viewport.Y * 0.48), 340, 560)
 	return UDim2.fromOffset(width, height)
+end
+
+-- CENTRALIZED THEME REGISTRY
+utils.theme = {
+	AccentColor = Color3.fromRGB(0, 162, 255),
+	BackgroundColor = Color3.fromRGB(16, 16, 18),
+	CardColor = Color3.fromRGB(24, 24, 28),
+	BorderColor = Color3.fromRGB(60, 60, 68),
+	TextColor = Color3.fromRGB(235, 235, 240),
+	MutedTextColor = Color3.fromRGB(150, 150, 160),
+}
+
+local themeRegistry = {}
+local themeSignals = {}
+
+function utils.onThemeChanged(callback)
+	table.insert(themeSignals, callback)
+end
+
+function utils.registerTheme(instance, property, themeKey)
+	table.insert(themeRegistry, { instance = instance, property = property, key = themeKey })
+	instance[property] = utils.theme[themeKey]
+end
+
+function utils.setThemeColor(themeKey, color)
+	if utils.theme[themeKey] then
+		utils.theme[themeKey] = color
+		for i = #themeRegistry, 1, -1 do
+			local item = themeRegistry[i]
+			if item.instance and item.instance.Parent then
+				pcall(function()
+					item.instance[item.property] = color
+				end)
+			else
+				table.remove(themeRegistry, i)
+			end
+		end
+		for _, cb in ipairs(themeSignals) do
+			task.spawn(cb, themeKey, color)
+		end
+	end
 end
 
 return utils

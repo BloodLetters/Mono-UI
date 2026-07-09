@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MonoUI — Premium Roblox UI Library Docs</title>
+    <meta name="description"
+        content="Sleek, modular, and premium Roblox UI library with auto-saving, live search, and autoexec support.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- Prism.js Tomorrow Night Theme for Code Highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Background glow grids for futuristic cyber aesthetics -->
+    <div class="glow-bg">
+        <div class="glow-circle glow-blue"></div>
+        <div class="glow-circle glow-purple"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="navbar" id="navbar">
+        <div class="nav-left">
+            <div class="brand">
+                <i class="fa-solid fa-shield-halved brand-logo"></i>
+                <span class="brand-name">Mono<span>UI</span></span>
+            </div>
+            <span class="badge">v1.1.0</span>
+        </div>
+        <div class="nav-right">
+            <div class="search-wrapper">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="doc-search" placeholder="Search API docs...">
+            </div>
+            <a href="https://github.com/YOUR_GITHUB_USERNAME/mono-ui" target="_blank" class="github-link"
+                id="github-link">
+                <i class="fa-brands fa-github"></i> GitHub
+            </a>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        <aside class="sidebar" id="sidebar">
+            <nav class="sidebar-nav">
+                <div class="nav-group">
+                    <span class="group-title">Getting Started</span>
+                    <a href="#introduction" class="nav-item active" id="nav-intro"><i
+                            class="fa-solid fa-circle-info"></i> Introduction</a>
+                    <a href="#getting-started" class="nav-item" id="nav-boot"><i class="fa-solid fa-rocket"></i>
+                        Loadstring Boot</a>
+                    <a href="#features" class="nav-item" id="nav-feat"><i class="fa-solid fa-star"></i> Key Features</a>
+                </div>
+                <div class="nav-group">
+                    <span class="group-title">Core APIs</span>
+                    <a href="#create-window" class="nav-item" id="nav-window"><i
+                            class="fa-solid fa-window-maximize"></i> CreateWindow</a>
+                    <a href="#notifications" class="nav-item" id="nav-notify"><i class="fa-solid fa-bell"></i> Notify
+                        Toast</a>
+                    <a href="#watermark" class="nav-item" id="nav-watermark"><i class="fa-solid fa-chart-line"></i>
+                        SetWatermark</a>
+                    <a href="#control-hud" class="nav-item" id="nav-hud"><i class="fa-solid fa-sliders"></i>
+                        CreateControlHUD</a>
+                </div>
+                <div class="nav-group">
+                    <span class="group-title">Layout & Structure</span>
+                    <a href="#create-tab" class="nav-item" id="nav-tab"><i class="fa-solid fa-folder-open"></i>
+                        CreateTab</a>
+                    <a href="#create-section" class="nav-item" id="nav-section"><i class="fa-solid fa-grip-lines"></i>
+                        CreateSection</a>
+                </div>
+                <div class="nav-group">
+                    <span class="group-title">Components</span>
+                    <a href="#toggle" class="nav-item" id="nav-toggle"><i class="fa-solid fa-toggle-on"></i> Toggle
+                        Button</a>
+                    <a href="#slider" class="nav-item" id="nav-slider"><i class="fa-solid fa-sliders"></i> Numeric
+                        Slider</a>
+                    <a href="#dropdown" class="nav-item" id="nav-dropdown"><i class="fa-solid fa-caret-down"></i>
+                        Dropdown Select</a>
+                    <a href="#input" class="nav-item" id="nav-input"><i class="fa-solid fa-keyboard"></i> Text Input</a>
+                    <a href="#button" class="nav-item" id="nav-button"><i class="fa-solid fa-square-check"></i> Button
+                        Clicker</a>
+                    <a href="#colorpicker" class="nav-item" id="nav-color"><i class="fa-solid fa-palette"></i> Color
+                        Picker</a>
+                    <a href="#keybind" class="nav-item" id="nav-keybind"><i class="fa-solid fa-keyboard"></i> Keybind
+                        Capturer</a>
+                    <a href="#targetbody" class="nav-item" id="nav-body"><i class="fa-solid fa-child"></i> Skeletal
+                        Target</a>
+                    <a href="#playerlist" class="nav-item" id="nav-players"><i class="fa-solid fa-users"></i> Player
+                        List & ESP</a>
+                    <a href="#logger" class="nav-item" id="nav-logger"><i class="fa-solid fa-terminal"></i> In-App
+                        Console</a>
+                </div>
+                <div class="nav-group">
+                    <span class="group-title">Examples</span>
+                    <a href="#full-code" class="nav-item" id="nav-example"><i class="fa-solid fa-code"></i> Complete
+                        Script</a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Documentation Container -->
+        <main class="content-container">
+            <section id="introduction" class="doc-section">
+                <h1>🌌 MonoUI Library Documentation</h1>
+                <p class="lead-text">Welcome to the official developer documentation for MonoUI. MonoUI is a
+                    state-of-the-art, high-performance, dark-mode Roblox UI library focusing on beautiful aesthetics,
+                    modular expansion, auto-saving configurations, and live search filtering.</p>
+                <div class="alert note">
+                    <i class="fa-solid fa-lightbulb alert-icon"></i>
+                    <div class="alert-content">
+                        <strong>Tip:</strong> All interactive components automatically sync their values with the global
+                        configuration database when modified.
+                    </div>
+                </div>
+            </section>
+
+            <section id="getting-started" class="doc-section">
+                <h2>🚀 Getting Started</h2>
+                <p>To initialize MonoUI in your script executor, paste and run the following loadstring bootstrapper:
+                </p>
+                <div class="code-container">
+                    <button class="copy-btn" data-clipboard-target="#code-boot"><i class="fa-regular fa-copy"></i>
+                        Copy</button>
+                    <pre><code class="language-lua" id="code-boot">local MonoUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/mono-ui/main/dist/mono-ui.luau"))()</code></pre>
+                </div>
+            </section>
+
+            <section id="features" class="doc-section">
+                <h2>✨ Key Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <i class="fa-solid fa-magnifying-glass feature-icon"></i>
+                        <h3>Global Search Filter</h3>
+                        <p>A built-in Live Search Bar inside the TopBar filters components instantly as you type.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fa-solid fa-arrows-to-eye feature-icon"></i>
+                        <h3>Draggable Control HUD</h3>
+                        <p>Rounded HUD carrying setting toggles. Supports safe drag-threshold triggers.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fa-solid fa-rotate feature-icon"></i>
+                        <h3>AutoExec Teleportation</h3>
+                        <p>Automatically queues execution on server hops using <code>queue_on_teleport</code>.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fa-solid fa-floppy-disk feature-icon"></i>
+                        <h3>Automatic Save & Load</h3>
+                        <p>Auto-serializes element configurations, including Color3 and KeyCodes.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="create-window" class="doc-section">
+                <h2>🪟 CreateWindow</h2>
+                <p>Creates the core glassmorphic container instance for your library controls.</p>
+                <div class="code-container">
+                    <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    <pre><code class="language-lua">local window = MonoUI.CreateWindow({
+    Title = "mono ui",
+    Subtitle = "premium modular library",
+    Size = UDim2.fromOffset(600, 400),
+    Icon = "shield",
+    ConfigName = "mono_demo_config", -- Saved as mono_demo_config.json
+    AutoSave = true,                 -- Saves component changes instantly
+    AutoExec = true                  -- Automatically reload script on teleport
+})</code></pre>
+                </div>
+            </section>
+
+            <section id="notifications" class="doc-section">
+                <h2>🔔 Notify Toast</h2>
+                <p>Spawns a translucent toast notification card in the bottom-right corner of the screen.</p>
+                <div class="code-container">
+                    <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    <pre><code class="language-lua">MonoUI.Notify({
+    title = "System Alert",
+    content = "MonoUI has loaded successfully.",
+    icon = "check-circle",
+    duration = 4
+})</code></pre>
+                </div>
+            </section>
+
+            <section id="watermark" class="doc-section">
+                <h2>🖥️ SetWatermark</h2>
+                <p>Displays a floating utility overlay tracking execution stats, ping, and local system clock.</p>
+                <div class="code-container">
+                    <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    <pre><code class="language-lua">MonoUI.SetWatermark({
+    visible = true,
+    text = "MonoUI Premium v1.0"
+})</code></pre>
+                </div>
+            </section>
+
+            <section id="control-hud" class="doc-section">
+                <h2>🎛️ CreateControlHUD</h2>
+                <p>Creates a small draggable rounded quick settings menu carrying icons only.</p>
+                <div class="code-container">
+                    <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    <pre><code class="language-lua">MonoUI.CreateControlHUD({
+    {
+        icon = "swords",
+        default = false,
+        callback = function(active)
+            print("Silent Aim: " .. tostring(active))
+        end
+    },
+    {
+        icon = "eye",
+        default = true,
+        callback = function(active)
+            print("ESP: " .. tostring(active))
+        end
+    }
+})</code></pre>
+                </div>
+            </section>
+
+            <section id="create-tab" class="doc-section">
+                <h2>📂 CreateTab</h2>
+                <p>Appends a navigation tab item to the window sidebar.</p>
+                <div class="code-container">
+                    <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    <pre><code class="language-lua">local combatTab = window:CreateTab({
+    text = "Combat",
+    icon = "swords"
+})</code></pre>
+                </div>
+            </section>
+
+            <section id="create-section" class="doc-section">
+                <h2>🗂️ CreateSection</h2>
+                <p>Groups consecutive components together under a section banner.</p>
+                <div class="code-container">
+                    <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    <pre><code class="language-lua">combatTab:CreateSection({
+    text = "Combat Hacks"
+})</code></pre>
+                </div>
+            </section>
+
+            <section id="toggle" class="doc-section">
+                <h2>🔘 Toggle Button</h2>
+                <p>A simple on/off switch component.</p>
+                <div class="code-container">
+                    <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    <pre><code class="language-lua">tab1:CreateToggle({
+    text = "Silent Aim",
+    default = false,
+    flag = "silent_aim_state",
+    callback = function(state)
+        print("Silent Aim: " .. (state and "ENABLED" or "DISABLED"))
+    end
+})</code></pre>
+                </div>
+            </section>
+
+            <section id="slider" class="doc-section">
+                <h2>🎚️ Numeric Slider</h2>
+                <p>A draggable range input slider with support for decimals and unit suffixes.</p>
+                <div class="code-container">
+                    <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    <pre><code class="language-lua">tab1:CreateSlider({
+    text = "FOV Range",
+    min = 10,
+    max = 200,
+    default = 90,
+    decimals = 1,              -- Float value spacing
+    suffix = "°",              -- Suffix character
+    flag = "aimbot_fov",
+    callback = function(value)
+        print("FOV Range set to: " .. value)
+    end
+})</code></pre>
+                </div>
+            </section>
+
+            <section id="dropdown" class="doc-section">
+                <h2>🔽 Dropdown Select</h2>
+                <p>A collapsed scrollable select list supporting single or multiple selections.</p>
+                <div class="code-container">
+                    <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    <pre><code class="language-lua">tab1:CreateDropdown({
+    text = "Target Mode",
+    list = {"Distance", "FOV", "Health"},
+    default = "Distance",
+    multiple = false,
+    flag = "target_mode",
+    callback = function(selection)
+        print("Selected: " .. tostring(selection[1] or selection))
+    end
+})</code></pre>
+                </div>
+            </section>
+
+            <section id="input" class="doc-section">
+                <h2>🔤 Text Input</h2>
+                <p>A focusable text box allowing players to type strings.</p>
+                <div class="code-container">
+                    <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    <pre><code class="language-lua">tab1:CreateInput({
+    text = "Aimbot Key",
+    placeholder = "Type text...",
+    default = "Headshot",
+    flag = "aimbot_key_text",
+    callback = function(value)
+        print("Aimbot text value set to: " .. value)
+    end
+})</code></pre>
+                </div>
+            </section>
+
+            <section id="button" class="doc-section">
+                <h2>🖱️ Button Clicker</h2>
+                <p>Standard clickable trigger button.</p>
+                <div class="code-container">
+                    <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    <pre><code class="language-lua">tab1:CreateButton({
+    text = "Reset Settings",
+    callback = function()
+        print("Settings reset successfully.")
+    end
+})</code></pre>
+                </div>
+            </section>
+
+            <section id="colorpicker" class="doc-section">
+                <h2>🎨 Color Picker</h2>
+                <p>Provides a visual color selector pop-up canvas.</p>
+                <div class="code-container">
+                    <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    <pre><code class="language-lua">tab1:CreateColorPicker({
+    text = "ESP Color",
+    default = Color3.fromRGB(0, 162, 255),
+    flag = "esp_theme_color",
+    callback = function(color)
+        print("ESP Theme Color updated: ", color)
+    end
+})</code></pre>
+                </div>
+            </section>
+
+            <section id="keybind" class="doc-section">
+                <h2>⌨️ Keybind Capturer</h2>
+                <p>Allows users to register custom keyboard binds. Supports pressing Escape to clear.</p>
+                <div class="code-container">
+                    <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    <pre><code class="language-lua">tab1:CreateKeybind({
+    text = "Menu Toggle Key",
+    default = Enum.KeyCode.RightControl,
+    flag = "menu_toggle_key",
+    callback = function(key)
+        print("Pressed hotkey: " .. key.Name)
+    end
+})</code></pre>
+                </div>
+            </section>
+
+            <section id="targetbody" class="doc-section">
+                <h2>🎯 Skeletal Target Selection</h2>
+                <p>Advanced interactive R6 body layout selection. Limbs can be toggled or disabled.</p>
+                <div class="code-container">
+                    <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    <pre><code class="language-lua">tab1:CreateTargetBody({
+    text = "Target Limbs",
+    default = {"Head", "Torso"},
+    disabledParts = {"RightArm", "LeftArm"},
+    flag = "body_parts",
+    callback = function(selectedParts)
+        print("Active parts: " .. table.concat(selectedParts, ", "))
+    end
+})</code></pre>
+                </div>
+            </section>
+
+            <section id="playerlist" class="doc-section">
+                <h2>👥 Player List & ESP</h2>
+                <p>Generates a list of active players in the server. Clicking TP teleports your character, while ESP
+                    turns on highlights.</p>
+                <div class="code-container">
+                    <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    <pre><code class="language-lua">tab1:CreatePlayerList({
+    text = "Active Server Players",
+    height = 280
+})</code></pre>
+                </div>
+            </section>
+
+            <section id="logger" class="doc-section">
+                <h2>🖥️ In-App Console</h2>
+                <p>Creates an in-app console widget showing activity logs.</p>
+                <div class="code-container">
+                    <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    <pre><code class="language-lua">local logger = tab1:CreateLogger({
+    text = "Console Output Logs",
+    height = 280
+})
+
+-- Logger syntax:
+logger:Log("INFO", "Starting engine...")
+logger:Log("SUCCESS", "ESP fully loaded.")
+logger:Log("WARNING", "Server lag detected.")
+logger:Log("ERROR", "Access denied.")</code></pre>
+                </div>
+            </section>
+
+            <section id="full-code" class="doc-section">
+                <h2>💻 Complete Script Example</h2>
+                <p>This is a complete script using all the custom methods in the library:</p>
+                <div class="code-container">
+                    <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    <pre><code class="language-lua">local MonoUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/mono-ui/main/dist/mono-ui.luau"))()
+
+-- Configure stats overlay
+MonoUI.SetWatermark({
+    visible = true,
+    text = "MonoUI Premium",
+})
+
+-- Create main window
+local window = MonoUI.CreateWindow({
+    Title = "mono ui",
+    Subtitle = "premium modular library",
+    Size = UDim2.fromOffset(600, 400),
+    Icon = "shield",
+    ConfigName = "mono_demo_config",
+    AutoSave = true,
+    AutoExec = true,
+})
+
+-- Setup console tab
+local consoleTab = window:CreateTab({
+    text = "Console",
+    icon = "terminal",
+})
+consoleTab:CreateSection({
+    text = "System Action Logs"
+})
+local logger = consoleTab:CreateLogger({
+    text = "Mono Console Output",
+    height = 280,
+})
+
+-- Setup combat tab
+local combatTab = window:CreateTab({
+    text = "Combat",
+    icon = "swords",
+})
+combatTab:CreateSection({
+    text = "Combat Hacks"
+})
+combatTab:CreateToggle({
+    text = "Silent Aim",
+    default = false,
+    flag = "silent_aim",
+    callback = function(state)
+        logger:Log("INFO", "Silent Aim toggled: " .. tostring(state))
+    end
+})
+
+-- Setup floating Control HUD
+MonoUI.CreateControlHUD({
+    {
+        icon = "swords",
+        default = false,
+        callback = function(active)
+            logger:Log("INFO", "HUD - Silent Aim: " .. tostring(active))
+        end
+    },
+    {
+        icon = "eye",
+        default = true,
+        callback = function(active)
+            logger:Log("INFO", "HUD - ESP: " .. tostring(active))
+        end
+    }
+})</code></pre>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 MonoUI. Built with premium design standards. MIT License.</p>
+    </footer>
+
+    <!-- Prism JS for Code Highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-lua.min.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
