@@ -19,7 +19,7 @@
 To integrate **MonoUI** into your script, execute the following `loadstring` environment:
 
 ```lua
-local MonoUI = loadstring(game:HttpGet("[https://github.com/BloodLetters/mono-ui/releases/latest/download/Release.luau](https://github.com/BloodLetters/mono-ui/releases/latest/download/Release.luau)"))()
+local MonoUI = loadstring(game:HttpGet("https://github.com/BloodLetters/mono-ui/releases/latest/download/Release.luau"))()
 ```
 
 ---
