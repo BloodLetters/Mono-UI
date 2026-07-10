@@ -1,6 +1,5 @@
-</p>
+> [!WARNING]  
 > ⚠️ **Warning:** This project is **Still in Development** features and behavior may change without notice. Use at your own risk in production environments.
-</div>
 
 <div align="center">
 
