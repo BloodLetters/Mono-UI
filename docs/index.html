@@ -24,7 +24,7 @@
                 <i class="fa-solid fa-shield-halved brand-logo"></i>
                 <span class="brand-name">Mono<span>UI</span></span>
             </div>
-            <span class="badge">v1.1.0</span>
+            <!-- VERSION_START --><span class="badge">v1.2</span><!-- VERSION_END -->
         </div>
         <div class="nav-right">
             <div class="search-wrapper">
@@ -53,42 +53,52 @@
 
                 <div class="nav-group">
                     <span class="group-title">Core</span>
+                    <!-- SIDEBAR_CORE_START -->
+                    <a href="#control-hud" class="nav-item" id="nav-hud"><i
+                            class="fa-solid fa-sliders"></i> CreateControlHUD</a>
                     <a href="#create-window" class="nav-item" id="nav-window"><i
                             class="fa-solid fa-window-maximize"></i> CreateWindow</a>
-                    <a href="#notifications" class="nav-item" id="nav-notify"><i class="fa-solid fa-bell"></i>
-                        Notify</a>
-                    <a href="#watermark" class="nav-item" id="nav-wm"><i class="fa-solid fa-chart-line"></i>
-                        SetWatermark</a>
-                    <a href="#control-hud" class="nav-item" id="nav-hud"><i class="fa-solid fa-sliders"></i>
-                        CreateControlHUD</a>
+                    <a href="#notifications" class="nav-item" id="nav-notify"><i
+                            class="fa-solid fa-bell"></i> Notify</a>
+                    <a href="#watermark" class="nav-item" id="nav-wm"><i
+                            class="fa-solid fa-chart-line"></i> SetWatermark</a>
+                    <!-- SIDEBAR_CORE_END -->
                 </div>
 
                 <div class="nav-group">
                     <span class="group-title">Layout</span>
-                    <a href="#create-tab" class="nav-item" id="nav-tab"><i class="fa-solid fa-folder-open"></i>
-                        CreateTab</a>
-                    <a href="#create-section" class="nav-item" id="nav-section"><i class="fa-solid fa-grip-lines"></i>
-                        CreateSection</a>
+                    <!-- SIDEBAR_LAYOUT_START -->
+                    <a href="#create-section" class="nav-item" id="nav-section"><i
+                            class="fa-solid fa-grip-lines"></i> CreateSection</a>
+                    <a href="#create-tab" class="nav-item" id="nav-tab"><i
+                            class="fa-solid fa-folder-open"></i> CreateTab</a>
+                    <!-- SIDEBAR_LAYOUT_END -->
                 </div>
 
                 <div class="nav-group">
                     <span class="group-title">Components</span>
-                    <a href="#toggle" class="nav-item" id="nav-toggle"><i class="fa-solid fa-toggle-on"></i> Toggle</a>
-                    <a href="#slider" class="nav-item" id="nav-slider"><i class="fa-solid fa-sliders"></i> Slider</a>
-                    <a href="#dropdown" class="nav-item" id="nav-dropdown"><i class="fa-solid fa-caret-down"></i>
-                        Dropdown</a>
-                    <a href="#input" class="nav-item" id="nav-input"><i class="fa-solid fa-keyboard"></i> Input</a>
-                    <a href="#button" class="nav-item" id="nav-button"><i class="fa-solid fa-square-check"></i>
-                        Button</a>
-                    <a href="#colorpicker" class="nav-item" id="nav-color"><i class="fa-solid fa-palette"></i>
-                        ColorPicker</a>
-                    <a href="#keybind" class="nav-item" id="nav-keybind"><i class="fa-solid fa-keyboard"></i>
-                        Keybind</a>
-                    <a href="#targetbody" class="nav-item" id="nav-body"><i class="fa-solid fa-child"></i>
-                        TargetBody</a>
-                    <a href="#playerlist" class="nav-item" id="nav-players"><i class="fa-solid fa-users"></i>
-                        PlayerList</a>
-                    <a href="#logger" class="nav-item" id="nav-logger"><i class="fa-solid fa-terminal"></i> Logger</a>
+                    <!-- SIDEBAR_COMPONENTS_START -->
+                    <a href="#button" class="nav-item" id="nav-button"><i
+                            class="fa-solid fa-square-check"></i> CreateButton</a>
+                    <a href="#colorpicker" class="nav-item" id="nav-color"><i
+                            class="fa-solid fa-palette"></i> CreateColorPicker</a>
+                    <a href="#dropdown" class="nav-item" id="nav-dropdown"><i
+                            class="fa-solid fa-caret-down"></i> CreateDropdown</a>
+                    <a href="#input" class="nav-item" id="nav-input"><i
+                            class="fa-solid fa-keyboard"></i> CreateInput</a>
+                    <a href="#keybind" class="nav-item" id="nav-keybind"><i
+                            class="fa-solid fa-keyboard"></i> CreateKeybind</a>
+                    <a href="#logger" class="nav-item" id="nav-logger"><i
+                            class="fa-solid fa-terminal"></i> CreateLogger</a>
+                    <a href="#playerlist" class="nav-item" id="nav-players"><i
+                            class="fa-solid fa-users"></i> CreatePlayerList</a>
+                    <a href="#slider" class="nav-item" id="nav-slider"><i
+                            class="fa-solid fa-sliders"></i> CreateSlider</a>
+                    <a href="#targetbody" class="nav-item" id="nav-body"><i
+                            class="fa-solid fa-child"></i> CreateTargetBody</a>
+                    <a href="#toggle" class="nav-item" id="nav-toggle"><i
+                            class="fa-solid fa-toggle-on"></i> CreateToggle</a>
+                    <!-- SIDEBAR_COMPONENTS_END -->
                 </div>
 
                 <div class="nav-group">
@@ -172,6 +182,55 @@
                 </div>
             </section>
 
+            <!-- DYNAMIC_API_START -->
+            <!-- CreateControlHUD -->
+            <section id="control-hud" class="doc-section">
+                <div class="breadcrumb">
+                    <span class="current">Core</span>
+                    <span class="sep">›</span>
+                    <span class="current">CreateControlHUD</span>
+                </div>
+                <div class="section-label">Core API</div>
+                <h2>CreateControlHUD</h2>
+                <p>Creates a floating, draggable, compact HUD with quick toggles (perfect for keeping essential scripts visible).</p>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Argument</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>icon</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Lucide icon name for this HUD shortcut.</td>
+                        </tr>
+                        <tr>
+                            <td>default</td>
+                            <td><span class="type type-boolean">boolean</span></td>
+                            <td>Initial active state of the shortcut button.</td>
+                        </tr>
+                        <tr>
+                            <td>callback</td>
+                            <td><span class="type type-function">function</span></td>
+                            <td>Fires with <code>active: boolean</code> on toggle.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">MonoUI.CreateControlHUD({
+    { icon = "swords", default = false, callback = function(v) print("Aim:", v) end },
+    { icon = "eye",    default = true,  callback = function(v) print("ESP:", v) end },
+})</code></pre>
+                </div>
+            </section>
+
             <!-- CreateWindow -->
             <section id="create-window" class="doc-section">
                 <div class="breadcrumb">
@@ -192,29 +251,14 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Title</td>
-                            <td><span class="type type-string">string</span></td>
-                            <td>Window title displayed in the top bar.</td>
+                            <td>AutoExec</td>
+                            <td><span class="type type-boolean">boolean</span></td>
+                            <td>Re-executes script on teleport via <code>queue_on_teleport</code>.</td>
                         </tr>
                         <tr>
-                            <td>Subtitle</td>
+                            <td>AutoExecUrl</td>
                             <td><span class="type type-string">string</span></td>
-                            <td>Subtitle text below the title.</td>
-                        </tr>
-                        <tr>
-                            <td>Size</td>
-                            <td><span class="type type-table">UDim2</span></td>
-                            <td>Window dimensions.</td>
-                        </tr>
-                        <tr>
-                            <td>Icon</td>
-                            <td><span class="type type-string">string</span></td>
-                            <td>Lucide icon name shown in the corner.</td>
-                        </tr>
-                        <tr>
-                            <td>ConfigName</td>
-                            <td><span class="type type-string">string</span></td>
-                            <td>Filename key used for config persistence.</td>
+                            <td>URL of the raw script to download and execute for AutoExec.</td>
                         </tr>
                         <tr>
                             <td>AutoSave</td>
@@ -222,9 +266,44 @@
                             <td>Auto-saves component state changes.</td>
                         </tr>
                         <tr>
-                            <td>AutoExec</td>
-                            <td><span class="type type-boolean">boolean</span></td>
-                            <td>Re-executes script on teleport via <code>queue_on_teleport</code>.</td>
+                            <td>ConfigName</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Filename key used for config persistence.</td>
+                        </tr>
+                        <tr>
+                            <td>DisplayOrder</td>
+                            <td><span class="type type-number">number</span></td>
+                            <td>Render layering display order index of the ScreenGui.</td>
+                        </tr>
+                        <tr>
+                            <td>Icon</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Lucide icon name shown in the corner.</td>
+                        </tr>
+                        <tr>
+                            <td>Name</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Name property of the ScreenGui instance.</td>
+                        </tr>
+                        <tr>
+                            <td>Position</td>
+                            <td><span class="type type-string">UDim2</span></td>
+                            <td>Initial screen position coordinates of the window.</td>
+                        </tr>
+                        <tr>
+                            <td>Size</td>
+                            <td><span class="type type-string">UDim2</span></td>
+                            <td>Window dimensions.</td>
+                        </tr>
+                        <tr>
+                            <td>Subtitle</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Subtitle text below the title.</td>
+                        </tr>
+                        <tr>
+                            <td>Title</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Window title displayed in the top bar.</td>
                         </tr>
                     </tbody>
                 </table>
@@ -254,7 +333,7 @@
                 </div>
                 <div class="section-label">Core API</div>
                 <h2>Notify</h2>
-                <p>Spawns a toast notification card in the bottom-right corner. Multiple calls stack automatically.</p>
+                <p>Fires a toast notification at the bottom right corner of the screen.</p>
                 <table class="params-table">
                     <thead>
                         <tr>
@@ -265,24 +344,24 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>title</td>
-                            <td><span class="type type-string">string</span></td>
-                            <td>Bold heading text of the notification.</td>
-                        </tr>
-                        <tr>
                             <td>content</td>
                             <td><span class="type type-string">string</span></td>
-                            <td>Body message shown below the title.</td>
-                        </tr>
-                        <tr>
-                            <td>icon</td>
-                            <td><span class="type type-string">string</span></td>
-                            <td>Lucide icon name rendered on the left.</td>
+                            <td>Description content of the notification.</td>
                         </tr>
                         <tr>
                             <td>duration</td>
                             <td><span class="type type-number">number</span></td>
-                            <td>Seconds before auto-dismiss (default: 4).</td>
+                            <td>Time in seconds before the notification disappears.</td>
+                        </tr>
+                        <tr>
+                            <td>icon</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Lucide icon name displayed beside the text.</td>
+                        </tr>
+                        <tr>
+                            <td>title</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Title of the notification header.</td>
                         </tr>
                     </tbody>
                 </table>
@@ -292,10 +371,10 @@
                         <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
                     </div>
                     <pre><code class="language-lua">MonoUI.Notify({
-    title    = "System Alert",
-    content  = "MonoUI has loaded successfully.",
+    title    = "Success",
+    content  = "Cheat successfully loaded!",
     icon     = "check-circle",
-    duration = 4,
+    duration = 5,
 })</code></pre>
                 </div>
             </section>
@@ -309,7 +388,7 @@
                 </div>
                 <div class="section-label">Core API</div>
                 <h2>SetWatermark</h2>
-                <p>Displays a floating overlay showing custom text, FPS counter, ping, and system time.</p>
+                <p>Creates or updates a small top-right HUD showing custom text, client FPS, ping, and character coordinates.</p>
                 <table class="params-table">
                     <thead>
                         <tr>
@@ -320,14 +399,24 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>visible</td>
-                            <td><span class="type type-boolean">boolean</span></td>
-                            <td>Whether the watermark is shown.</td>
+                            <td>anchorPoint</td>
+                            <td><span class="type type-string">Vector2</span></td>
+                            <td>Anchor point of the watermark frame.</td>
+                        </tr>
+                        <tr>
+                            <td>position</td>
+                            <td><span class="type type-string">UDim2</span></td>
+                            <td>Custom screen position offset.</td>
                         </tr>
                         <tr>
                             <td>text</td>
                             <td><span class="type type-string">string</span></td>
-                            <td>Custom label shown in the watermark bar.</td>
+                            <td>Custom prefix header text.</td>
+                        </tr>
+                        <tr>
+                            <td>visible</td>
+                            <td><span class="type type-boolean">boolean</span></td>
+                            <td>Sets the visibility of the watermark HUD.</td>
                         </tr>
                     </tbody>
                 </table>
@@ -339,97 +428,6 @@
                     <pre><code class="language-lua">MonoUI.SetWatermark({
     visible = true,
     text    = "MonoUI Premium",
-})</code></pre>
-                </div>
-            </section>
-
-            <!-- CreateControlHUD -->
-            <section id="control-hud" class="doc-section">
-                <div class="breadcrumb">
-                    <span class="current">Core</span>
-                    <span class="sep">›</span>
-                    <span class="current">CreateControlHUD</span>
-                </div>
-                <div class="section-label">Core API</div>
-                <h2>CreateControlHUD</h2>
-                <p>Creates a small draggable icon-only quick-toggle HUD. Each entry is a toggle button.</p>
-                <table class="params-table">
-                    <thead>
-                        <tr>
-                            <th>Argument</th>
-                            <th>Type</th>
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>icon</td>
-                            <td><span class="type type-string">string</span></td>
-                            <td>Lucide icon name for this HUD button.</td>
-                        </tr>
-                        <tr>
-                            <td>default</td>
-                            <td><span class="type type-boolean">boolean</span></td>
-                            <td>Initial active state of the toggle.</td>
-                        </tr>
-                        <tr>
-                            <td>callback</td>
-                            <td><span class="type type-function">function</span></td>
-                            <td>Called with <code>active: boolean</code> on toggle.</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="code-lang">Lua</span>
-                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
-                    </div>
-                    <pre><code class="language-lua">MonoUI.CreateControlHUD({
-    { icon = "swords", default = false, callback = function(v) print("Aim:", v) end },
-    { icon = "eye",    default = true,  callback = function(v) print("ESP:", v) end },
-})</code></pre>
-                </div>
-            </section>
-
-            <!-- CreateTab -->
-            <section id="create-tab" class="doc-section">
-                <div class="breadcrumb">
-                    <span class="current">Layout</span>
-                    <span class="sep">›</span>
-                    <span class="current">CreateTab</span>
-                </div>
-                <div class="section-label">Layout</div>
-                <h2>CreateTab</h2>
-                <p>Appends a navigation tab to the window sidebar. Returns a tab object used to add components.</p>
-                <table class="params-table">
-                    <thead>
-                        <tr>
-                            <th>Argument</th>
-                            <th>Type</th>
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>text</td>
-                            <td><span class="type type-string">string</span></td>
-                            <td>Label displayed in the sidebar.</td>
-                        </tr>
-                        <tr>
-                            <td>icon</td>
-                            <td><span class="type type-string">string</span></td>
-                            <td>Lucide icon shown next to the label.</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="code-lang">Lua</span>
-                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
-                    </div>
-                    <pre><code class="language-lua">local tab = window:CreateTab({
-    text = "Combat",
-    icon = "swords",
 })</code></pre>
                 </div>
             </section>
@@ -469,16 +467,16 @@
                 </div>
             </section>
 
-            <!-- Toggle -->
-            <section id="toggle" class="doc-section">
+            <!-- CreateTab -->
+            <section id="create-tab" class="doc-section">
                 <div class="breadcrumb">
-                    <span class="current">Components</span>
+                    <span class="current">Layout</span>
                     <span class="sep">›</span>
-                    <span class="current">Toggle</span>
+                    <span class="current">CreateTab</span>
                 </div>
-                <div class="section-label">Components</div>
-                <h2>Toggle</h2>
-                <p>A checkbox-style switch for boolean values. State is persisted to config when a flag is provided.</p>
+                <div class="section-label">Layout</div>
+                <h2>CreateTab</h2>
+                <p>Appends a navigation tab to the window sidebar. Returns a tab object used to add components.</p>
                 <table class="params-table">
                     <thead>
                         <tr>
@@ -489,24 +487,14 @@
                     </thead>
                     <tbody>
                         <tr>
+                            <td>icon</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Lucide icon shown next to the label.</td>
+                        </tr>
+                        <tr>
                             <td>text</td>
                             <td><span class="type type-string">string</span></td>
-                            <td>Label for the toggle.</td>
-                        </tr>
-                        <tr>
-                            <td>default</td>
-                            <td><span class="type type-boolean">boolean</span></td>
-                            <td>Initial state (true/false).</td>
-                        </tr>
-                        <tr>
-                            <td>flag</td>
-                            <td><span class="type type-string">string</span></td>
-                            <td>Unique key for config saving.</td>
-                        </tr>
-                        <tr>
-                            <td>callback</td>
-                            <td><span class="type type-function">function</span></td>
-                            <td>Fires with the new boolean state.</td>
+                            <td>Label displayed in the sidebar.</td>
                         </tr>
                     </tbody>
                 </table>
@@ -515,26 +503,401 @@
                         <span class="code-lang">Lua</span>
                         <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
                     </div>
-                    <pre><code class="language-lua">tab:CreateToggle({
-    text     = "Silent Aim",
-    default  = false,
-    flag     = "silent_aim",
-    callback = function(state)
-        print("Silent Aim:", state)
+                    <pre><code class="language-lua">local tab = window:CreateTab({
+    text = "Combat",
+    icon = "swords",
+})</code></pre>
+                </div>
+            </section>
+
+            <!-- CreateButton -->
+            <section id="button" class="doc-section">
+                <div class="breadcrumb">
+                    <span class="current">Components</span>
+                    <span class="sep">›</span>
+                    <span class="current">CreateButton</span>
+                </div>
+                <div class="section-label">Components</div>
+                <h2>CreateButton</h2>
+                <p>An interactive button that runs a custom function when clicked.</p>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Argument</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>callback</td>
+                            <td><span class="type type-function">function</span></td>
+                            <td>Fires when the button is clicked.</td>
+                        </tr>
+                        <tr>
+                            <td>text</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Text displayed on the button.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">tab:CreateButton({
+    text     = "Force Teleport",
+    callback = function()
+        print("Teleport button pressed.")
     end,
 })</code></pre>
                 </div>
             </section>
 
-            <!-- Slider -->
+            <!-- CreateColorPicker -->
+            <section id="colorpicker" class="doc-section">
+                <div class="breadcrumb">
+                    <span class="current">Components</span>
+                    <span class="sep">›</span>
+                    <span class="current">CreateColorPicker</span>
+                </div>
+                <div class="section-label">Components</div>
+                <h2>CreateColorPicker</h2>
+                <p>An advanced RGB/HSV color picker that supports hex input and saturation/brightness visual adjustments.</p>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Argument</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>callback</td>
+                            <td><span class="type type-function">function</span></td>
+                            <td>Fires with the selected Color3 object.</td>
+                        </tr>
+                        <tr>
+                            <td>default</td>
+                            <td><span class="type type-string">Color3</span></td>
+                            <td>Initial Color3 value.</td>
+                        </tr>
+                        <tr>
+                            <td>flag</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Unique key for config saving.</td>
+                        </tr>
+                        <tr>
+                            <td>text</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Label for the color picker.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">tab:CreateColorPicker({
+    text     = "ESP Color",
+    default  = Color3.fromRGB(255, 0, 0),
+    flag     = "esp_color",
+    callback = function(color)
+        print("Color changed:", color)
+    end,
+})</code></pre>
+                </div>
+            </section>
+
+            <!-- CreateDropdown -->
+            <section id="dropdown" class="doc-section">
+                <div class="breadcrumb">
+                    <span class="current">Components</span>
+                    <span class="sep">›</span>
+                    <span class="current">CreateDropdown</span>
+                </div>
+                <div class="section-label">Components</div>
+                <h2>CreateDropdown</h2>
+                <p>A selection menu for single or multi-value selections. Supports search filtering inside dropdown items.</p>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Argument</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>callback</td>
+                            <td><span class="type type-function">function</span></td>
+                            <td>Fires with a table of selected options.</td>
+                        </tr>
+                        <tr>
+                            <td>default</td>
+                            <td><span class="type type-table">string | table</span></td>
+                            <td>Pre-selected option(s).</td>
+                        </tr>
+                        <tr>
+                            <td>flag</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Unique key for config saving.</td>
+                        </tr>
+                        <tr>
+                            <td>list</td>
+                            <td><span class="type type-table">table</span></td>
+                            <td>Array of string options to display.</td>
+                        </tr>
+                        <tr>
+                            <td>multiple</td>
+                            <td><span class="type type-boolean">boolean</span></td>
+                            <td>Allows selecting multiple items concurrently.</td>
+                        </tr>
+                        <tr>
+                            <td>text</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Label for the dropdown dropdown.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">tab:CreateDropdown({
+    text     = "Target Part",
+    list     = {"Head", "Torso", "LeftArm", "RightArm"},
+    default  = "Head",
+    multiple = false,
+    flag     = "target_part",
+    callback = function(selected)
+        print("Selected:", selected[1])
+    end,
+})</code></pre>
+                </div>
+            </section>
+
+            <!-- CreateInput -->
+            <section id="input" class="doc-section">
+                <div class="breadcrumb">
+                    <span class="current">Components</span>
+                    <span class="sep">›</span>
+                    <span class="current">CreateInput</span>
+                </div>
+                <div class="section-label">Components</div>
+                <h2>CreateInput</h2>
+                <p>A single-line text input field for strings and custom configs.</p>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Argument</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>callback</td>
+                            <td><span class="type type-function">function</span></td>
+                            <td>Fires with the updated text value.</td>
+                        </tr>
+                        <tr>
+                            <td>default</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Initial text value.</td>
+                        </tr>
+                        <tr>
+                            <td>flag</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Unique key for config saving.</td>
+                        </tr>
+                        <tr>
+                            <td>placeholder</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Ghost text shown when the input is empty.</td>
+                        </tr>
+                        <tr>
+                            <td>text</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Label of the input field.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">tab:CreateInput({
+    text        = "Webhook URL",
+    placeholder = "https://discord.com/api/webhooks/...",
+    default     = "",
+    flag        = "webhook_url",
+    callback    = function(url)
+        print("Webhook:", url)
+    end,
+})</code></pre>
+                </div>
+            </section>
+
+            <!-- CreateKeybind -->
+            <section id="keybind" class="doc-section">
+                <div class="breadcrumb">
+                    <span class="current">Components</span>
+                    <span class="sep">›</span>
+                    <span class="current">CreateKeybind</span>
+                </div>
+                <div class="section-label">Components</div>
+                <h2>CreateKeybind</h2>
+                <p>Allows the user to bind a keybind shortcut to toggle/trigger functions. Click to rebind, press Escape to unbind.</p>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Argument</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>callback</td>
+                            <td><span class="type type-function">function</span></td>
+                            <td>Fires with the new KeyCode when bound/triggered.</td>
+                        </tr>
+                        <tr>
+                            <td>default</td>
+                            <td><span class="type type-string">Enum.KeyCode</span></td>
+                            <td>Initial bound KeyCode.</td>
+                        </tr>
+                        <tr>
+                            <td>flag</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Unique key for config saving.</td>
+                        </tr>
+                        <tr>
+                            <td>text</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Label for the keybind.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">tab:CreateKeybind({
+    text     = "Toggle GUI",
+    default  = Enum.KeyCode.RightControl,
+    flag     = "gui_toggle",
+    callback = function(key)
+        print("Keybind triggered:", key.Name)
+    end,
+})</code></pre>
+                </div>
+            </section>
+
+            <!-- CreateLogger -->
+            <section id="logger" class="doc-section">
+                <div class="breadcrumb">
+                    <span class="current">Components</span>
+                    <span class="sep">›</span>
+                    <span class="current">CreateLogger</span>
+                </div>
+                <div class="section-label">Components</div>
+                <h2>CreateLogger</h2>
+                <p>An in-app console widget that displays color-coded activity logs. Supports INFO, SUCCESS, WARNING, and ERROR levels.</p>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Argument</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>height</td>
+                            <td><span class="type type-number">number</span></td>
+                            <td>Pixel height of the log area.</td>
+                        </tr>
+                        <tr>
+                            <td>text</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Console panel header label.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">local log = tab:CreateLogger({ text = "Console", height = 280 })
+
+log:Log("INFO",    "Script loaded.")
+log:Log("SUCCESS", "ESP enabled.")
+log:Log("WARNING", "High ping detected.")
+log:Log("ERROR",   "Target not found.")</code></pre>
+                </div>
+            </section>
+
+            <!-- CreatePlayerList -->
+            <section id="playerlist" class="doc-section">
+                <div class="breadcrumb">
+                    <span class="current">Components</span>
+                    <span class="sep">›</span>
+                    <span class="current">CreatePlayerList</span>
+                </div>
+                <div class="section-label">Components</div>
+                <h2>CreatePlayerList</h2>
+                <p>Renders a scrolling player list widget showing active players on the server. Includes search bar.</p>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Argument</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>height</td>
+                            <td><span class="type type-number">number</span></td>
+                            <td>Pixel height of the scroll area.</td>
+                        </tr>
+                        <tr>
+                            <td>text</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Header title of the list widget.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">tab:CreatePlayerList({
+    text   = "Active Server Players",
+    height = 280,
+})</code></pre>
+                </div>
+            </section>
+
+            <!-- CreateSlider -->
             <section id="slider" class="doc-section">
                 <div class="breadcrumb">
                     <span class="current">Components</span>
                     <span class="sep">›</span>
-                    <span class="current">Slider</span>
+                    <span class="current">CreateSlider</span>
                 </div>
                 <div class="section-label">Components</div>
-                <h2>Slider</h2>
+                <h2>CreateSlider</h2>
                 <p>A draggable range input with min/max bounds and optional decimal precision.</p>
                 <table class="params-table">
                     <thead>
@@ -546,19 +909,9 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>text</td>
-                            <td><span class="type type-string">string</span></td>
-                            <td>Label for the slider row.</td>
-                        </tr>
-                        <tr>
-                            <td>min</td>
-                            <td><span class="type type-number">number</span></td>
-                            <td>Minimum value of the range.</td>
-                        </tr>
-                        <tr>
-                            <td>max</td>
-                            <td><span class="type type-number">number</span></td>
-                            <td>Maximum value of the range.</td>
+                            <td>callback</td>
+                            <td><span class="type type-function">function</span></td>
+                            <td>Fires with the current numeric value.</td>
                         </tr>
                         <tr>
                             <td>default</td>
@@ -571,9 +924,19 @@
                             <td>Unique key for config saving.</td>
                         </tr>
                         <tr>
-                            <td>callback</td>
-                            <td><span class="type type-function">function</span></td>
-                            <td>Fires with the current numeric value.</td>
+                            <td>max</td>
+                            <td><span class="type type-number">number</span></td>
+                            <td>Maximum value of the range.</td>
+                        </tr>
+                        <tr>
+                            <td>min</td>
+                            <td><span class="type type-number">number</span></td>
+                            <td>Minimum value of the range.</td>
+                        </tr>
+                        <tr>
+                            <td>text</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Label for the slider row.</td>
                         </tr>
                     </tbody>
                 </table>
@@ -595,307 +958,16 @@
                 </div>
             </section>
 
-            <!-- Dropdown -->
-            <section id="dropdown" class="doc-section">
-                <div class="breadcrumb">
-                    <span class="current">Components</span>
-                    <span class="sep">›</span>
-                    <span class="current">Dropdown</span>
-                </div>
-                <div class="section-label">Components</div>
-                <h2>Dropdown</h2>
-                <p>A collapsed select list supporting single or multiple selections from a list of options.</p>
-                <table class="params-table">
-                    <thead>
-                        <tr>
-                            <th>Argument</th>
-                            <th>Type</th>
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>text</td>
-                            <td><span class="type type-string">string</span></td>
-                            <td>Label for the dropdown row.</td>
-                        </tr>
-                        <tr>
-                            <td>list</td>
-                            <td><span class="type type-table">table</span></td>
-                            <td>Array of string options.</td>
-                        </tr>
-                        <tr>
-                            <td>default</td>
-                            <td><span class="type type-string">string</span></td>
-                            <td>Pre-selected option.</td>
-                        </tr>
-                        <tr>
-                            <td>multiple</td>
-                            <td><span class="type type-boolean">boolean</span></td>
-                            <td>Allow multi-select if true.</td>
-                        </tr>
-                        <tr>
-                            <td>flag</td>
-                            <td><span class="type type-string">string</span></td>
-                            <td>Unique key for config saving.</td>
-                        </tr>
-                        <tr>
-                            <td>callback</td>
-                            <td><span class="type type-function">function</span></td>
-                            <td>Fires with selected value(s) as a table.</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="code-lang">Lua</span>
-                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
-                    </div>
-                    <pre><code class="language-lua">tab:CreateDropdown({
-    text     = "Target Mode",
-    list     = { "Distance", "FOV", "Health" },
-    default  = "Distance",
-    multiple = false,
-    flag     = "target_mode",
-    callback = function(selection)
-        print("Selected:", selection[1])
-    end,
-})</code></pre>
-                </div>
-            </section>
-
-            <!-- Input -->
-            <section id="input" class="doc-section">
-                <div class="breadcrumb">
-                    <span class="current">Components</span>
-                    <span class="sep">›</span>
-                    <span class="current">Input</span>
-                </div>
-                <div class="section-label">Components</div>
-                <h2>Input</h2>
-                <p>A focusable text box allowing the user to type a string value.</p>
-                <table class="params-table">
-                    <thead>
-                        <tr>
-                            <th>Argument</th>
-                            <th>Type</th>
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>text</td>
-                            <td><span class="type type-string">string</span></td>
-                            <td>Label displayed beside the input.</td>
-                        </tr>
-                        <tr>
-                            <td>placeholder</td>
-                            <td><span class="type type-string">string</span></td>
-                            <td>Placeholder hint inside the text field.</td>
-                        </tr>
-                        <tr>
-                            <td>default</td>
-                            <td><span class="type type-string">string</span></td>
-                            <td>Pre-filled value on load.</td>
-                        </tr>
-                        <tr>
-                            <td>flag</td>
-                            <td><span class="type type-string">string</span></td>
-                            <td>Unique key for config saving.</td>
-                        </tr>
-                        <tr>
-                            <td>callback</td>
-                            <td><span class="type type-function">function</span></td>
-                            <td>Fires with the submitted string on Enter.</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="code-lang">Lua</span>
-                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
-                    </div>
-                    <pre><code class="language-lua">tab:CreateInput({
-    text        = "Custom Tag",
-    placeholder = "Enter text...",
-    default     = "",
-    flag        = "custom_tag",
-    callback    = function(value)
-        print("Tag set to:", value)
-    end,
-})</code></pre>
-                </div>
-            </section>
-
-            <!-- Button -->
-            <section id="button" class="doc-section">
-                <div class="breadcrumb">
-                    <span class="current">Components</span>
-                    <span class="sep">›</span>
-                    <span class="current">Button</span>
-                </div>
-                <div class="section-label">Components</div>
-                <h2>Button</h2>
-                <p>A standard clickable trigger button. Fires callback on each press.</p>
-                <table class="params-table">
-                    <thead>
-                        <tr>
-                            <th>Argument</th>
-                            <th>Type</th>
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>text</td>
-                            <td><span class="type type-string">string</span></td>
-                            <td>Button row label and action label.</td>
-                        </tr>
-                        <tr>
-                            <td>callback</td>
-                            <td><span class="type type-function">function</span></td>
-                            <td>Fires on click with no arguments.</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="code-lang">Lua</span>
-                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
-                    </div>
-                    <pre><code class="language-lua">tab:CreateButton({
-    text     = "Reset Settings",
-    callback = function()
-        print("Settings reset.")
-    end,
-})</code></pre>
-                </div>
-            </section>
-
-            <!-- ColorPicker -->
-            <section id="colorpicker" class="doc-section">
-                <div class="breadcrumb">
-                    <span class="current">Components</span>
-                    <span class="sep">›</span>
-                    <span class="current">ColorPicker</span>
-                </div>
-                <div class="section-label">Components</div>
-                <h2>ColorPicker</h2>
-                <p>A visual color selector pop-up with hue/saturation canvas. Fires in real-time as the user drags.</p>
-                <table class="params-table">
-                    <thead>
-                        <tr>
-                            <th>Argument</th>
-                            <th>Type</th>
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>text</td>
-                            <td><span class="type type-string">string</span></td>
-                            <td>Label for the color picker row.</td>
-                        </tr>
-                        <tr>
-                            <td>default</td>
-                            <td><span class="type type-color3">Color3</span></td>
-                            <td>Initial color value.</td>
-                        </tr>
-                        <tr>
-                            <td>flag</td>
-                            <td><span class="type type-string">string</span></td>
-                            <td>Unique key for config saving.</td>
-                        </tr>
-                        <tr>
-                            <td>callback</td>
-                            <td><span class="type type-function">function</span></td>
-                            <td>Fires with the new <code>Color3</code> on change.</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="code-lang">Lua</span>
-                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
-                    </div>
-                    <pre><code class="language-lua">tab:CreateColorPicker({
-    text     = "ESP Color",
-    default  = Color3.fromRGB(0, 162, 255),
-    flag     = "esp_color",
-    callback = function(color)
-        print("Color:", color)
-    end,
-})</code></pre>
-                </div>
-            </section>
-
-            <!-- Keybind -->
-            <section id="keybind" class="doc-section">
-                <div class="breadcrumb">
-                    <span class="current">Components</span>
-                    <span class="sep">›</span>
-                    <span class="current">Keybind</span>
-                </div>
-                <div class="section-label">Components</div>
-                <h2>Keybind</h2>
-                <p>Records a keyboard shortcut from the user. Press <code>Escape</code> to clear the binding.</p>
-                <table class="params-table">
-                    <thead>
-                        <tr>
-                            <th>Argument</th>
-                            <th>Type</th>
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>text</td>
-                            <td><span class="type type-string">string</span></td>
-                            <td>Label for the keybind row.</td>
-                        </tr>
-                        <tr>
-                            <td>default</td>
-                            <td><span class="type type-keycode">KeyCode</span></td>
-                            <td>Default key binding.</td>
-                        </tr>
-                        <tr>
-                            <td>flag</td>
-                            <td><span class="type type-string">string</span></td>
-                            <td>Unique key for config saving.</td>
-                        </tr>
-                        <tr>
-                            <td>callback</td>
-                            <td><span class="type type-function">function</span></td>
-                            <td>Fires with the registered <code>KeyCode</code> when pressed.</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="code-lang">Lua</span>
-                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
-                    </div>
-                    <pre><code class="language-lua">tab:CreateKeybind({
-    text     = "Toggle Menu",
-    default  = Enum.KeyCode.RightControl,
-    flag     = "menu_key",
-    callback = function(key)
-        print("Key pressed:", key.Name)
-    end,
-})</code></pre>
-                </div>
-            </section>
-
-            <!-- TargetBody -->
+            <!-- CreateTargetBody -->
             <section id="targetbody" class="doc-section">
                 <div class="breadcrumb">
                     <span class="current">Components</span>
                     <span class="sep">›</span>
-                    <span class="current">TargetBody</span>
+                    <span class="current">CreateTargetBody</span>
                 </div>
                 <div class="section-label">Components</div>
-                <h2>TargetBody</h2>
-                <p>An interactive R6 body-part selector. Individual limbs can be toggled or disabled entirely.</p>
+                <h2>CreateTargetBody</h2>
+                <p>A body hitbox selector showing a visual representation of a character body. Perfect for selective aimbot hitboxes.</p>
                 <table class="params-table">
                     <thead>
                         <tr>
@@ -906,19 +978,19 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>text</td>
-                            <td><span class="type type-string">string</span></td>
-                            <td>Section label.</td>
+                            <td>callback</td>
+                            <td><span class="type type-function">function</span></td>
+                            <td>Fires with a table of currently active body parts.</td>
                         </tr>
                         <tr>
                             <td>default</td>
-                            <td><span class="type type-table">table</span></td>
-                            <td>Array of initially selected part names.</td>
+                            <td><span class="type type-table">string | table</span></td>
+                            <td>Initially selected body part(s) (e.g. 'Head' or {'Head', 'Torso'}).</td>
                         </tr>
                         <tr>
                             <td>disabledParts</td>
                             <td><span class="type type-table">table</span></td>
-                            <td>Array of part names that cannot be toggled.</td>
+                            <td>List of parts that cannot be selected (e.g. {'LeftArm', 'RightArm'}).</td>
                         </tr>
                         <tr>
                             <td>flag</td>
@@ -926,9 +998,14 @@
                             <td>Unique key for config saving.</td>
                         </tr>
                         <tr>
-                            <td>callback</td>
-                            <td><span class="type type-function">function</span></td>
-                            <td>Fires with an array of currently selected parts.</td>
+                            <td>multiple</td>
+                            <td><span class="type type-boolean">boolean</span></td>
+                            <td>Allows selecting multiple body parts.</td>
+                        </tr>
+                        <tr>
+                            <td>text</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Label for the hitbox selector.</td>
                         </tr>
                     </tbody>
                 </table>
@@ -938,28 +1015,28 @@
                         <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
                     </div>
                     <pre><code class="language-lua">tab:CreateTargetBody({
-    text          = "Hitbox Parts",
-    default       = { "Head", "Torso" },
-    disabledParts = { "RightArm", "LeftArm" },
-    flag          = "hitbox_parts",
+    text          = "Selective Hitboxes",
+    multiple      = true,
+    default       = {"Head", "Torso"},
+    disabledParts = {"LeftArm", "RightArm"},
+    flag          = "target_hitboxes",
     callback      = function(parts)
-        print("Parts:", table.concat(parts, ", "))
+        print("Active hitboxes:", table.concat(parts, ", "))
     end,
 })</code></pre>
                 </div>
             </section>
 
-            <!-- PlayerList -->
-            <section id="playerlist" class="doc-section">
+            <!-- CreateToggle -->
+            <section id="toggle" class="doc-section">
                 <div class="breadcrumb">
                     <span class="current">Components</span>
                     <span class="sep">›</span>
-                    <span class="current">PlayerList</span>
+                    <span class="current">CreateToggle</span>
                 </div>
                 <div class="section-label">Components</div>
-                <h2>PlayerList</h2>
-                <p>Renders a live scrollable list of all players in the server. Each row has a TP (teleport) and ESP
-                    (highlight) button.</p>
+                <h2>CreateToggle</h2>
+                <p>A checkbox-style switch for boolean values. State is persisted to config when a flag is provided.</p>
                 <table class="params-table">
                     <thead>
                         <tr>
@@ -970,14 +1047,24 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>text</td>
-                            <td><span class="type type-string">string</span></td>
-                            <td>Header label above the list.</td>
+                            <td>callback</td>
+                            <td><span class="type type-function">function</span></td>
+                            <td>Fires with the new boolean state.</td>
                         </tr>
                         <tr>
-                            <td>height</td>
-                            <td><span class="type type-number">number</span></td>
-                            <td>Pixel height of the scrollable area.</td>
+                            <td>default</td>
+                            <td><span class="type type-boolean">boolean</span></td>
+                            <td>Initial state (true/false).</td>
+                        </tr>
+                        <tr>
+                            <td>flag</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Unique key for config saving.</td>
+                        </tr>
+                        <tr>
+                            <td>text</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Label for the toggle.</td>
                         </tr>
                     </tbody>
                 </table>
@@ -986,58 +1073,22 @@
                         <span class="code-lang">Lua</span>
                         <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
                     </div>
-                    <pre><code class="language-lua">tab:CreatePlayerList({
-    text   = "Active Players",
-    height = 280,
+                    <pre><code class="language-lua">tab:CreateToggle({
+    text     = "Silent Aim",
+    default  = false,
+    flag     = "silent_aim",
+    callback = function(state)
+        print("Silent Aim:", state)
+    end,
 })</code></pre>
                 </div>
             </section>
 
-            <!-- Logger -->
-            <section id="logger" class="doc-section">
-                <div class="breadcrumb">
-                    <span class="current">Components</span>
-                    <span class="sep">›</span>
-                    <span class="current">Logger</span>
-                </div>
-                <div class="section-label">Components</div>
-                <h2>Logger</h2>
-                <p>An in-app console widget that displays color-coded activity logs. Supports INFO, SUCCESS, WARNING,
-                    and ERROR levels.</p>
-                <table class="params-table">
-                    <thead>
-                        <tr>
-                            <th>Argument</th>
-                            <th>Type</th>
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>text</td>
-                            <td><span class="type type-string">string</span></td>
-                            <td>Console panel header label.</td>
-                        </tr>
-                        <tr>
-                            <td>height</td>
-                            <td><span class="type type-number">number</span></td>
-                            <td>Pixel height of the log area.</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="code-lang">Lua</span>
-                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
-                    </div>
-                    <pre><code class="language-lua">local log = tab:CreateLogger({ text = "Console", height = 280 })
 
-log:Log("INFO",    "Script loaded.")
-log:Log("SUCCESS", "ESP enabled.")
-log:Log("WARNING", "High ping detected.")
-log:Log("ERROR",   "Target not found.")</code></pre>
-                </div>
-            </section>
+
+
+
+            <!-- DYNAMIC_API_END -->
 
             <!-- Full Example -->
             <section id="full-code" class="doc-section">

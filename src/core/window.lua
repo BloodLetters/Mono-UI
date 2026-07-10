@@ -935,6 +935,14 @@ end
 		tabButton.Activated:Connect(function()
 			showTab(tab)
 		end)
+		tabButton.MouseButton1Down:Connect(function()
+			showTab(tab)
+		end)
+		tabButton.InputBegan:Connect(function(input)
+			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+				showTab(tab)
+			end
+		end)
 		tabButton.MouseEnter:Connect(function()
 			if windowObject.ActiveTab ~= tab then
 				tween(tabButton, {

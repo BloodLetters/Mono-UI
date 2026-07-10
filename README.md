@@ -1,3 +1,7 @@
+</p>
+> ⚠️ **Warning:** This project is **Still in Development** features and behavior may change without notice. Use at your own risk in production environments.
+</div>
+
 <div align="center">
 
 # 🌌 MonoUI
@@ -10,9 +14,6 @@
 ---
 <p align="left">
   <strong>MonoUI</strong> is a high-performance, feature-rich, and highly customizable UI library designed specifically for Roblox script developers. It combines a beautiful glassmorphic dark aesthetic with advanced automation features, built-in state management, and smooth EasingStyle animations.
-</p>
-
-</div>
 
 ## 🚀 Getting Started
 
