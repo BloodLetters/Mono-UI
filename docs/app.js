@@ -98,4 +98,24 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     });
+
+    // 4. Fetch Latest Version from GitHub Release
+    const versionBadge = document.querySelector(".navbar .badge");
+    if (versionBadge) {
+        fetch("https://api.github.com/repos/BloodLetters/Mono-UI/releases/latest")
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error("Network response was not ok");
+            })
+            .then(data => {
+                if (data && data.tag_name) {
+                    versionBadge.innerText = data.tag_name;
+                }
+            })
+            .catch(err => {
+                console.warn("Failed to fetch latest version from GitHub: ", err);
+            });
+    }
 });

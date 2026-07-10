@@ -24,6 +24,7 @@ local function getNotificationGui()
 		Name = "MonoNotification",
 		ResetOnSpawn = false,
 		DisplayOrder = 99999,
+		ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
 		Parent = utils.getGuiParent(),
 	})
 

@@ -20,8 +20,25 @@ local function getHUDGui()
 		Name = "MonoControlHUD",
 		ResetOnSpawn = false,
 		DisplayOrder = 99996,
+		ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
 		Parent = utils.getGuiParent(),
 	})
+
+	local GuiService = game:GetService("GuiService")
+	local updatingSelection = false
+	local selectedConn
+	selectedConn = GuiService:GetPropertyChangedSignal("SelectedObject"):Connect(function()
+		if not screenGui or not screenGui.Parent then
+			if selectedConn then selectedConn:Disconnect() end
+			return
+		end
+		if updatingSelection then return end
+		if GuiService.SelectedObject and GuiService.SelectedObject:IsDescendantOf(screenGui) then
+			updatingSelection = true
+			GuiService.SelectedObject = nil
+			updatingSelection = false
+		end
+	end)
 
 	container = make("Frame", {
 		Name = "HUDContainer",

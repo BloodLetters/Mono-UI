@@ -21,6 +21,7 @@ local function getWatermarkGui()
 		Name = "MonoWatermark",
 		ResetOnSpawn = false,
 		DisplayOrder = 99998,
+		ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
 		Parent = utils.getGuiParent(),
 	})
 	

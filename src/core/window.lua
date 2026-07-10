@@ -48,10 +48,22 @@ local function CreateWindow(options)
 		ResetOnSpawn = false,
 		IgnoreGuiInset = true,
 		DisplayOrder = options.DisplayOrder or 1000,
+		ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
 		Parent = getGuiParent(),
 	})
 	windowJanitor:Add(screenGui)
 	windowJanitor:LinkToInstance(screenGui)
+	
+	local GuiService = game:GetService("GuiService")
+	local updatingSelection = false
+	windowJanitor:Add(GuiService:GetPropertyChangedSignal("SelectedObject"):Connect(function()
+		if updatingSelection then return end
+		if GuiService.SelectedObject and GuiService.SelectedObject:IsDescendantOf(screenGui) then
+			updatingSelection = true
+			GuiService.SelectedObject = nil
+			updatingSelection = false
+		end
+	end))
 	
 	local window = make("Frame", {
 		Name = "Window",

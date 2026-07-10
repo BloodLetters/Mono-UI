@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MonoUI — Documentation</title>
-    <meta name="description" content="Official API documentation for MonoUI — a premium Roblox UI library.">
+    <title>Mono-UI - Documentation</title>
+    <meta name="description" content="Official API documentation for Mono-UI - a premium Roblox UI library.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -24,7 +24,7 @@
                 <i class="fa-solid fa-shield-halved brand-logo"></i>
                 <span class="brand-name">Mono<span>UI</span></span>
             </div>
-            <!-- VERSION_START --><span class="badge">v1.2</span><!-- VERSION_END -->
+            <!-- VERSION_START --><span class="badge">v1.2.1</span><!-- VERSION_END -->
         </div>
         <div class="nav-right">
             <div class="search-wrapper">
@@ -54,50 +54,50 @@
                 <div class="nav-group">
                     <span class="group-title">Core</span>
                     <!-- SIDEBAR_CORE_START -->
-                    <a href="#control-hud" class="nav-item" id="nav-hud"><i
-                            class="fa-solid fa-sliders"></i> CreateControlHUD</a>
+                    <a href="#control-hud" class="nav-item" id="nav-hud"><i class="fa-solid fa-sliders"></i>
+                        CreateControlHUD</a>
                     <a href="#create-window" class="nav-item" id="nav-window"><i
                             class="fa-solid fa-window-maximize"></i> CreateWindow</a>
-                    <a href="#notifications" class="nav-item" id="nav-notify"><i
-                            class="fa-solid fa-bell"></i> Notify</a>
-                    <a href="#watermark" class="nav-item" id="nav-wm"><i
-                            class="fa-solid fa-chart-line"></i> SetWatermark</a>
+                    <a href="#notifications" class="nav-item" id="nav-notify"><i class="fa-solid fa-bell"></i>
+                        Notify</a>
+                    <a href="#watermark" class="nav-item" id="nav-wm"><i class="fa-solid fa-chart-line"></i>
+                        SetWatermark</a>
                     <!-- SIDEBAR_CORE_END -->
                 </div>
 
                 <div class="nav-group">
                     <span class="group-title">Layout</span>
                     <!-- SIDEBAR_LAYOUT_START -->
-                    <a href="#create-section" class="nav-item" id="nav-section"><i
-                            class="fa-solid fa-grip-lines"></i> CreateSection</a>
-                    <a href="#create-tab" class="nav-item" id="nav-tab"><i
-                            class="fa-solid fa-folder-open"></i> CreateTab</a>
+                    <a href="#create-section" class="nav-item" id="nav-section"><i class="fa-solid fa-grip-lines"></i>
+                        CreateSection</a>
+                    <a href="#create-tab" class="nav-item" id="nav-tab"><i class="fa-solid fa-folder-open"></i>
+                        CreateTab</a>
                     <!-- SIDEBAR_LAYOUT_END -->
                 </div>
 
                 <div class="nav-group">
                     <span class="group-title">Components</span>
                     <!-- SIDEBAR_COMPONENTS_START -->
-                    <a href="#button" class="nav-item" id="nav-button"><i
-                            class="fa-solid fa-square-check"></i> CreateButton</a>
-                    <a href="#colorpicker" class="nav-item" id="nav-color"><i
-                            class="fa-solid fa-palette"></i> CreateColorPicker</a>
-                    <a href="#dropdown" class="nav-item" id="nav-dropdown"><i
-                            class="fa-solid fa-caret-down"></i> CreateDropdown</a>
-                    <a href="#input" class="nav-item" id="nav-input"><i
-                            class="fa-solid fa-keyboard"></i> CreateInput</a>
-                    <a href="#keybind" class="nav-item" id="nav-keybind"><i
-                            class="fa-solid fa-keyboard"></i> CreateKeybind</a>
-                    <a href="#logger" class="nav-item" id="nav-logger"><i
-                            class="fa-solid fa-terminal"></i> CreateLogger</a>
-                    <a href="#playerlist" class="nav-item" id="nav-players"><i
-                            class="fa-solid fa-users"></i> CreatePlayerList</a>
-                    <a href="#slider" class="nav-item" id="nav-slider"><i
-                            class="fa-solid fa-sliders"></i> CreateSlider</a>
-                    <a href="#targetbody" class="nav-item" id="nav-body"><i
-                            class="fa-solid fa-child"></i> CreateTargetBody</a>
-                    <a href="#toggle" class="nav-item" id="nav-toggle"><i
-                            class="fa-solid fa-toggle-on"></i> CreateToggle</a>
+                    <a href="#button" class="nav-item" id="nav-button"><i class="fa-solid fa-square-check"></i>
+                        CreateButton</a>
+                    <a href="#colorpicker" class="nav-item" id="nav-color"><i class="fa-solid fa-palette"></i>
+                        CreateColorPicker</a>
+                    <a href="#dropdown" class="nav-item" id="nav-dropdown"><i class="fa-solid fa-caret-down"></i>
+                        CreateDropdown</a>
+                    <a href="#input" class="nav-item" id="nav-input"><i class="fa-solid fa-keyboard"></i>
+                        CreateInput</a>
+                    <a href="#keybind" class="nav-item" id="nav-keybind"><i class="fa-solid fa-keyboard"></i>
+                        CreateKeybind</a>
+                    <a href="#logger" class="nav-item" id="nav-logger"><i class="fa-solid fa-terminal"></i>
+                        CreateLogger</a>
+                    <a href="#playerlist" class="nav-item" id="nav-players"><i class="fa-solid fa-users"></i>
+                        CreatePlayerList</a>
+                    <a href="#slider" class="nav-item" id="nav-slider"><i class="fa-solid fa-sliders"></i>
+                        CreateSlider</a>
+                    <a href="#targetbody" class="nav-item" id="nav-body"><i class="fa-solid fa-child"></i>
+                        CreateTargetBody</a>
+                    <a href="#toggle" class="nav-item" id="nav-toggle"><i class="fa-solid fa-toggle-on"></i>
+                        CreateToggle</a>
                     <!-- SIDEBAR_COMPONENTS_END -->
                 </div>
 
@@ -192,7 +192,8 @@
                 </div>
                 <div class="section-label">Core API</div>
                 <h2>CreateControlHUD</h2>
-                <p>Creates a floating, draggable, compact HUD with quick toggles (perfect for keeping essential scripts visible).</p>
+                <p>Creates a floating, draggable, compact HUD with quick toggles (perfect for keeping essential scripts
+                    visible).</p>
                 <table class="params-table">
                     <thead>
                         <tr>
@@ -388,7 +389,8 @@
                 </div>
                 <div class="section-label">Core API</div>
                 <h2>SetWatermark</h2>
-                <p>Creates or updates a small top-right HUD showing custom text, client FPS, ping, and character coordinates.</p>
+                <p>Creates or updates a small top-right HUD showing custom text, client FPS, ping, and character
+                    coordinates.</p>
                 <table class="params-table">
                     <thead>
                         <tr>
@@ -564,7 +566,8 @@
                 </div>
                 <div class="section-label">Components</div>
                 <h2>CreateColorPicker</h2>
-                <p>An advanced RGB/HSV color picker that supports hex input and saturation/brightness visual adjustments.</p>
+                <p>An advanced RGB/HSV color picker that supports hex input and saturation/brightness visual
+                    adjustments.</p>
                 <table class="params-table">
                     <thead>
                         <tr>
@@ -621,7 +624,8 @@
                 </div>
                 <div class="section-label">Components</div>
                 <h2>CreateDropdown</h2>
-                <p>A selection menu for single or multi-value selections. Supports search filtering inside dropdown items.</p>
+                <p>A selection menu for single or multi-value selections. Supports search filtering inside dropdown
+                    items.</p>
                 <table class="params-table">
                     <thead>
                         <tr>
@@ -753,7 +757,8 @@
                 </div>
                 <div class="section-label">Components</div>
                 <h2>CreateKeybind</h2>
-                <p>Allows the user to bind a keybind shortcut to toggle/trigger functions. Click to rebind, press Escape to unbind.</p>
+                <p>Allows the user to bind a keybind shortcut to toggle/trigger functions. Click to rebind, press Escape
+                    to unbind.</p>
                 <table class="params-table">
                     <thead>
                         <tr>
@@ -810,7 +815,8 @@
                 </div>
                 <div class="section-label">Components</div>
                 <h2>CreateLogger</h2>
-                <p>An in-app console widget that displays color-coded activity logs. Supports INFO, SUCCESS, WARNING, and ERROR levels.</p>
+                <p>An in-app console widget that displays color-coded activity logs. Supports INFO, SUCCESS, WARNING,
+                    and ERROR levels.</p>
                 <table class="params-table">
                     <thead>
                         <tr>
@@ -967,7 +973,8 @@ log:Log("ERROR",   "Target not found.")</code></pre>
                 </div>
                 <div class="section-label">Components</div>
                 <h2>CreateTargetBody</h2>
-                <p>A body hitbox selector showing a visual representation of a character body. Perfect for selective aimbot hitboxes.</p>
+                <p>A body hitbox selector showing a visual representation of a character body. Perfect for selective
+                    aimbot hitboxes.</p>
                 <table class="params-table">
                     <thead>
                         <tr>
@@ -1083,6 +1090,7 @@ log:Log("ERROR",   "Target not found.")</code></pre>
 })</code></pre>
                 </div>
             </section>
+
 
 
 
