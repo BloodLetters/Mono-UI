@@ -242,7 +242,7 @@ return function(page, args)
 		partButtons[pInfo.name] = partBtn
 		updatePartVisual(pInfo.name)
 
-		partBtn.MouseButton1Click:Connect(function()
+		partBtn.Activated:Connect(function()
 			togglePart(pInfo.name)
 		end)
 

@@ -198,7 +198,7 @@ return function(page, args)
 			end
 		end)
 		
-		optionButton.MouseButton1Click:Connect(function()
+		optionButton.Activated:Connect(function()
 			if multiple then
 				selectedMap[option] = not selectedMap[option]
 			else
@@ -219,7 +219,7 @@ return function(page, args)
 		end)
 	end
 	
-	header.MouseButton1Click:Connect(function()
+	header.Activated:Connect(function()
 		setOpen(not open)
 	end)
 	

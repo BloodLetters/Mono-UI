@@ -932,7 +932,7 @@ end
 			return PlayerList(self.Page, plArgs)
 		end
 
-		tabButton.MouseButton1Click:Connect(function()
+		tabButton.Activated:Connect(function()
 			showTab(tab)
 		end)
 		tabButton.MouseEnter:Connect(function()
@@ -982,7 +982,7 @@ end
 		windowJanitor:Destroy()
 	end
 
-	closeButton.MouseButton1Click:Connect(function()
+	closeButton.Activated:Connect(function()
 		cleanUpAllScreens()
 		if closedCallback then
 			task.spawn(closedCallback)
@@ -1027,10 +1027,10 @@ end
 			floatingDragging = false
 		end
 	end))
-	windowJanitor:Add(minimizeButton.MouseButton1Click:Connect(function()
+	windowJanitor:Add(minimizeButton.Activated:Connect(function()
 		setMinimized(true)
 	end))
-	windowJanitor:Add(floatingButton.MouseButton1Click:Connect(function()
+	windowJanitor:Add(floatingButton.Activated:Connect(function()
 		if floatingMoved then
 			floatingMoved = false
 			return

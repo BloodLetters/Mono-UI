@@ -56,19 +56,23 @@ return function(page, args)
 		}, 0.12):Play()
 	end)
 	
-	actionButton.MouseButton1Down:Connect(function()
-		tween(actionButton, {
-			BackgroundColor3 = Color3.fromRGB(80, 80, 90)
-		}, 0.08):Play()
+	actionButton.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			tween(actionButton, {
+				BackgroundColor3 = Color3.fromRGB(80, 80, 90)
+			}, 0.08):Play()
+		end
 	end)
 	
-	actionButton.MouseButton1Up:Connect(function()
-		tween(actionButton, {
-			BackgroundColor3 = Color3.fromRGB(100, 100, 110)
-		}, 0.12):Play()
+	actionButton.InputEnded:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			tween(actionButton, {
+				BackgroundColor3 = Color3.fromRGB(100, 100, 110)
+			}, 0.12):Play()
+		end
 	end)
 	
-	actionButton.MouseButton1Click:Connect(function()
+	actionButton.Activated:Connect(function()
 		tween(actionButton, {BackgroundColor3 = Color3.fromRGB(80, 80, 90)}, 0.05):Play()
 		task.wait(0.1)
 		tween(actionButton, {BackgroundColor3 = Color3.fromRGB(100, 100, 110)}, 0.05):Play()

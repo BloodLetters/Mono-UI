@@ -61,7 +61,7 @@ return function(page, args)
 		knob.BackgroundColor3 = state and Color3.fromRGB(18, 18, 20) or Color3.fromRGB(235, 235, 235)
 	end
 	
-	toggleButton.MouseButton1Click:Connect(function()
+	toggleButton.Activated:Connect(function()
 		state = not state
 		tween(toggleButton, {BackgroundColor3 = state and Color3.fromRGB(0, 162, 255) or Color3.fromRGB(34, 34, 40)}, 0.2):Play()
 		tween(knob, {Position = state and UDim2.fromOffset(32, 4) or UDim2.fromOffset(4, 4)}, 0.2):Play()

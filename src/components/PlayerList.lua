@@ -155,7 +155,7 @@ return function(page, args)
 		addStroke(tpBtn, Color3.fromRGB(50, 50, 58), 0.5, 1)
 		applyFont(tpBtn, 14, Color3.fromRGB(220, 220, 225), Enum.TextXAlignment.Center)
 
-		tpBtn.MouseButton1Click:Connect(function()
+		tpBtn.Activated:Connect(function()
 			teleportTo(player)
 		end)
 
@@ -172,7 +172,7 @@ return function(page, args)
 		local espStroke = addStroke(espBtn, Color3.fromRGB(50, 50, 58), 0.5, 1)
 		applyFont(espBtn, 14, Color3.fromRGB(220, 220, 225), Enum.TextXAlignment.Center)
 
-		espBtn.MouseButton1Click:Connect(function()
+		espBtn.Activated:Connect(function()
 			local isEspActive = not (espStates[player] == true)
 			toggleESP(player, isEspActive)
 			local targetBgColor = isEspActive and utils.theme.AccentColor or Color3.fromRGB(30, 30, 36)

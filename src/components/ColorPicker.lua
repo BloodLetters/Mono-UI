@@ -487,7 +487,7 @@ return function(page, screenGui, args)
 			addCorner(btn, 5)
 			addStroke(btn, Color3.fromRGB(52, 52, 60), 0.5, 1)
 
-			btn.MouseButton1Click:Connect(function()
+			btn.Activated:Connect(function()
 				applyPopupColor(pr, pg, pb)
 			end)
 		end
@@ -545,7 +545,7 @@ return function(page, screenGui, args)
 		end
 	end)
 
-	colorBox.MouseButton1Click:Connect(function()
+	colorBox.Activated:Connect(function()
 		local wasJustClosed = not pickerOpen
 		openPicker()
 		-- Perlu bind drag setelah popup dibuat

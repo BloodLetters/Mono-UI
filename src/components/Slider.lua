@@ -114,7 +114,7 @@ return function(page, args)
 		if not dragging then
 			return
 		end
-		if input.UserInputType == Enum.UserInputType.MouseMovement then
+		if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
 			setValue(getValueFromMouse(input.Position))
 		end
 	end)

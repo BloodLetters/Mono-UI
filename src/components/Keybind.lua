@@ -72,7 +72,14 @@ return function(page, args)
 		end
 	end)
 
-	bindBtn.MouseButton1Click:Connect(function()
+	bindBtn.Activated:Connect(function()
+		if not utils.UserInputService.KeyboardEnabled then
+			if callback then
+				task.spawn(callback, currentKey)
+			end
+			return
+		end
+
 		if binding then return end
 		binding = true
 		updateBtnText()
