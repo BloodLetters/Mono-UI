@@ -48,12 +48,3 @@ A complete, production-ready demonstration covering all UI components, callbacks
 ## 🔒 License
 
 Distributed under the **MIT License**. You are completely free to fork, modify, distribute, and integrate MonoUI into both personal and commercial scripts.
-
-```
-
-### 💡 Perubahan yang Dilakukan:
-1. **Ukuran Banner**: Menggunakan `<img src="..." width="450">` di dalam `div align="center"` agar ukuran banner tetap rapi, proporsional, dan tidak memenuhi layar (terlalu besar).
-2. **Badges Release & Lisensi**: Ditambahkan *dynamic badges* menggunakan Shields.io yang otomatis mengambil tag rilis terbaru langsung dari repositori GitHub kamu (`BloodLetters/mono-ui`). Warna disesuaikan dengan tema gelap keunguan (`#775ada`).
-3. **Tipografi & Struktur**: Tata letak diubah agar lebih *scannable*, menggunakan pembatas horizontal (`---`) untuk memisahkan bagian penting, serta ikon emoji yang lebih terkurasi agar terlihat profesional namun modern.
-
-```
