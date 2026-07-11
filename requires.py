@@ -62,16 +62,10 @@ def process_file(filepath):
         else:
             total_parents = p_count
             
-        if total_parents == 0:
-            if is_init_file:
-                up_steps = 0
-            else:
-                up_steps = -1
+        if is_init_file:
+            up_steps = total_parents
         else:
-            if is_init_file:
-                up_steps = total_parents + 1
-            else:
-                up_steps = total_parents - 1
+            up_steps = total_parents - 1
             
         if up_steps < 0:
             prefix = "./" + base_name + "/"
