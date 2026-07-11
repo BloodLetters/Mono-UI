@@ -2,3 +2,4 @@ old/
 dist/
 Packages/
 MCP/__pycache__/
+__pycache__/

@@ -472,5 +472,38 @@
             }
         ],
         "example": "MonoUI.CreateControlHUD({\n    { icon = \"swords\", default = false, callback = function(v) print(\"Aim:\", v) end },\n    { icon = \"eye\",    default = true,  callback = function(v) print(\"ESP:\", v) end },\n})"
+    },
+    "AddCleanup": {
+        "type": "core",
+        "label": "Core API",
+        "display_name": "AddCleanup",
+        "description": "Registers a thread, connection, instance, or custom callback to be automatically cleaned up/cancelled when the window is closed or destroyed.",
+        "arguments": [
+            {
+                "name": "object",
+                "type": "any",
+                "description": "The thread, RBXScriptConnection, Instance, or custom clean-up function to track."
+            },
+            {
+                "name": "customCleanup",
+                "type": "function",
+                "description": "Optional destructor function. For threads, pass <code>task.cancel</code>. For custom actions, pass a function."
+            }
+        ],
+        "example": "-- Auto-cancel a background loop when window closes\nlocal myLoop = task.spawn(function()\n    while true do\n        task.wait(1)\n        print(\"Looping...\")\n    end\nend)\nwindow:AddCleanup(myLoop, task.cancel)\n\n-- Auto-disconnect a custom event connection\nlocal connection = game.Players.PlayerAdded:Connect(function(player)\n    print(\"Welcome\", player.Name)\nend)\nwindow:AddCleanup(connection)"
+    },
+    "CreateTimer": {
+        "type": "core",
+        "label": "Core API",
+        "display_name": "CreateTimer",
+        "description": "Creates a new Timer object from the built-in <code>sleitnick/timer</code> package. Provides a memory-safe, pauseable, and highly accurate alternative to <code>while true do</code> loops.",
+        "arguments": [
+            {
+                "name": "interval",
+                "type": "number",
+                "description": "Tick interval duration in seconds (defaults to 1)."
+            }
+        ],
+        "example": "-- Create a timer that ticks every 1 second\nlocal myTimer = MonoUI.CreateTimer(1)\n\n-- Connect logic to the Tick event\nmyTimer.Tick:Connect(function()\n    print(\"Timer ticked!\")\nend)\n\n-- Register the timer with the window to automatically stop it when the GUI closes\nwindow:AddCleanup(myTimer)\n\n-- Start the timer\nmyTimer:Start()\n\n-- You can also use:\n-- myTimer:Pause()\n-- myTimer:Resume()\n-- myTimer:Stop()"
     }
 }

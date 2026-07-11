@@ -1,10 +1,3 @@
-"""
-MonoUI MCP Server - Model Context Protocol server for MonoUI Roblox GUI library.
-
-Provides tools to generate Luau code snippets for creating MonoUI interfaces,
-including windows, tabs, components, notifications, watermarks, and control HUDs.
-"""
-
 import json
 import sys
 from mcp.server import Server
@@ -21,108 +14,324 @@ LOADSTRING_URL = (
     '))()'
 )
 
+# COMPONENT_DOCS_START
 COMPONENT_DOCS = {
-    "Button": {
-        "description": "A clickable action button with 'run' label.",
-        "params": [
-            {"name": "text", "type": "string", "default": '"Button"', "desc": "Label text for the button."},
-            {"name": "callback", "type": "function", "default": "nil", "desc": "Function called when the button is clicked."},
+    'Button': {
+        'description': 'An interactive button that runs a custom function when clicked.',
+        'params': [
+            {
+                'default': 'nil',
+                'desc': 'Fires when the button is clicked.',
+                'name': 'callback',
+                'type': 'function',
+            },
+            {
+                'default': '"Button"',
+                'desc': 'Text displayed on the button.',
+                'name': 'text',
+                'type': 'string',
+            },
         ],
     },
-    "Toggle": {
-        "description": "An on/off toggle switch.",
-        "params": [
-            {"name": "text", "type": "string", "default": '"Toggle"', "desc": "Label text."},
-            {"name": "default", "type": "boolean", "default": "false", "desc": "Initial toggle state."},
-            {"name": "flag", "type": "string", "default": "nil", "desc": "Config save/load key."},
-            {"name": "callback", "type": "function", "default": "nil", "desc": "Called with (state: boolean) on toggle."},
+    'ColorPicker': {
+        'description': 'An advanced RGB/HSV color picker that supports hex input and saturation/brightness visual adjustments.',
+        'params': [
+            {
+                'default': 'nil',
+                'desc': 'Fires with the selected Color3 object.',
+                'name': 'callback',
+                'type': 'function',
+            },
+            {
+                'default': 'Color3.fromRGB(100,100,110)',
+                'desc': 'Initial Color3 value.',
+                'name': 'default',
+                'type': 'Color3',
+            },
+            {
+                'default': 'nil',
+                'desc': 'Unique key for config saving.',
+                'name': 'flag',
+                'type': 'string',
+            },
+            {
+                'default': '"Color"',
+                'desc': 'Label for the color picker.',
+                'name': 'text',
+                'type': 'string',
+            },
         ],
     },
-    "Input": {
-        "description": "A text input field.",
-        "params": [
-            {"name": "text", "type": "string", "default": '"Input"', "desc": "Label text."},
-            {"name": "placeholder", "type": "string", "default": '"type here..."', "desc": "Placeholder text."},
-            {"name": "default", "type": "string", "default": '""', "desc": "Default input value."},
-            {"name": "flag", "type": "string", "default": "nil", "desc": "Config save/load key."},
-            {"name": "callback", "type": "function", "default": "nil", "desc": "Called with (value: string) on change."},
+    'CreateSection': {
+        'description': 'Inserts a visual section divider with a label to group related components.',
+        'params': [
+            {
+                'default': 'nil',
+                'desc': 'Section heading label.',
+                'name': 'text',
+                'type': 'string',
+            },
         ],
     },
-    "Dropdown": {
-        "description": "A dropdown selector (single or multi-select).",
-        "params": [
-            {"name": "text", "type": "string", "default": '"Dropdown"', "desc": "Label text."},
-            {"name": "list", "type": "table", "default": "{}", "desc": "Array of option strings."},
-            {"name": "default", "type": "string", "default": "nil", "desc": "Default selected option."},
-            {"name": "multiple", "type": "boolean", "default": "false", "desc": "Allow multiple selections."},
-            {"name": "flag", "type": "string", "default": "nil", "desc": "Config save/load key."},
-            {"name": "callback", "type": "function", "default": "nil", "desc": "Called with (value) on selection change."},
+    'Dropdown': {
+        'description': 'A selection menu for single or multi-value selections. Supports search filtering inside dropdown items.',
+        'params': [
+            {
+                'default': 'nil',
+                'desc': 'Fires with a table of selected options.',
+                'name': 'callback',
+                'type': 'function',
+            },
+            {
+                'default': 'nil',
+                'desc': 'Pre-selected option(s).',
+                'name': 'default',
+                'type': 'string | table',
+            },
+            {
+                'default': 'nil',
+                'desc': 'Unique key for config saving.',
+                'name': 'flag',
+                'type': 'string',
+            },
+            {
+                'default': '{}',
+                'desc': 'Array of string options to display.',
+                'name': 'list',
+                'type': 'table',
+            },
+            {
+                'default': 'false',
+                'desc': 'Allows selecting multiple items concurrently.',
+                'name': 'multiple',
+                'type': 'boolean',
+            },
+            {
+                'default': '"Dropdown"',
+                'desc': 'Label for the dropdown dropdown.',
+                'name': 'text',
+                'type': 'string',
+            },
         ],
     },
-    "Slider": {
-        "description": "A numeric slider with drag handle.",
-        "params": [
-            {"name": "text", "type": "string", "default": '"Slider"', "desc": "Label text."},
-            {"name": "min", "type": "number", "default": "0", "desc": "Minimum value."},
-            {"name": "max", "type": "number", "default": "100", "desc": "Maximum value."},
-            {"name": "default", "type": "number", "default": "min", "desc": "Default slider value."},
-            {"name": "flag", "type": "string", "default": "nil", "desc": "Config save/load key."},
-            {"name": "callback", "type": "function", "default": "nil", "desc": "Called with (value: number) on change."},
+    'Input': {
+        'description': 'A single-line text input field for strings and custom configs.',
+        'params': [
+            {
+                'default': 'nil',
+                'desc': 'Fires with the updated text value.',
+                'name': 'callback',
+                'type': 'function',
+            },
+            {
+                'default': '""',
+                'desc': 'Initial text value.',
+                'name': 'default',
+                'type': 'string',
+            },
+            {
+                'default': 'nil',
+                'desc': 'Unique key for config saving.',
+                'name': 'flag',
+                'type': 'string',
+            },
+            {
+                'default': '"type here..."',
+                'desc': 'Ghost text shown when the input is empty.',
+                'name': 'placeholder',
+                'type': 'string',
+            },
+            {
+                'default': '"Input"',
+                'desc': 'Label of the input field.',
+                'name': 'text',
+                'type': 'string',
+            },
         ],
     },
-    "ColorPicker": {
-        "description": "A color picker with hex input and interactive picker.",
-        "params": [
-            {"name": "text", "type": "string", "default": '"Color"', "desc": "Label text."},
-            {"name": "default", "type": "Color3", "default": "Color3.fromRGB(100,100,110)", "desc": "Default color."},
-            {"name": "flag", "type": "string", "default": "nil", "desc": "Config save/load key."},
-            {"name": "callback", "type": "function", "default": "nil", "desc": "Called with (color: Color3) on change."},
+    'Keybind': {
+        'description': 'Allows the user to bind a keybind shortcut to toggle/trigger functions. Click to rebind, press Escape to unbind.',
+        'params': [
+            {
+                'default': 'nil',
+                'desc': 'Fires with the new KeyCode when bound/triggered.',
+                'name': 'callback',
+                'type': 'function',
+            },
+            {
+                'default': 'Enum.KeyCode.None',
+                'desc': 'Initial bound KeyCode.',
+                'name': 'default',
+                'type': 'Enum.KeyCode',
+            },
+            {
+                'default': 'nil',
+                'desc': 'Unique key for config saving.',
+                'name': 'flag',
+                'type': 'string',
+            },
+            {
+                'default': '"Keybind"',
+                'desc': 'Label for the keybind.',
+                'name': 'text',
+                'type': 'string',
+            },
         ],
     },
-    "Keybind": {
-        "description": "A keybind capture button.",
-        "params": [
-            {"name": "text", "type": "string", "default": '"Keybind"', "desc": "Label text."},
-            {"name": "default", "type": "KeyCode", "default": "Enum.KeyCode.None", "desc": "Default keybind."},
-            {"name": "flag", "type": "string", "default": "nil", "desc": "Config save/load key."},
-            {"name": "callback", "type": "function", "default": "nil", "desc": "Called with (key: KeyCode) on bind."},
+    'Logger': {
+        'description': 'An in-app console widget that displays color-coded activity logs. Supports INFO, SUCCESS, WARNING, and ERROR levels.',
+        'methods': [
+            {
+                'desc': 'Append a log entry.',
+                'name': 'Log',
+                'params': 'level: string (INFO|WARNING|SUCCESS|ERROR), message: string',
+            },
+        ],
+        'params': [
+            {
+                'default': '180',
+                'desc': 'Pixel height of the log area.',
+                'name': 'height',
+                'type': 'number',
+            },
+            {
+                'default': '"Console Logs"',
+                'desc': 'Console panel header label.',
+                'name': 'text',
+                'type': 'string',
+            },
         ],
     },
-    "Logger": {
-        "description": "A scrollable console log display.",
-        "params": [
-            {"name": "text", "type": "string", "default": '"Console Logs"', "desc": "Title text."},
-            {"name": "height", "type": "number", "default": "180", "desc": "Height of the logger in pixels."},
-        ],
-        "methods": [
-            {"name": "Log", "params": "level: string (INFO|WARNING|SUCCESS|ERROR), message: string", "desc": "Append a log entry."},
-        ],
-    },
-    "PlayerList": {
-        "description": "A scrollable list of server players.",
-        "params": [
-            {"name": "text", "type": "string", "default": '"Player List"', "desc": "Title text."},
-            {"name": "height", "type": "number", "default": "200", "desc": "Height in pixels."},
-        ],
-    },
-    "TargetBody": {
-        "description": "Interactive skeleton hitbox selector.",
-        "params": [
-            {"name": "text", "type": "string", "default": '"Target Body Parts"', "desc": "Title text."},
-            {"name": "multiple", "type": "boolean", "default": "true", "desc": "Allow selecting multiple parts."},
-            {"name": "default", "type": "string|table", "default": "nil", "desc": "Default selected part(s)."},
-            {"name": "disabledParts", "type": "table", "default": "{}", "desc": "Parts to disable (e.g. {'LeftArm','RightArm'})."},
-            {"name": "flag", "type": "string", "default": "nil", "desc": "Config save/load key."},
-            {"name": "callback", "type": "function", "default": "nil", "desc": "Called with (parts: table) on change."},
+    'PlayerList': {
+        'description': 'Renders a scrolling player list widget showing active players on the server. Includes search bar.',
+        'params': [
+            {
+                'default': '200',
+                'desc': 'Pixel height of the scroll area.',
+                'name': 'height',
+                'type': 'number',
+            },
+            {
+                'default': '"Player List"',
+                'desc': 'Header title of the list widget.',
+                'name': 'text',
+                'type': 'string',
+            },
         ],
     },
-    "Section": {
-        "description": "A section header with uppercase title and divider line.",
-        "params": [
-            {"name": "text", "type": "string", "default": '"Section"', "desc": "Section title (auto-uppercased)."},
+    'Slider': {
+        'description': 'A draggable range input with min/max bounds and optional decimal precision.',
+        'params': [
+            {
+                'default': 'nil',
+                'desc': 'Fires with the current numeric value.',
+                'name': 'callback',
+                'type': 'function',
+            },
+            {
+                'default': 'min',
+                'desc': 'Initial value.',
+                'name': 'default',
+                'type': 'number',
+            },
+            {
+                'default': 'nil',
+                'desc': 'Unique key for config saving.',
+                'name': 'flag',
+                'type': 'string',
+            },
+            {
+                'default': 'nil',
+                'desc': 'Maximum value of the range.',
+                'name': 'max',
+                'type': 'number',
+            },
+            {
+                'default': 'nil',
+                'desc': 'Minimum value of the range.',
+                'name': 'min',
+                'type': 'number',
+            },
+            {
+                'default': '"Slider"',
+                'desc': 'Label for the slider row.',
+                'name': 'text',
+                'type': 'string',
+            },
+        ],
+    },
+    'TargetBody': {
+        'description': 'A body hitbox selector showing a visual representation of a character body. Perfect for selective aimbot hitboxes.',
+        'params': [
+            {
+                'default': 'nil',
+                'desc': 'Fires with a table of currently active body parts.',
+                'name': 'callback',
+                'type': 'function',
+            },
+            {
+                'default': 'nil',
+                'desc': "Initially selected body part(s) (e.g. 'Head' or {'Head', 'Torso'}).",
+                'name': 'default',
+                'type': 'string | table',
+            },
+            {
+                'default': '{}',
+                'desc': "List of parts that cannot be selected (e.g. {'LeftArm', 'RightArm'}).",
+                'name': 'disabledParts',
+                'type': 'table',
+            },
+            {
+                'default': 'nil',
+                'desc': 'Unique key for config saving.',
+                'name': 'flag',
+                'type': 'string',
+            },
+            {
+                'default': 'true',
+                'desc': 'Allows selecting multiple body parts.',
+                'name': 'multiple',
+                'type': 'boolean',
+            },
+            {
+                'default': '"Target Body Parts"',
+                'desc': 'Label for the hitbox selector.',
+                'name': 'text',
+                'type': 'string',
+            },
+        ],
+    },
+    'Toggle': {
+        'description': 'A checkbox-style switch for boolean values. State is persisted to config when a flag is provided.',
+        'params': [
+            {
+                'default': 'nil',
+                'desc': 'Fires with the new boolean state.',
+                'name': 'callback',
+                'type': 'function',
+            },
+            {
+                'default': 'false',
+                'desc': 'Initial state (true/false).',
+                'name': 'default',
+                'type': 'boolean',
+            },
+            {
+                'default': 'nil',
+                'desc': 'Unique key for config saving.',
+                'name': 'flag',
+                'type': 'string',
+            },
+            {
+                'default': '"Toggle"',
+                'desc': 'Label for the toggle.',
+                'name': 'text',
+                'type': 'string',
+            },
         ],
     },
 }
+# COMPONENT_DOCS_END
 
 AVAILABLE_ICONS = [
     "shield", "terminal", "swords", "settings", "users", "user", "star",
@@ -166,25 +375,28 @@ def _indent(code: str, level: int = 1) -> str:
     return "\n".join(prefix + line for line in code.split("\n"))
 
 
-def generate_loadstring() -> str:
+def generate_loadstring(watermark: bool = False) -> str:
     """Generate the loadstring snippet to load MonoUI."""
-    return f"""-- Load MonoUI Library
+    code = f"""-- Load MonoUI Library
 local MonoUI = {LOADSTRING_URL}
-
--- (Optional) Set watermark
-MonoUI.SetWatermark({{
+"""
+    if watermark:
+        code += """
+-- Set watermark
+MonoUI.SetWatermark({
     visible = true,
     text = "MonoUI Premium",
-}})
+})
 """
+    return code
 
 
 def generate_window(title: str, subtitle: str = "", icon: str = "shield",
                     width: int = 600, height: int = 400,
                     config_name: str = "mono_config", auto_save: bool = True,
-                    auto_exec: bool = True) -> str:
+                    auto_exec: bool = True, include_event_hooks: bool = False) -> str:
     """Generate a window creation snippet."""
-    return f"""local window = MonoUI.CreateWindow({{
+    code = f"""local window = MonoUI.CreateWindow({{
     Title = \"{title}\",
     Subtitle = \"{subtitle}\",
     Size = UDim2.fromOffset({width}, {height}),
@@ -193,7 +405,9 @@ def generate_window(title: str, subtitle: str = "", icon: str = "shield",
     AutoSave = {_luau_value(auto_save)},
     AutoExec = {_luau_value(auto_exec)},
 }})
-
+"""
+    if include_event_hooks:
+        code += """
 -- Window event hooks (optional)
 window.event.PreOpened(function(event)
     -- Runs before the window opens
@@ -210,6 +424,7 @@ window.event.Minimized(function()
     print("Window minimized!")
 end)
 """
+    return code
 
 
 def generate_tab(tab_var: str, window_var: str, text: str, icon: str = "") -> str:
@@ -303,39 +518,38 @@ def generate_control_hud(buttons: list) -> str:
     return "\n".join(lines)
 
 
-def generate_full_example(title: str = "Mono UI", config_name: str = "mono_config") -> str:
+def generate_full_example(title: str = "Mono UI", config_name: str = "mono_config",
+                          include_watermark: bool = False,
+                          include_notifications: bool = False,
+                          include_control_hud: bool = False,
+                          include_logger: bool = False,
+                          include_event_hooks: bool = False) -> str:
     """Generate a complete MonoUI example script."""
-    return f"""-- ╔══════════════════════════════════════════╗
--- ║     MonoUI - Complete Example Script    ║
--- ╚══════════════════════════════════════════╝
-
-local MonoUI = {LOADSTRING_URL}
+    watermark_section = ""
+    if include_watermark:
+        watermark_section = f"""
 
 -- ═══ Watermark ═══
 MonoUI.SetWatermark({{
     visible = true,
     text = "{title}",
-}})
+}})"""
+
+    notification_section = ""
+    if include_notifications:
+        notification_section = f"""
 
 -- ═══ Notifications ═══
 MonoUI.Notify({{
-    title = "MonoUI Loaded",
+    title = "{title} Loaded",
     content = "All modules initialized successfully.",
     icon = "check-circle",
     duration = 5,
-}})
+}})"""
 
--- ═══ Window ═══
-local window = MonoUI.CreateWindow({{
-    Title = \"{title.lower()}\",
-    Subtitle = \"premium modular library\",
-    Size = UDim2.fromOffset(600, 400),
-    Icon = \"shield\",
-    ConfigName = \"{config_name}\",
-    AutoSave = true,
-    AutoExec = true,
-}})
-
+    event_hooks_section = ""
+    if include_event_hooks:
+        event_hooks_section = """
 -- ═══ Window Events ═══
 window.event.PreOpened(function(event)
     event.message("Loading MonoUI...")
@@ -348,7 +562,83 @@ end)
 window.event.Closed(function()
     print("Window closed!")
 end)
+"""
 
+    logger_setup = ""
+    logger_log = ""
+    if include_logger:
+        logger_setup = """
+
+-- ═══ Logger ═══
+local logger = mainTab:CreateLogger({
+    text = "Console Output",
+    height = 200,
+})
+
+logger:Log("SUCCESS", "MonoUI initialized!")"""
+        logger_log = 'logger:Log("INFO", "Feature: " .. (state and "ON" or "OFF"))'
+    else:
+        logger_log = 'print("Feature: " .. (state and "ON" or "OFF"))'
+
+    # Slider callback
+    slider_callback = 'logger:Log("INFO", "Intensity: " .. math.floor(value))' if include_logger else 'print("Intensity: " .. math.floor(value))'
+    # Dropdown callback
+    dropdown_callback = 'logger:Log("INFO", "Mode: " .. tostring(value))' if include_logger else 'print("Mode: " .. tostring(value))'
+    # Button callback
+    button_callback = 'logger:Log("SUCCESS", "Action executed!")\n\t\t' if include_logger else 'print("Action executed!")\n\t\t'
+    if include_notifications:
+        button_callback += """MonoUI.Notify({
+            title = "Success",
+            content = "Action completed.",
+            icon = "check-circle",
+            duration = 3,
+        })"""
+    else:
+        button_callback += '-- Put your action code here'
+
+    # Input callback
+    input_callback = 'logger:Log("INFO", "Input: " .. value)' if include_logger else 'print("Input: " .. value)'
+
+    # Theme picker callback
+    theme_callback = """MonoUI.SetThemeColor("AccentColor", color)"""
+    if include_notifications:
+        theme_callback += """\n\t\tMonoUI.Notify({
+            title = "Theme Updated",
+            content = "Accent color changed.",
+            icon = "palette",
+            duration = 2.5,
+        })"""
+
+    # Keybind callback
+    keybind_callback = 'logger:Log("WARNING", "Toggled via: " .. key.Name)' if include_logger else 'print("Toggled via: " .. key.Name)'
+
+    control_hud_section = ""
+    if include_control_hud:
+        control_hud_section = """
+
+-- ═══ Control HUD ═══
+MonoUI.CreateControlHUD({
+    { icon = "swords", default = false, callback = function(active) print("Combat:", active) end },
+    { icon = "eye",     default = true,  callback = function(active) print("ESP:", active) end },
+    { icon = "gauge",   default = false, callback = function(active) print("Speed:", active) end },
+})"""
+
+    return f"""-- ╔══════════════════════════════════════════╗
+-- ║     MonoUI - Complete Example Script    ║
+-- ╚══════════════════════════════════════════╝
+
+local MonoUI = {LOADSTRING_URL}{watermark_section}{notification_section}
+
+-- ═══ Window ═══
+local window = MonoUI.CreateWindow({{
+    Title = "{title.lower()}",
+    Subtitle = "premium modular library",
+    Size = UDim2.fromOffset(600, 400),
+    Icon = "shield",
+    ConfigName = "{config_name}",
+    AutoSave = true,
+    AutoExec = true,
+}}){event_hooks_section}
 -- ═══ Tabs ═══
 local mainTab = window:CreateTab({{
     text = "Main",
@@ -363,15 +653,7 @@ local settingsTab = window:CreateTab({{
 -- ═══ Sections ═══
 mainTab:CreateSection({{
     text = "Core Features"
-}})
-
--- ═══ Logger ═══
-local logger = mainTab:CreateLogger({{
-    text = "Console Output",
-    height = 200,
-}})
-
-logger:Log("SUCCESS", "MonoUI initialized!")
+}}){logger_setup}
 
 -- ═══ Toggle ═══
 mainTab:CreateToggle({{
@@ -379,7 +661,7 @@ mainTab:CreateToggle({{
     default = false,
     flag = "feature_toggle",
     callback = function(state)
-        logger:Log("INFO", "Feature: " .. (state and "ON" or "OFF"))
+        {logger_log}
     end,
 }})
 
@@ -391,7 +673,7 @@ mainTab:CreateSlider({{
     default = 50,
     flag = "intensity_slider",
     callback = function(value)
-        logger:Log("INFO", "Intensity: " .. math.floor(value))
+        {slider_callback}
     end,
 }})
 
@@ -403,7 +685,7 @@ mainTab:CreateDropdown({{
     multiple = false,
     flag = "mode_dropdown",
     callback = function(value)
-        logger:Log("INFO", "Mode: " .. tostring(value))
+        {dropdown_callback}
     end,
 }})
 
@@ -411,13 +693,7 @@ mainTab:CreateDropdown({{
 mainTab:CreateButton({{
     text = "Execute Action",
     callback = function()
-        logger:Log("SUCCESS", "Action executed!")
-        MonoUI.Notify({{
-            title = "Success",
-            content = "Action completed.",
-            icon = "check-circle",
-            duration = 3,
-        }})
+        {button_callback}
     end,
 }})
 
@@ -428,27 +704,21 @@ mainTab:CreateInput({{
     default = "",
     flag = "custom_input",
     callback = function(value)
-        logger:Log("INFO", "Input: " .. value)
+        {input_callback}
     end,
 }})
 
--- ═══ Color Picker ═══
 settingsTab:CreateSection({{
     text = "Theme"
 }})
 
+-- ═══ Color Picker ═══
 settingsTab:CreateColorPicker({{
     text = "Accent Color",
     default = Color3.fromRGB(0, 162, 255),
     flag = "accent_color",
     callback = function(color)
-        MonoUI.SetThemeColor("AccentColor", color)
-        MonoUI.Notify({{
-            title = "Theme Updated",
-            content = "Accent color changed.",
-            icon = "palette",
-            duration = 2.5,
-        }})
+        {theme_callback}
     end,
 }})
 
@@ -461,19 +731,25 @@ settingsTab:CreateKeybind({{
     callback = function(key)
         visibleState = not visibleState
         window:SetVisible(visibleState)
-        logger:Log("WARNING", "Toggled via: " .. key.Name)
+        {keybind_callback}
     end,
-}})
+}}){control_hud_section}
 
--- ═══ Control HUD ═══
-MonoUI.CreateControlHUD({{
-    {{ icon = "swords", default = false, callback = function(active) print("Combat:", active) end }},
-    {{ icon = "eye",     default = true,  callback = function(active) print("ESP:", active) end }},
-    {{ icon = "gauge",   default = false, callback = function(active) print("Speed:", active) end }},
-}})
+-- ═══ Cleanup Examples (Loops & Connections) ═══
+-- Use window:AddCleanup to automatically stop loops and disconnect events when GUI closes
 
-logger:Log("SUCCESS", "Example script fully loaded!")
-print("✅ MonoUI Example ready!")
+-- Safe background loop using MonoUI's built-in Timer (sleitnick/timer)
+local myTimer = MonoUI.CreateTimer(1)
+myTimer.Tick:Connect(function()
+    -- Your background loop logic here (runs every 1 second)
+end)
+window:AddCleanup(myTimer)
+myTimer:Start()
+
+local myConnection = game.Players.PlayerAdded:Connect(function(player)
+    -- Your event handler logic here
+end)
+window:AddCleanup(myConnection)
 """
 
 
@@ -489,10 +765,16 @@ async def list_tools():
     return [
         Tool(
             name="get-loadstring",
-            description="Get the loadstring code to load the MonoUI library in Roblox. Returns the full snippet including SetWatermark setup.",
+            description="Get the loadstring code to load the MonoUI library in Roblox. Optionally includes the watermark setup.",
             inputSchema={
                 "type": "object",
-                "properties": {},
+                "properties": {
+                    "watermark": {
+                        "type": "boolean",
+                        "description": "Whether to include the watermark initialization snippet.",
+                        "default": False
+                    }
+                },
                 "required": [],
             },
         ),
@@ -510,6 +792,7 @@ async def list_tools():
                     "config_name": {"type": "string", "description": "Config file name for auto-save.", "default": "mono_config"},
                     "auto_save": {"type": "boolean", "description": "Enable auto-save of config.", "default": True},
                     "auto_exec": {"type": "boolean", "description": "Enable auto-reload on teleport.", "default": True},
+                    "include_event_hooks": {"type": "boolean", "description": "Whether to include window lifecycle event hooks (PreOpened, Closed, Minimized).", "default": False},
                 },
                 "required": ["title"],
             },
@@ -599,11 +882,17 @@ async def list_tools():
         ),
         Tool(
             name="generate-full-example",
-            description="Generate a complete, runnable MonoUI example script with window, tabs, multiple components, notifications, and control HUD.",
+            description="Generate a complete, runnable MonoUI example script with window, tabs, and optional sections like watermark, notifications, control HUD, and logger.",
             inputSchema={
                 "type": "object",
                 "properties": {
                     "title": {"type": "string", "description": "Title/name for the example script.", "default": "Mono UI"},
+                    "config_name": {"type": "string", "description": "Config file name.", "default": "mono_config"},
+                    "include_watermark": {"type": "boolean", "description": "Include SetWatermark initialization.", "default": False},
+                    "include_notifications": {"type": "boolean", "description": "Include load notification.", "default": False},
+                    "include_control_hud": {"type": "boolean", "description": "Include ControlHUD setup.", "default": False},
+                    "include_logger": {"type": "boolean", "description": "Include Logger widget and callback logs.", "default": False},
+                    "include_event_hooks": {"type": "boolean", "description": "Include window event hooks (PreOpened, etc.).", "default": False},
                 },
                 "required": [],
             },
@@ -623,7 +912,9 @@ async def list_tools():
 @server.call_tool()
 async def call_tool(name: str, arguments: dict):
     if name == "get-loadstring":
-        result = generate_loadstring()
+        result = generate_loadstring(
+            watermark=arguments.get("watermark", False)
+        )
 
     elif name == "generate-window":
         result = generate_window(
@@ -635,6 +926,7 @@ async def call_tool(name: str, arguments: dict):
             config_name=arguments.get("config_name", "mono_config"),
             auto_save=arguments.get("auto_save", True),
             auto_exec=arguments.get("auto_exec", True),
+            include_event_hooks=arguments.get("include_event_hooks", False),
         )
 
     elif name == "generate-tab":
@@ -766,7 +1058,15 @@ async def call_tool(name: str, arguments: dict):
 
     elif name == "generate-full-example":
         title = arguments.get("title", "Mono UI")
-        result = generate_full_example(title)
+        result = generate_full_example(
+            title=title,
+            config_name=arguments.get("config_name", "mono_config"),
+            include_watermark=arguments.get("include_watermark", False),
+            include_notifications=arguments.get("include_notifications", False),
+            include_control_hud=arguments.get("include_control_hud", False),
+            include_logger=arguments.get("include_logger", False),
+            include_event_hooks=arguments.get("include_event_hooks", False),
+        )
 
     elif name == "list-icons":
         lines = ["# Available Lucide Icons", ""]

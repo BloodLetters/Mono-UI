@@ -24,7 +24,7 @@
                 <i class="fa-solid fa-shield-halved brand-logo"></i>
                 <span class="brand-name">Mono<span>UI</span></span>
             </div>
-            <!-- VERSION_START --><span class="badge">v1.2.1</span><!-- VERSION_END -->
+            <!-- VERSION_START --><span class="badge">v1.2.2</span><!-- VERSION_END -->
         </div>
         <div class="nav-right">
             <div class="search-wrapper">
@@ -54,50 +54,54 @@
                 <div class="nav-group">
                     <span class="group-title">Core</span>
                     <!-- SIDEBAR_CORE_START -->
-                    <a href="#control-hud" class="nav-item" id="nav-hud"><i class="fa-solid fa-sliders"></i>
-                        CreateControlHUD</a>
+                    <a href="#add-cleanup" class="nav-item" id="nav-cleanup"><i
+                            class="fa-solid fa-trash-can"></i> AddCleanup</a>
+                    <a href="#control-hud" class="nav-item" id="nav-hud"><i
+                            class="fa-solid fa-sliders"></i> CreateControlHUD</a>
+                    <a href="#create-timer" class="nav-item" id="nav-timer"><i
+                            class="fa-solid fa-clock"></i> CreateTimer</a>
                     <a href="#create-window" class="nav-item" id="nav-window"><i
                             class="fa-solid fa-window-maximize"></i> CreateWindow</a>
-                    <a href="#notifications" class="nav-item" id="nav-notify"><i class="fa-solid fa-bell"></i>
-                        Notify</a>
-                    <a href="#watermark" class="nav-item" id="nav-wm"><i class="fa-solid fa-chart-line"></i>
-                        SetWatermark</a>
+                    <a href="#notifications" class="nav-item" id="nav-notify"><i
+                            class="fa-solid fa-bell"></i> Notify</a>
+                    <a href="#watermark" class="nav-item" id="nav-wm"><i
+                            class="fa-solid fa-chart-line"></i> SetWatermark</a>
                     <!-- SIDEBAR_CORE_END -->
                 </div>
 
                 <div class="nav-group">
                     <span class="group-title">Layout</span>
                     <!-- SIDEBAR_LAYOUT_START -->
-                    <a href="#create-section" class="nav-item" id="nav-section"><i class="fa-solid fa-grip-lines"></i>
-                        CreateSection</a>
-                    <a href="#create-tab" class="nav-item" id="nav-tab"><i class="fa-solid fa-folder-open"></i>
-                        CreateTab</a>
+                    <a href="#create-section" class="nav-item" id="nav-section"><i
+                            class="fa-solid fa-grip-lines"></i> CreateSection</a>
+                    <a href="#create-tab" class="nav-item" id="nav-tab"><i
+                            class="fa-solid fa-folder-open"></i> CreateTab</a>
                     <!-- SIDEBAR_LAYOUT_END -->
                 </div>
 
                 <div class="nav-group">
                     <span class="group-title">Components</span>
                     <!-- SIDEBAR_COMPONENTS_START -->
-                    <a href="#button" class="nav-item" id="nav-button"><i class="fa-solid fa-square-check"></i>
-                        CreateButton</a>
-                    <a href="#colorpicker" class="nav-item" id="nav-color"><i class="fa-solid fa-palette"></i>
-                        CreateColorPicker</a>
-                    <a href="#dropdown" class="nav-item" id="nav-dropdown"><i class="fa-solid fa-caret-down"></i>
-                        CreateDropdown</a>
-                    <a href="#input" class="nav-item" id="nav-input"><i class="fa-solid fa-keyboard"></i>
-                        CreateInput</a>
-                    <a href="#keybind" class="nav-item" id="nav-keybind"><i class="fa-solid fa-keyboard"></i>
-                        CreateKeybind</a>
-                    <a href="#logger" class="nav-item" id="nav-logger"><i class="fa-solid fa-terminal"></i>
-                        CreateLogger</a>
-                    <a href="#playerlist" class="nav-item" id="nav-players"><i class="fa-solid fa-users"></i>
-                        CreatePlayerList</a>
-                    <a href="#slider" class="nav-item" id="nav-slider"><i class="fa-solid fa-sliders"></i>
-                        CreateSlider</a>
-                    <a href="#targetbody" class="nav-item" id="nav-body"><i class="fa-solid fa-child"></i>
-                        CreateTargetBody</a>
-                    <a href="#toggle" class="nav-item" id="nav-toggle"><i class="fa-solid fa-toggle-on"></i>
-                        CreateToggle</a>
+                    <a href="#button" class="nav-item" id="nav-button"><i
+                            class="fa-solid fa-square-check"></i> CreateButton</a>
+                    <a href="#colorpicker" class="nav-item" id="nav-color"><i
+                            class="fa-solid fa-palette"></i> CreateColorPicker</a>
+                    <a href="#dropdown" class="nav-item" id="nav-dropdown"><i
+                            class="fa-solid fa-caret-down"></i> CreateDropdown</a>
+                    <a href="#input" class="nav-item" id="nav-input"><i
+                            class="fa-solid fa-keyboard"></i> CreateInput</a>
+                    <a href="#keybind" class="nav-item" id="nav-keybind"><i
+                            class="fa-solid fa-keyboard"></i> CreateKeybind</a>
+                    <a href="#logger" class="nav-item" id="nav-logger"><i
+                            class="fa-solid fa-terminal"></i> CreateLogger</a>
+                    <a href="#playerlist" class="nav-item" id="nav-players"><i
+                            class="fa-solid fa-users"></i> CreatePlayerList</a>
+                    <a href="#slider" class="nav-item" id="nav-slider"><i
+                            class="fa-solid fa-sliders"></i> CreateSlider</a>
+                    <a href="#targetbody" class="nav-item" id="nav-body"><i
+                            class="fa-solid fa-child"></i> CreateTargetBody</a>
+                    <a href="#toggle" class="nav-item" id="nav-toggle"><i
+                            class="fa-solid fa-toggle-on"></i> CreateToggle</a>
                     <!-- SIDEBAR_COMPONENTS_END -->
                 </div>
 
@@ -183,6 +187,59 @@
             </section>
 
             <!-- DYNAMIC_API_START -->
+            <!-- AddCleanup -->
+            <section id="add-cleanup" class="doc-section">
+                <div class="breadcrumb">
+                    <span class="current">Core</span>
+                    <span class="sep">›</span>
+                    <span class="current">AddCleanup</span>
+                </div>
+                <div class="section-label">Core API</div>
+                <h2>AddCleanup</h2>
+                <p>Registers a thread, connection, instance, or custom callback to be automatically cleaned up/cancelled when the window is closed or destroyed.</p>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Argument</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>object</td>
+                            <td><span class="type type-string">any</span></td>
+                            <td>The thread, RBXScriptConnection, Instance, or custom clean-up function to track.</td>
+                        </tr>
+                        <tr>
+                            <td>customCleanup</td>
+                            <td><span class="type type-function">function</span></td>
+                            <td>Optional destructor function. For threads, pass <code>task.cancel</code>. For custom actions, pass a function.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">-- Auto-cancel a background loop when window closes
+local myLoop = task.spawn(function()
+    while true do
+        task.wait(1)
+        print("Looping...")
+    end
+end)
+window:AddCleanup(myLoop, task.cancel)
+
+-- Auto-disconnect a custom event connection
+local connection = game.Players.PlayerAdded:Connect(function(player)
+    print("Welcome", player.Name)
+end)
+window:AddCleanup(connection)</code></pre>
+                </div>
+            </section>
+
             <!-- CreateControlHUD -->
             <section id="control-hud" class="doc-section">
                 <div class="breadcrumb">
@@ -192,8 +249,7 @@
                 </div>
                 <div class="section-label">Core API</div>
                 <h2>CreateControlHUD</h2>
-                <p>Creates a floating, draggable, compact HUD with quick toggles (perfect for keeping essential scripts
-                    visible).</p>
+                <p>Creates a floating, draggable, compact HUD with quick toggles (perfect for keeping essential scripts visible).</p>
                 <table class="params-table">
                     <thead>
                         <tr>
@@ -229,6 +285,58 @@
     { icon = "swords", default = false, callback = function(v) print("Aim:", v) end },
     { icon = "eye",    default = true,  callback = function(v) print("ESP:", v) end },
 })</code></pre>
+                </div>
+            </section>
+
+            <!-- CreateTimer -->
+            <section id="create-timer" class="doc-section">
+                <div class="breadcrumb">
+                    <span class="current">Core</span>
+                    <span class="sep">›</span>
+                    <span class="current">CreateTimer</span>
+                </div>
+                <div class="section-label">Core API</div>
+                <h2>CreateTimer</h2>
+                <p>Creates a new Timer object from the built-in <code>sleitnick/timer</code> package. Provides a memory-safe, pauseable, and highly accurate alternative to <code>while true do</code> loops.</p>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Argument</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>interval</td>
+                            <td><span class="type type-number">number</span></td>
+                            <td>Tick interval duration in seconds (defaults to 1).</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">-- Create a timer that ticks every 1 second
+local myTimer = MonoUI.CreateTimer(1)
+
+-- Connect logic to the Tick event
+myTimer.Tick:Connect(function()
+    print("Timer ticked!")
+end)
+
+-- Register the timer with the window to automatically stop it when the GUI closes
+window:AddCleanup(myTimer)
+
+-- Start the timer
+myTimer:Start()
+
+-- You can also use:
+-- myTimer:Pause()
+-- myTimer:Resume()
+-- myTimer:Stop()</code></pre>
                 </div>
             </section>
 
@@ -389,8 +497,7 @@
                 </div>
                 <div class="section-label">Core API</div>
                 <h2>SetWatermark</h2>
-                <p>Creates or updates a small top-right HUD showing custom text, client FPS, ping, and character
-                    coordinates.</p>
+                <p>Creates or updates a small top-right HUD showing custom text, client FPS, ping, and character coordinates.</p>
                 <table class="params-table">
                     <thead>
                         <tr>
@@ -566,8 +673,7 @@
                 </div>
                 <div class="section-label">Components</div>
                 <h2>CreateColorPicker</h2>
-                <p>An advanced RGB/HSV color picker that supports hex input and saturation/brightness visual
-                    adjustments.</p>
+                <p>An advanced RGB/HSV color picker that supports hex input and saturation/brightness visual adjustments.</p>
                 <table class="params-table">
                     <thead>
                         <tr>
@@ -624,8 +730,7 @@
                 </div>
                 <div class="section-label">Components</div>
                 <h2>CreateDropdown</h2>
-                <p>A selection menu for single or multi-value selections. Supports search filtering inside dropdown
-                    items.</p>
+                <p>A selection menu for single or multi-value selections. Supports search filtering inside dropdown items.</p>
                 <table class="params-table">
                     <thead>
                         <tr>
@@ -757,8 +862,7 @@
                 </div>
                 <div class="section-label">Components</div>
                 <h2>CreateKeybind</h2>
-                <p>Allows the user to bind a keybind shortcut to toggle/trigger functions. Click to rebind, press Escape
-                    to unbind.</p>
+                <p>Allows the user to bind a keybind shortcut to toggle/trigger functions. Click to rebind, press Escape to unbind.</p>
                 <table class="params-table">
                     <thead>
                         <tr>
@@ -815,8 +919,7 @@
                 </div>
                 <div class="section-label">Components</div>
                 <h2>CreateLogger</h2>
-                <p>An in-app console widget that displays color-coded activity logs. Supports INFO, SUCCESS, WARNING,
-                    and ERROR levels.</p>
+                <p>An in-app console widget that displays color-coded activity logs. Supports INFO, SUCCESS, WARNING, and ERROR levels.</p>
                 <table class="params-table">
                     <thead>
                         <tr>
@@ -973,8 +1076,7 @@ log:Log("ERROR",   "Target not found.")</code></pre>
                 </div>
                 <div class="section-label">Components</div>
                 <h2>CreateTargetBody</h2>
-                <p>A body hitbox selector showing a visual representation of a character body. Perfect for selective
-                    aimbot hitboxes.</p>
+                <p>A body hitbox selector showing a visual representation of a character body. Perfect for selective aimbot hitboxes.</p>
                 <table class="params-table">
                     <thead>
                         <tr>
@@ -1090,6 +1192,10 @@ log:Log("ERROR",   "Target not found.")</code></pre>
 })</code></pre>
                 </div>
             </section>
+
+
+
+
 
 
 

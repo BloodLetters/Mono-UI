@@ -9,6 +9,7 @@
 [![Latest Release](https://img.shields.io/github/v/release/BloodLetters/mono-ui?color=775ada&label=release&style=for-the-badge)](https://github.com/BloodLetters/mono-ui/releases/latest)
 [![License](https://img.shields.io/github/license/BloodLetters/mono-ui?color=775ada&style=for-the-badge)](./LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-Roblox-000000?style=for-the-badge&logo=roblox&logoColor=white)](https://www.roblox.com)
+</div>
 
 ---
 <p align="left">

@@ -475,6 +475,10 @@ local function CreateWindow(options)
 		end
 	end
 
+	function windowObject:AddCleanup(object, customCleanup)
+		return windowJanitor:Add(object, customCleanup)
+	end
+
 	local autoExec = options.AutoExec
 	local autoExecUrl = options.AutoExecUrl
 	if autoExec or autoExecUrl then

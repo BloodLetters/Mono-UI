@@ -2,16 +2,13 @@ import os
 import re
 import json
 
-# Paths
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SRC_DIR = os.path.join(BASE_DIR, "src")
 DOCS_DIR = os.path.join(BASE_DIR, "docs")
 INDEX_HTML = os.path.join(DOCS_DIR, "index.html")
 DUMP_FILE = os.path.join(DOCS_DIR, "dump.json")
 
-# Predefined metadata database for functions and arguments
 METADATA = {
-    # Core API
     "CreateWindow": {
         "group": "Core",
         "label": "Core API",
@@ -101,8 +98,64 @@ METADATA = {
     { icon = "eye",    default = true,  callback = function(v) print("ESP:", v) end },
 })"""
     },
+    "AddCleanup": {
+        "group": "Core",
+        "label": "Core API",
+        "display_name": "AddCleanup",
+        "id": "add-cleanup",
+        "nav_id": "nav-cleanup",
+        "icon": "fa-trash-can",
+        "description": "Registers a thread, connection, instance, or custom callback to be automatically cleaned up/cancelled when the window is closed or destroyed.",
+        "params": {
+            "object": {"type": "any", "description": "The thread, RBXScriptConnection, Instance, or custom clean-up function to track."},
+            "customCleanup": {"type": "function", "description": "Optional destructor function. For threads, pass <code>task.cancel</code>. For custom actions, pass a function."}
+        },
+        "example": """-- Auto-cancel a background loop when window closes
+local myLoop = task.spawn(function()
+    while true do
+        task.wait(1)
+        print("Looping...")
+    end
+end)
+window:AddCleanup(myLoop, task.cancel)
 
-    # Layout API
+-- Auto-disconnect a custom event connection
+local connection = game.Players.PlayerAdded:Connect(function(player)
+    print("Welcome", player.Name)
+end)
+window:AddCleanup(connection)"""
+    },
+    "CreateTimer": {
+        "group": "Core",
+        "label": "Core API",
+        "display_name": "CreateTimer",
+        "id": "create-timer",
+        "nav_id": "nav-timer",
+        "icon": "fa-clock",
+        "description": "Creates a new Timer object from the built-in <code>sleitnick/timer</code> package. Provides a memory-safe, pauseable, and highly accurate alternative to <code>while true do</code> loops.",
+        "params": {
+            "interval": {"type": "number", "description": "Tick interval duration in seconds (defaults to 1)."}
+        },
+        "example": """-- Create a timer that ticks every 1 second
+local myTimer = MonoUI.CreateTimer(1)
+
+-- Connect logic to the Tick event
+myTimer.Tick:Connect(function()
+    print("Timer ticked!")
+end)
+
+-- Register the timer with the window to automatically stop it when the GUI closes
+window:AddCleanup(myTimer)
+
+-- Start the timer
+myTimer:Start()
+
+-- You can also use:
+-- myTimer:Pause()
+-- myTimer:Resume()
+-- myTimer:Stop()"""
+    },
+
     "CreateTab": {
         "group": "Layout",
         "label": "Layout",
@@ -134,7 +187,6 @@ METADATA = {
         "example": 'tab:CreateSection({ text = "Combat Hacks" })'
     },
 
-    # Components API
     "CreateToggle": {
         "group": "Components",
         "label": "Components",
@@ -374,11 +426,9 @@ def parse_lua_file(filepath):
     with open(filepath, "r", encoding="utf-8") as f:
         content = f.read()
 
-    # Find matches of args.something or options.something
     pattern = r"(?:args|options|tArgs|sArgs|cArgs|slArgs|tbArgs|kbArgs|lgArgs|plArgs|currentOptions)\.([a-zA-Z0-9_]+)"
     matches = re.findall(pattern, content)
     
-    # Return unique sorted list
     return sorted(list(set(matches)))
 
 def extract_all_functions():
@@ -387,7 +437,6 @@ def extract_all_functions():
     """
     functions = {}
 
-    # 1. Parse src/components/
     components_path = os.path.join(SRC_DIR, "components")
     if os.path.exists(components_path):
         for filename in os.listdir(components_path):
@@ -396,33 +445,27 @@ def extract_all_functions():
                 basename = filename[:-4]  # Remove .lua
                 func_name = f"Create{basename}"
                 
-                # Exception for Section
                 if basename == "Section":
                     func_name = "CreateSection"
 
                 args = parse_lua_file(filepath)
-                # Guarantee 'flag' is included for stateful components (if not already found)
                 stateful_components = ["Toggle", "Slider", "Dropdown", "Input", "Keybind", "ColorPicker", "TargetBody"]
                 if basename in stateful_components and "flag" not in args:
                     args.append("flag")
 
                 functions[func_name] = sorted(args)
 
-    # 2. Parse core files for CreateWindow, CreateTab, Notify, SetWatermark, CreateControlHUD
     window_lua = os.path.join(SRC_DIR, "core", "window.lua")
     if os.path.exists(window_lua):
         with open(window_lua, "r", encoding="utf-8") as f:
             content = f.read()
         
-        # CreateWindow options
         create_window_match = re.search(r"local function CreateWindow\(([^)]+)\)", content)
         if create_window_match:
-            # Parse all options.something inside window.lua before showTab
             window_subcontent = content[:content.find("local function showTab")]
             window_args = re.findall(r"options\.([a-zA-Z0-9_]+)", window_subcontent)
             functions["CreateWindow"] = sorted(list(set(window_args)))
 
-        # CreateTab args
         create_tab_match = re.search(r"function windowObject:CreateTab\(([^)]+)\)", content)
         if create_tab_match:
             tab_block_start = content.find("function windowObject:CreateTab")
@@ -431,23 +474,22 @@ def extract_all_functions():
             tab_args = re.findall(r"args\.([a-zA-Z0-9_]+)", tab_subcontent)
             functions["CreateTab"] = sorted(list(set(tab_args)))
 
-    # Notify in notification.lua
     notification_lua = os.path.join(SRC_DIR, "core", "notification.lua")
     if os.path.exists(notification_lua):
         notification_args = parse_lua_file(notification_lua)
         functions["Notify"] = notification_args
 
-    # SetWatermark in watermark.lua
     watermark_lua = os.path.join(SRC_DIR, "core", "watermark.lua")
     if os.path.exists(watermark_lua):
         watermark_args = parse_lua_file(watermark_lua)
         functions["SetWatermark"] = watermark_args
 
-    # CreateControlHUD in controlHUD.lua
     control_hud_lua = os.path.join(SRC_DIR, "core", "controlHUD.lua")
     if os.path.exists(control_hud_lua):
-        # We manually structure controlHUD arguments because it processes a list of tables
         functions["CreateControlHUD"] = ["icon", "default", "callback"]
+
+    functions["AddCleanup"] = ["object", "customCleanup"]
+    functions["CreateTimer"] = ["interval"]
 
     return functions
 
@@ -459,7 +501,6 @@ def generate_dump(extracted):
     for func_name, args in extracted.items():
         meta = METADATA.get(func_name, {})
         
-        # Extract metadata details or fall back to defaults
         group = meta.get("group", "Components")
         label = meta.get("label", "Components")
         display_name = meta.get("display_name", func_name.replace("Create", ""))
@@ -495,7 +536,6 @@ def build_sidebar_html(dump_data, group_name):
     """
     html_lines = []
     
-    # Sort functions in this group to maintain consistency
     group_funcs = {k: v for k, v in dump_data.items() if v["type"] == group_name.lower()}
     
     for func_name in sorted(group_funcs.keys()):
@@ -505,7 +545,6 @@ def build_sidebar_html(dump_data, group_name):
         icon = meta.get("icon", "fa-cube")
         display_name = group_funcs[func_name]["display_name"]
         
-        # Clean formatting matching standard index.html sidebar nav-items
         html_lines.append(f'                    <a href="#{section_id}" class="nav-item" id="{nav_id}"><i\n'
                            f'                            class="fa-solid {icon}"></i> {func_name}</a>')
                            
@@ -517,7 +556,6 @@ def build_content_html(dump_data):
     """
     sections = []
     
-    # Group and order functions logically: Core, then Layout, then Components
     ordered_funcs = []
     for group in ["Core", "Layout", "Components"]:
         group_funcs = {k: v for k, v in dump_data.items() if v["type"] == group.lower()}
@@ -533,7 +571,6 @@ def build_content_html(dump_data):
         desc = func_data["description"]
         example = func_data["example"]
         
-        # Breadcrumb HTML
         breadcrumb = (
             f'                <div class="breadcrumb">\n'
             f'                    <span class="current">{group}</span>\n'
@@ -542,14 +579,12 @@ def build_content_html(dump_data):
             f'                </div>'
         )
 
-        # Arguments Table rows
         table_rows = []
         for arg in func_data["arguments"]:
             name = arg["name"]
             arg_type = arg["type"]
             arg_desc = arg["description"]
             
-            # Formatted type class mapping
             type_class = "type-string"
             if "boolean" in arg_type:
                 type_class = "type-boolean"
@@ -624,28 +659,351 @@ def update_index_html(sidebar_core, sidebar_layout, sidebar_components, main_con
     with open(INDEX_HTML, "r", encoding="utf-8") as f:
         content = f.read()
 
-    # Replace Version Badge
     version_pattern = r"(<!-- VERSION_START -->).*?(<!-- VERSION_END -->)"
     content = re.sub(version_pattern, rf'\1<span class="badge">{version}</span>\2', content, flags=re.DOTALL)
 
-    # Replace Sidebar Core
     core_pattern = r"(<!-- SIDEBAR_CORE_START -->\n).*?(\n\s*<!-- SIDEBAR_CORE_END -->)"
     content = re.sub(core_pattern, rf"\1{sidebar_core}\2", content, flags=re.DOTALL)
 
-    # Replace Sidebar Layout
     layout_pattern = r"(<!-- SIDEBAR_LAYOUT_START -->\n).*?(\n\s*<!-- SIDEBAR_LAYOUT_END -->)"
     content = re.sub(layout_pattern, rf"\1{sidebar_layout}\2", content, flags=re.DOTALL)
 
-    # Replace Sidebar Components
     comp_pattern = r"(<!-- SIDEBAR_COMPONENTS_START -->\n).*?(\n\s*<!-- SIDEBAR_COMPONENTS_END -->)"
     content = re.sub(comp_pattern, rf"\1{sidebar_components}\2", content, flags=re.DOTALL)
 
-    # Replace Dynamic Content
     content_pattern = r"(<!-- DYNAMIC_API_START -->\n).*?(\n\s*<!-- DYNAMIC_API_END -->)"
     content = re.sub(content_pattern, rf"\1{main_content}\2", content, flags=re.DOTALL)
 
     with open(INDEX_HTML, "w", encoding="utf-8") as f:
         f.write(content)
+
+def sync_mcp(dump_data):
+    """
+    Updates COMPONENT_DOCS in MCP/server.py and writes JSON schemas to App Data directory.
+    """
+    print("[SYNC] Synchronizing MCP server documents & schemas...")
+    mcp_dir = os.path.join(BASE_DIR, "MCP")
+    server_py_path = os.path.join(mcp_dir, "server.py")
+    
+    PARAM_DEFAULTS = {
+        "text": {
+            "Button": '"Button"', "Toggle": '"Toggle"', "Input": '"Input"', "Dropdown": '"Dropdown"',
+            "Slider": '"Slider"', "ColorPicker": '"Color"', "Keybind": '"Keybind"', "Logger": '"Console Logs"',
+            "PlayerList": '"Player List"', "TargetBody": '"Target Body Parts"', "Section": '"Section"'
+        },
+        "default": {
+            "Toggle": "false", "Input": '""', "Dropdown": "nil", "Slider": "min",
+            "ColorPicker": "Color3.fromRGB(100,100,110)", "Keybind": "Enum.KeyCode.None", "TargetBody": "nil"
+        },
+        "multiple": {
+            "Dropdown": "false", "TargetBody": "true"
+        },
+        "list": "{}",
+        "disabledParts": "{}",
+        "flag": "nil",
+        "callback": "nil",
+        "placeholder": '"type here..."',
+        "height": {
+            "Logger": "180", "PlayerList": "200"
+        }
+    }
+
+    def get_default_value(arg_name, comp_name):
+        default_entry = PARAM_DEFAULTS.get(arg_name, "nil")
+        if isinstance(default_entry, dict):
+            return default_entry.get(comp_name, "nil")
+        return default_entry
+
+    mcp_components = {}
+    for func_name, data in dump_data.items():
+        if data["type"] == "components" or func_name == "CreateSection":
+            comp_name = data["display_name"]
+            params = []
+            for arg in data["arguments"]:
+                params.append({
+                    "name": arg["name"],
+                    "type": arg["type"],
+                    "default": get_default_value(arg["name"], comp_name),
+                    "desc": arg["description"]
+                })
+            
+            comp_entry = {
+                "description": data["description"],
+                "params": params
+            }
+            if comp_name == "Logger":
+                comp_entry["methods"] = [
+                    {"name": "Log", "params": "level: string (INFO|WARNING|SUCCESS|ERROR), message: string", "desc": "Append a log entry."}
+                ]
+            mcp_components[comp_name] = comp_entry
+
+    def format_py(val, indent_level=0):
+        indent = "    " * indent_level
+        if isinstance(val, dict):
+            if not val:
+                return "{}"
+            lines = ["{"]
+            for k, v in sorted(val.items()):
+                lines.append(f"{indent}    {repr(k)}: {format_py(v, indent_level + 1)},")
+            lines.append(f"{indent}}}")
+            return "\n".join(lines)
+        elif isinstance(val, list):
+            if not val:
+                return "[]"
+            lines = ["["]
+            for item in val:
+                lines.append(f"{indent}    {format_py(item, indent_level + 1)},")
+            lines.append(f"{indent}]")
+            return "\n".join(lines)
+        else:
+            return repr(val)
+
+    component_docs_str = f"COMPONENT_DOCS = {format_py(mcp_components, 0)}"
+
+    if os.path.exists(server_py_path):
+        with open(server_py_path, "r", encoding="utf-8") as f:
+            server_content = f.read()
+
+        start_marker = "# COMPONENT_DOCS_START"
+        end_marker = "# COMPONENT_DOCS_END"
+        
+        start_idx = server_content.find(start_marker)
+        end_idx = server_content.find(end_marker)
+        
+        if start_idx != -1 and end_idx != -1:
+            new_content = (
+                server_content[:start_idx + len(start_marker)] +
+                "\n" + component_docs_str + "\n" +
+                server_content[end_idx:]
+            )
+            with open(server_py_path, "w", encoding="utf-8") as f:
+                f.write(new_content)
+            print("[SUCCESS] Updated 'COMPONENT_DOCS' in MCP/server.py")
+        else:
+            print("[WARNING] Could not find COMPONENT_DOCS markers in MCP/server.py")
+    else:
+        print(f"[WARNING] MCP/server.py not found at {server_py_path}")
+
+    mcp_schema_dir = os.path.expanduser("~/.gemini/antigravity-ide/mcp/mono-ui-mcp")
+    if os.path.exists(mcp_schema_dir):
+        components_list = sorted(list(mcp_components.keys()))
+        components_str = ", ".join(components_list)
+
+        schemas = {
+            "get-loadstring": {
+                "name": "get-loadstring",
+                "description": "Get the loadstring code to load the MonoUI library in Roblox. Optionally includes the watermark setup.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "watermark": {
+                            "type": "boolean",
+                            "description": "Whether to include the watermark initialization snippet.",
+                            "default": False
+                        }
+                    },
+                    "required": []
+                }
+            },
+            "generate-window": {
+                "name": "generate-window",
+                "description": "Generate Luau code to create a MonoUI window with event hooks.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "title": {"type": "string", "description": "Window title (displayed in top bar)."},
+                        "subtitle": {"type": "string", "description": "Window subtitle.", "default": ""},
+                        "icon": {"type": "string", "description": "Lucide icon name for the window.", "default": "shield"},
+                        "width": {"type": "integer", "description": "Window width in pixels.", "default": 600},
+                        "height": {"type": "integer", "description": "Window height in pixels.", "default": 400},
+                        "config_name": {"type": "string", "description": "Config file name for auto-save.", "default": "mono_config"},
+                        "auto_save": {"type": "boolean", "description": "Enable auto-save of config.", "default": True},
+                        "auto_exec": {"type": "boolean", "description": "Enable auto-reload on teleport.", "default": True},
+                        "include_event_hooks": {"type": "boolean", "description": "Whether to include window lifecycle event hooks (PreOpened, Closed, Minimized).", "default": False}
+                    },
+                    "required": ["title"]
+                }
+            },
+            "generate-tab": {
+                "name": "generate-tab",
+                "description": "Generate Luau code to create a tab inside a window.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "tab_var": {"type": "string", "description": "Variable name for the tab (e.g. 'mainTab')."},
+                        "window_var": {"type": "string", "description": "Variable name of the window (e.g. 'window').", "default": "window"},
+                        "text": {"type": "string", "description": "Tab display text."},
+                        "icon": {"type": "string", "description": "Lucide icon name.", "default": ""}
+                    },
+                    "required": ["tab_var", "text"]
+                }
+            },
+            "generate-component": {
+                "name": "generate-component",
+                "description": f"Generate Luau code to create a UI component ({components_str}) inside a tab.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "tab_var": {"type": "string", "description": "Variable name of the tab (e.g. 'mainTab').", "default": "tab"},
+                        "comp_type": {"type": "string", "description": f"Component type: {components_str}."},
+                        "var_name": {"type": "string", "description": "Variable name to assign result to (e.g. 'myLogger' for Logger)."},
+                        "text": {"type": "string", "description": "Label/display text for the component."},
+                        "placeholder": {"type": "string", "description": "(Input only) Placeholder text."},
+                        "default": {"type": "string", "description": "Default value (boolean, number, string, Color3)."},
+                        "min": {"type": "number", "description": "(Slider only) Minimum value."},
+                        "max": {"type": "number", "description": "(Slider only) Maximum value."},
+                        "list": {"type": "string", "description": "(Dropdown only) Comma-separated option strings."},
+                        "multiple": {"type": "boolean", "description": "(Dropdown/TargetBody) Allow multiple selections."},
+                        "height": {"type": "number", "description": "(Logger/PlayerList) Height in pixels."},
+                        "disabledParts": {"type": "string", "description": "(TargetBody only) Comma-separated parts to disable."},
+                        "flag": {"type": "string", "description": "Config save/load key for auto-save."},
+                        "callback": {"type": "string", "description": "Luau callback code (e.g. 'function(value) print(value) end')."}
+                    },
+                    "required": ["comp_type"]
+                }
+            },
+            "generate-notification": {
+                "name": "generate-notification",
+                "description": "Generate Luau code for a MonoUI sliding notification toast.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "title": {"type": "string", "description": "Notification title."},
+                        "content": {"type": "string", "description": "Notification body text."},
+                        "icon": {"type": "string", "description": "Lucide icon name.", "default": "check-circle"},
+                        "duration": {"type": "integer", "description": "Display duration in seconds.", "default": 5}
+                    },
+                    "required": ["title", "content"]
+                }
+            },
+            "generate-control-hud": {
+                "name": "generate-control-hud",
+                "description": "Generate Luau code for a ControlHUD quick-toggle bar with Lucide icons.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "buttons": {"type": "string", "description": "JSON array of buttons, each with: icon (string), default (boolean). Example: [{\"icon\":\"swords\",\"default\":false},{\"icon\":\"eye\",\"default\":true}]"}
+                    },
+                    "required": ["buttons"]
+                }
+            },
+            "list-components": {
+                "name": "list-components",
+                "description": "List all available MonoUI components with brief descriptions.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {},
+                    "required": []
+                }
+            },
+            "get-component-docs": {
+                "name": "get-component-docs",
+                "description": "Get detailed documentation for a specific MonoUI component, including all parameters and methods.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "component": {"type": "string", "description": f"Component name: {components_str}."}
+                    },
+                    "required": ["component"]
+                }
+            },
+            "generate-full-example": {
+                "name": "generate-full-example",
+                "description": "Generate a complete, runnable MonoUI example script with window, tabs, and optional sections like watermark, notifications, control HUD, and logger.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "title": {"type": "string", "description": "Title/name for the example script.", "default": "Mono UI"},
+                        "config_name": {"type": "string", "description": "Config file name.", "default": "mono_config"},
+                        "include_watermark": {"type": "boolean", "description": "Include SetWatermark initialization.", "default": False},
+                        "include_notifications": {"type": "boolean", "description": "Include load notification.", "default": False},
+                        "include_control_hud": {"type": "boolean", "description": "Include ControlHUD setup.", "default": False},
+                        "include_logger": {"type": "boolean", "description": "Include Logger widget and callback logs.", "default": False},
+                        "include_event_hooks": {"type": "boolean", "description": "Include window event hooks (PreOpened, etc.).", "default": False}
+                    },
+                    "required": []
+                }
+            },
+            "list-icons": {
+                "name": "list-icons",
+                "description": "List available Lucide icon names that can be used with MonoUI.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {},
+                    "required": []
+                }
+            }
+        }
+
+        for schema_name, schema_data in schemas.items():
+            schema_file_path = os.path.join(mcp_schema_dir, f"{schema_name}.json")
+            try:
+                with open(schema_file_path, "w", encoding="utf-8") as sf:
+                    json.dump(schema_data, sf)
+                print(f"[SUCCESS] Updated lazy schema file: {schema_name}.json")
+            except Exception as e:
+                print(f"[WARNING] Failed to write lazy schema to {schema_file_path}: {e}")
+
+        # Write instructions.md for the MCP server
+        instructions_file_path = os.path.join(mcp_schema_dir, "instructions.md")
+        instructions_content = """# mono-ui-mcp Best Practices & Guidelines
+
+When generating Roblox scripts using MonoUI, you must follow these best practices for memory management and thread cleanup to prevent memory leaks in the player's client.
+
+## Memory Leak Prevention (Janitor / Cleanup)
+
+Roblox executors execute scripts inside persistent environments. When a user closes or destroys a GUI, any active event connections or running threads (loops) created by the script **will continue to run in the background** unless they are explicitly cleaned up.
+
+MonoUI windows include a built-in clean-up tracking method: `window:AddCleanup(object, customCleanup)`.
+
+### 1. Handling Loops (Never use raw `while` loops)
+Never use raw `while true do` or `while task.wait() do` loops for background tasks, as they cause massive memory leaks when the GUI closes. Instead, always use MonoUI's built-in, memory-safe `CreateTimer` and register it with the window's cleanup list.
+
+**Correct Pattern:**
+```lua
+local myTimer = MonoUI.CreateTimer(1) -- Ticks every 1 second
+myTimer.Tick:Connect(function()
+    -- Loop operations here
+end)
+window:AddCleanup(myTimer) -- Automatically stops and cleans up the timer on window close
+myTimer:Start()
+```
+
+### 2. Handling Event Connections (`:Connect`)
+When connecting to Roblox events outside of MonoUI's built-in callbacks (e.g. workspace events, user input, player joining/leaving), always register the connection with the window's cleanup list.
+
+**Correct Pattern:**
+```lua
+local playerConnection = game.Players.PlayerAdded:Connect(function(player)
+    print(player.Name .. " has joined the server!")
+end)
+window:AddCleanup(playerConnection) -- Automatically disconnects when window closes
+```
+
+### 3. Custom Cleanup Actions
+If custom cleanup actions are needed (e.g. restoring game settings or destroying temp parts in workspace), pass a custom cleanup function.
+
+**Correct Pattern:**
+```lua
+local tempPart = Instance.new("Part")
+tempPart.Parent = workspace
+window:AddCleanup(tempPart) -- Automatically calls :Destroy() on Instances
+
+window:AddCleanup(function()
+    -- Custom cleanup code (e.g. resetting gravity)
+    workspace.Gravity = 196.2
+end)
+```
+"""
+        try:
+            with open(instructions_file_path, "w", encoding="utf-8") as inf:
+                inf.write(instructions_content)
+            print("[SUCCESS] Updated MCP instructions.md")
+        except Exception as e:
+            print(f"[WARNING] Failed to write MCP instructions.md: {e}")
+    else:
+        print(f"[INFO] IDE Lazy schema directory not found at {mcp_schema_dir}. Skipping schema files sync.")
+
 
 def main():
     print("[SYNC] Parsing source files in 'src/'...")
@@ -670,6 +1028,8 @@ def main():
     print("[SYNC] Injecting documentation into 'index.html'...")
     update_index_html(sidebar_core, sidebar_layout, sidebar_components, main_content, version)
     print("[SUCCESS] HTML documentation has been synchronized!")
+
+    sync_mcp(dump_data)
 
 if __name__ == "__main__":
     main()
