@@ -195,6 +195,16 @@ local themeSignals = {}
 
 function utils.onThemeChanged(callback)
 	table.insert(themeSignals, callback)
+	return {
+		Disconnect = function()
+			for i, cb in ipairs(themeSignals) do
+				if cb == callback then
+					table.remove(themeSignals, i)
+					break
+				end
+			end
+		end,
+	}
 end
 
 function utils.registerTheme(instance, property, themeKey)

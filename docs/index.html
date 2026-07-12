@@ -24,7 +24,7 @@
                 <i class="fa-solid fa-shield-halved brand-logo"></i>
                 <span class="brand-name">Mono<span>UI</span></span>
             </div>
-            <!-- VERSION_START --><span class="badge">v1.2.2</span><!-- VERSION_END -->
+            <!-- VERSION_START --><span class="badge">v1.2.3</span><!-- VERSION_END -->
         </div>
         <div class="nav-right">
             <div class="search-wrapper">
@@ -964,7 +964,7 @@ log:Log("ERROR",   "Target not found.")</code></pre>
                 </div>
                 <div class="section-label">Components</div>
                 <h2>CreatePlayerList</h2>
-                <p>Renders a scrolling player list widget showing active players on the server. Includes search bar.</p>
+                <p>Renders a scrolling player list widget showing active players on the server. Supports up to 2 custom buttons per player.</p>
                 <table class="params-table">
                     <thead>
                         <tr>
@@ -974,6 +974,11 @@ log:Log("ERROR",   "Target not found.")</code></pre>
                         </tr>
                     </thead>
                     <tbody>
+                        <tr>
+                            <td>buttons</td>
+                            <td><span class="type type-table">table</span></td>
+                            <td>List of custom player actions (max 2). E.g. <code>{{text='TP', type='button', callback=function(p) ... end}}</code></td>
+                        </tr>
                         <tr>
                             <td>height</td>
                             <td><span class="type type-number">number</span></td>
@@ -994,6 +999,22 @@ log:Log("ERROR",   "Target not found.")</code></pre>
                     <pre><code class="language-lua">tab:CreatePlayerList({
     text   = "Active Server Players",
     height = 280,
+    buttons = {
+        {
+            text = "TP",
+            type = "button",
+            callback = function(player)
+                print("Teleporting to: " .. player.Name)
+            end
+        },
+        {
+            text = "ESP",
+            type = "toggle",
+            callback = function(player, active)
+                print("ESP for " .. player.Name .. " set to " .. tostring(active))
+            end
+        }
+    }
 })</code></pre>
                 </div>
             </section>
@@ -1192,6 +1213,7 @@ log:Log("ERROR",   "Target not found.")</code></pre>
 })</code></pre>
                 </div>
             </section>
+
 
 
 

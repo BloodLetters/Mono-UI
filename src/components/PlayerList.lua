@@ -60,68 +60,17 @@ return function(page, args)
 	padding.Parent = scroll
 
 	local playerRows = {}
-	local espStates = {}
-	local espHighlights = {}
-	local characterConns = {}
-
-	local function teleportTo(targetPlayer)
-		local localPlayer = Players.LocalPlayer
-		if not localPlayer then return end
-		local targetChar = targetPlayer.Character
-		local localChar = localPlayer.Character
-		if targetChar and localChar then
-			local targetRoot = targetChar:FindFirstChild("HumanoidRootPart")
-			local localRoot = localChar:FindFirstChild("HumanoidRootPart")
-			if targetRoot and localRoot then
-				localRoot.CFrame = targetRoot.CFrame * CFrame.new(0, 0, -3)
-			end
-		end
-	end
-
-	local function toggleESP(player, state)
-		espStates[player] = state
-		if state then
-			local function applyHighlight(char)
-				if not char then return end
-				local existing = char:FindFirstChild("MonoESP")
-				if existing then existing:Destroy() end
-
-				local hl = Instance.new("Highlight")
-				hl.Name = "MonoESP"
-				hl.FillColor = utils.theme.AccentColor
-				hl.FillTransparency = 0.5
-				hl.OutlineColor = Color3.fromRGB(255, 255, 255)
-				hl.OutlineTransparency = 0
-				hl.Adornee = char
-				hl.Parent = char
-				espHighlights[player] = hl
-			end
-
-			local char = player.Character
-			if char then
-				applyHighlight(char)
-			end
-
-			if characterConns[player] then characterConns[player]:Disconnect() end
-			characterConns[player] = player.CharacterAdded:Connect(function(newChar)
-				task.wait(0.5)
-				applyHighlight(newChar)
-			end)
-		else
-			local hl = espHighlights[player]
-			if hl then pcall(function() hl:Destroy() end) end
-			espHighlights[player] = nil
-
-			if characterConns[player] then
-				characterConns[player]:Disconnect()
-				characterConns[player] = nil
-			end
-		end
-	end
+	local playerRowButtons = {}
+	local activeToggleButtons = {}
 
 	local function addPlayerRow(player)
 		if playerRows[player] then return end
 		if player == Players.LocalPlayer then return end
+
+		local customButtons = args.buttons or {}
+		if #customButtons > 2 then
+			customButtons = {}
+		end
 
 		local playerRow = make("Frame", {
 			Name = player.Name,
@@ -133,54 +82,96 @@ return function(page, args)
 		addCorner(playerRow, 6)
 		addStroke(playerRow, Color3.fromRGB(40, 40, 48), 0.5, 1)
 
+		local numButtons = #customButtons
+		local buttonsContainerWidth = numButtons > 0 and (numButtons * 60 - 6) or 0
+		local nameLabelWidthOffset = -10 - buttonsContainerWidth - (numButtons > 0 and 8 or 0)
+
 		local nameLabel = make("TextLabel", {
 			Position = UDim2.fromOffset(8, 0),
-			Size = UDim2.new(1, -120, 1, 0),
+			Size = UDim2.new(1, nameLabelWidthOffset, 1, 0),
 			BackgroundTransparency = 1,
 			Text = player.DisplayName or player.Name,
 			Parent = playerRow,
 		})
 		applyFont(nameLabel, 14, Color3.fromRGB(220, 220, 225), Enum.TextXAlignment.Left)
 
-		local tpBtn = make("TextButton", {
-			Name = "TP",
-			Position = UDim2.new(1, -106, 0.5, -18),
-			Size = UDim2.fromOffset(50, 36),
-			BackgroundColor3 = Color3.fromRGB(30, 30, 36),
-			BorderSizePixel = 0,
-			Text = "TP",
-			Parent = playerRow,
-		})
-		addCorner(tpBtn, 4)
-		addStroke(tpBtn, Color3.fromRGB(50, 50, 58), 0.5, 1)
-		applyFont(tpBtn, 14, Color3.fromRGB(220, 220, 225), Enum.TextXAlignment.Center)
+		if numButtons > 0 then
+			local buttonsContainer = make("Frame", {
+				Name = "ButtonsContainer",
+				Position = UDim2.new(1, -10 - buttonsContainerWidth, 0.5, -15),
+				Size = UDim2.fromOffset(buttonsContainerWidth, 30),
+				BackgroundTransparency = 1,
+				Parent = playerRow,
+			})
 
-		tpBtn.Activated:Connect(function()
-			teleportTo(player)
-		end)
+			local buttonsLayout = Instance.new("UIListLayout")
+			buttonsLayout.FillDirection = Enum.FillDirection.Horizontal
+			buttonsLayout.HorizontalAlignment = Enum.HorizontalAlignment.Right
+			buttonsLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+			buttonsLayout.Padding = UDim.new(0, 6)
+			buttonsLayout.SortOrder = Enum.SortOrder.LayoutOrder
+			buttonsLayout.Parent = buttonsContainer
 
-		local espBtn = make("TextButton", {
-			Name = "ESP",
-			Position = UDim2.new(1, -50, 0.5, -18),
-			Size = UDim2.fromOffset(44, 36),
-			BackgroundColor3 = Color3.fromRGB(30, 30, 36),
-			BorderSizePixel = 0,
-			Text = "ESP",
-			Parent = playerRow,
-		})
-		addCorner(espBtn, 4)
-		local espStroke = addStroke(espBtn, Color3.fromRGB(50, 50, 58), 0.5, 1)
-		applyFont(espBtn, 14, Color3.fromRGB(220, 220, 225), Enum.TextXAlignment.Center)
+			local rowButtons = {}
+			playerRowButtons[player] = rowButtons
 
-		espBtn.Activated:Connect(function()
-			local isEspActive = not (espStates[player] == true)
-			toggleESP(player, isEspActive)
-			local targetBgColor = isEspActive and utils.theme.AccentColor or Color3.fromRGB(30, 30, 36)
-			local targetStrokeColor = isEspActive and utils.theme.AccentColor or Color3.fromRGB(50, 50, 58)
-			
-			tween(espBtn, { BackgroundColor3 = targetBgColor }, 0.12):Play()
-			tween(espStroke, { Color = targetStrokeColor }, 0.12):Play()
-		end)
+			for i, btnConfig in ipairs(customButtons) do
+				local btn = make("TextButton", {
+					Name = btnConfig.text or "Btn",
+					Size = UDim2.fromOffset(54, 30),
+					BackgroundColor3 = Color3.fromRGB(30, 30, 36),
+					BorderSizePixel = 0,
+					Text = btnConfig.text or "",
+					LayoutOrder = i,
+					Parent = buttonsContainer,
+				})
+				addCorner(btn, 4)
+				local btnStroke = addStroke(btn, Color3.fromRGB(50, 50, 58), 0.5, 1)
+				applyFont(btn, 13, Color3.fromRGB(220, 220, 225), Enum.TextXAlignment.Center)
+
+				table.insert(rowButtons, btn)
+
+				if btnConfig.type == "toggle" then
+					local state = btnConfig.default == true
+					local function updateColors(animate)
+						local targetBg, targetStroke
+						if state then
+							targetBg = utils.theme.AccentColor
+							targetStroke = utils.theme.AccentColor
+							activeToggleButtons[btn] = btnStroke
+						else
+							targetBg = Color3.fromRGB(30, 30, 36)
+							targetStroke = Color3.fromRGB(50, 50, 58)
+							activeToggleButtons[btn] = nil
+						end
+
+						if animate then
+							tween(btn, { BackgroundColor3 = targetBg }, 0.12):Play()
+							tween(btnStroke, { Color = targetStroke }, 0.12):Play()
+						else
+							btn.BackgroundColor3 = targetBg
+							btnStroke.Color = targetStroke
+						end
+					end
+
+					updateColors(false)
+
+					btn.Activated:Connect(function()
+						state = not state
+						updateColors(true)
+						if btnConfig.callback then
+							task.spawn(btnConfig.callback, player, state)
+						end
+					end)
+				else
+					btn.Activated:Connect(function()
+						if btnConfig.callback then
+							task.spawn(btnConfig.callback, player)
+						end
+					end)
+				end
+			end
+		end
 
 		playerRows[player] = playerRow
 	end
@@ -191,7 +182,14 @@ return function(page, args)
 			rowFrame:Destroy()
 			playerRows[player] = nil
 		end
-		toggleESP(player, false)
+		
+		local rowButtons = playerRowButtons[player]
+		if rowButtons then
+			for _, btn in ipairs(rowButtons) do
+				activeToggleButtons[btn] = nil
+			end
+			playerRowButtons[player] = nil
+		end
 	end
 
 	for _, p in ipairs(Players:GetPlayers()) do
@@ -204,8 +202,9 @@ return function(page, args)
 	local themeConn
 	themeConn = utils.onThemeChanged(function(key, color)
 		if key == "AccentColor" then
-			for player, hl in pairs(espHighlights) do
-				hl.FillColor = color
+			for btn, stroke in pairs(activeToggleButtons) do
+				btn.BackgroundColor3 = color
+				stroke.Color = color
 			end
 		end
 	end)
@@ -214,7 +213,9 @@ return function(page, args)
 		Destroy = function()
 			addedConn:Disconnect()
 			removingConn:Disconnect()
-			themeConn:Disconnect()
+			if themeConn and themeConn.Disconnect then
+				themeConn:Disconnect()
+			end
 			for p in pairs(playerRows) do
 				removePlayerRow(p)
 			end

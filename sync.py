@@ -388,14 +388,31 @@ myTimer:Start()
         "id": "playerlist",
         "nav_id": "nav-players",
         "icon": "fa-users",
-        "description": "Renders a scrolling player list widget showing active players on the server. Includes search bar.",
+        "description": "Renders a scrolling player list widget showing active players on the server. Supports up to 2 custom buttons per player.",
         "params": {
             "text": {"type": "string", "description": "Header title of the list widget."},
-            "height": {"type": "number", "description": "Pixel height of the scroll area."}
+            "height": {"type": "number", "description": "Pixel height of the scroll area."},
+            "buttons": {"type": "table", "description": "List of custom player actions (max 2). E.g. <code>{{text='TP', type='button', callback=function(p) ... end}}</code>"}
         },
         "example": """tab:CreatePlayerList({
     text   = "Active Server Players",
     height = 280,
+    buttons = {
+        {
+            text = "TP",
+            type = "button",
+            callback = function(player)
+                print("Teleporting to: " .. player.Name)
+            end
+        },
+        {
+            text = "ESP",
+            type = "toggle",
+            callback = function(player, active)
+                print("ESP for " .. player.Name .. " set to " .. tostring(active))
+            end
+        }
+    }
 })"""
     },
     "CreateLogger": {

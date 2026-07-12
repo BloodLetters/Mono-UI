@@ -203,8 +203,14 @@ COMPONENT_DOCS = {
         ],
     },
     'PlayerList': {
-        'description': 'Renders a scrolling player list widget showing active players on the server. Includes search bar.',
+        'description': 'Renders a scrolling player list widget showing active players on the server. Supports up to 2 custom buttons per player.',
         'params': [
+            {
+                'default': 'nil',
+                'desc': "List of custom player actions (max 2). E.g. <code>{{text='TP', type='button', callback=function(p) ... end}}</code>",
+                'name': 'buttons',
+                'type': 'table',
+            },
             {
                 'default': '200',
                 'desc': 'Pixel height of the scroll area.',

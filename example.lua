@@ -208,6 +208,51 @@ playersTab:CreateSection({
 playersTab:CreatePlayerList({
 	text = "Active Server Players",
 	height = 280,
+	buttons = {
+		{
+			text = "TP",
+			type = "button",
+			callback = function(player)
+				logger:Log("INFO", "Teleporting to: " .. player.Name)
+				local localPlayer = game:GetService("Players").LocalPlayer
+				if localPlayer and localPlayer.Character and player.Character then
+					local root = localPlayer.Character:FindFirstChild("HumanoidRootPart")
+					local targetRoot = player.Character:FindFirstChild("HumanoidRootPart")
+					if root and targetRoot then
+						root.CFrame = targetRoot.CFrame * CFrame.new(0, 0, -3)
+					end
+				end
+			end
+		},
+		{
+			text = "ESP",
+			type = "toggle",
+			callback = function(player, active)
+				logger:Log("INFO", "ESP for " .. player.Name .. ": " .. (active and "ON" or "OFF"))
+				if active then
+					local char = player.Character
+					if char then
+						local hl = Instance.new("Highlight")
+						hl.Name = "MonoESP"
+						hl.FillColor = Color3.fromRGB(0, 162, 255)
+						hl.FillTransparency = 0.5
+						hl.OutlineColor = Color3.fromRGB(255, 255, 255)
+						hl.OutlineTransparency = 0
+						hl.Adornee = char
+						hl.Parent = char
+					end
+				else
+					local char = player.Character
+					if char then
+						local hl = char:FindFirstChild("MonoESP")
+						if hl then
+							hl:Destroy()
+						end
+					end
+				end
+			end
+		}
+	}
 })
 
 window:CreateTab({

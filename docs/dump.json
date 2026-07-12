@@ -172,8 +172,13 @@
         "type": "components",
         "label": "Components",
         "display_name": "PlayerList",
-        "description": "Renders a scrolling player list widget showing active players on the server. Includes search bar.",
+        "description": "Renders a scrolling player list widget showing active players on the server. Supports up to 2 custom buttons per player.",
         "arguments": [
+            {
+                "name": "buttons",
+                "type": "table",
+                "description": "List of custom player actions (max 2). E.g. <code>{{text='TP', type='button', callback=function(p) ... end}}</code>"
+            },
             {
                 "name": "height",
                 "type": "number",
@@ -185,7 +190,7 @@
                 "description": "Header title of the list widget."
             }
         ],
-        "example": "tab:CreatePlayerList({\n    text   = \"Active Server Players\",\n    height = 280,\n})"
+        "example": "tab:CreatePlayerList({\n    text   = \"Active Server Players\",\n    height = 280,\n    buttons = {\n        {\n            text = \"TP\",\n            type = \"button\",\n            callback = function(player)\n                print(\"Teleporting to: \" .. player.Name)\n            end\n        },\n        {\n            text = \"ESP\",\n            type = \"toggle\",\n            callback = function(player, active)\n                print(\"ESP for \" .. player.Name .. \" set to \" .. tostring(active))\n            end\n        }\n    }\n})"
     },
     "CreateSection": {
         "type": "layout",
