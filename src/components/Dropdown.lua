@@ -33,10 +33,14 @@ return function(page, args)
 		Parent = dropdownRow,
 	})
 	
+	local isVBar = page.Name == "VBar"
+	local labelWidthOffset = isVBar and -80 or -120
+	local valueLabelWidth = isVBar and 50 or 90
+
 	local label = make("TextLabel", {
 		BackgroundTransparency = 1,
 		Position = UDim2.fromOffset(14, 0),
-		Size = UDim2.new(1, - 120, 1, 0),
+		Size = UDim2.new(1, labelWidthOffset, 1, 0),
 		Text = tostring(dropdownText or "Dropdown"),
 		TextXAlignment = Enum.TextXAlignment.Left,
 		Parent = header,
@@ -47,7 +51,7 @@ return function(page, args)
 		BackgroundTransparency = 1,
 		AnchorPoint = Vector2.new(1, 0.5),
 		Position = UDim2.new(1, - 30, 0.5, 0),
-		Size = UDim2.fromOffset(90, 18),
+		Size = UDim2.fromOffset(valueLabelWidth, 18),
 		Text = tostring(defaultValue or "select"),
 		TextColor3 = Color3.fromRGB(155, 155, 165),
 		TextXAlignment = Enum.TextXAlignment.Right,

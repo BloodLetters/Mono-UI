@@ -114,6 +114,10 @@ COMPONENT_DOCS = {
             },
         ],
     },
+    'HBar': {
+        'description': 'Creates a horizontal container block (HBar) that can hold multiple vertical column stacks (VBars) side-by-side.',
+        'params': [],
+    },
     'Input': {
         'description': 'A single-line text input field for strings and custom configs.',
         'params': [
@@ -277,13 +281,13 @@ COMPONENT_DOCS = {
             },
             {
                 'default': 'nil',
-                'desc': "Initially selected body part(s) (e.g. 'Head' or {'Head', 'Torso'}).",
+                'desc': "Initially selected body part(s). Valid parts: 'Head', 'Torso', 'LeftArm', 'RightArm', 'LeftLeg', 'RightLeg'.",
                 'name': 'default',
                 'type': 'string | table',
             },
             {
                 'default': '{}',
-                'desc': "List of parts that cannot be selected (e.g. {'LeftArm', 'RightArm'}).",
+                'desc': "List of parts that cannot be selected/clicked. Valid parts: 'Head', 'Torso', 'LeftArm', 'RightArm', 'LeftLeg', 'RightLeg'.",
                 'name': 'disabledParts',
                 'type': 'table',
             },
@@ -335,6 +339,10 @@ COMPONENT_DOCS = {
                 'type': 'string',
             },
         ],
+    },
+    'VBar': {
+        'description': 'Creates a vertical column stack (VBar) inside an HBar layout container. Allows vertical stacking of any standard components.',
+        'params': [],
     },
 }
 # COMPONENT_DOCS_END
@@ -828,13 +836,13 @@ async def list_tools():
                     "var_name": {"type": "string", "description": "Variable name to assign result to (e.g. 'myLogger' for Logger)."},
                     "text": {"type": "string", "description": "Label/display text for the component."},
                     "placeholder": {"type": "string", "description": "(Input only) Placeholder text."},
-                    "default": {"type": "string", "description": "Default value (boolean, number, string, Color3)."},
+                    "default": {"type": "string", "description": "Default value (boolean, number, string, Color3). For TargetBody, use single part ('Head') or comma-separated ('Head,Torso'). Valid parts: Head, Torso, LeftArm, RightArm, LeftLeg, RightLeg."},
                     "min": {"type": "number", "description": "(Slider only) Minimum value."},
                     "max": {"type": "number", "description": "(Slider only) Maximum value."},
                     "list": {"type": "string", "description": "(Dropdown only) Comma-separated option strings."},
                     "multiple": {"type": "boolean", "description": "(Dropdown/TargetBody) Allow multiple selections."},
                     "height": {"type": "number", "description": "(Logger/PlayerList) Height in pixels."},
-                    "disabledParts": {"type": "string", "description": "(TargetBody only) Comma-separated parts to disable."},
+                    "disabledParts": {"type": "string", "description": "(TargetBody only) Comma-separated parts that cannot be selected. Valid parts: Head, Torso, LeftArm, RightArm, LeftLeg, RightLeg."},
                     "flag": {"type": "string", "description": "Config save/load key for auto-save."},
                     "callback": {"type": "string", "description": "Luau callback code (e.g. 'function(value) print(value) end')."},
                 },

@@ -7,6 +7,7 @@ local tween = utils.tween
 
 return function(page, args)
 	args = args or {}
+	local isVBar = page.Name == "VBar"
 	local titleText = args.text or "Target Body Parts"
 	local isMultiple = args.multiple ~= false
 	local callback = args.callback
@@ -57,7 +58,7 @@ return function(page, args)
 	local bodyFrame = make("Frame", {
 		Name = "BodyFrame",
 		AnchorPoint = Vector2.new(0.5, 0),
-		Position = UDim2.new(0.25, 0, 0, 42),
+		Position = isVBar and UDim2.new(0.5, 0, 0, 42) or UDim2.new(0.25, 0, 0, 42),
 		Size = UDim2.fromOffset(160, 180),
 		BackgroundTransparency = 1,
 		Parent = container,
@@ -90,6 +91,7 @@ return function(page, args)
 		Position = UDim2.new(0.75, 0, 0, 42),
 		Size = UDim2.new(0.5, -40, 0, 180),
 		BackgroundTransparency = 1,
+		Visible = not isVBar,
 		Parent = container,
 	})
 
@@ -99,6 +101,7 @@ return function(page, args)
 	listLayout.Parent = listHolder
 
 	local function updateSelectedList()
+		if isVBar then return end
 		for _, child in ipairs(listHolder:GetChildren()) do
 			if child:IsA("Frame") then
 				child:Destroy()

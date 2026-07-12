@@ -10,6 +10,8 @@ return function(page, args)
 	local buttonText = args.text or "Button"
 	local callback = args.callback
 	
+	local isVBar = page.Name == "VBar"
+
 	local buttonRow = make("Frame", {
 		Name = buttonText .. "Row",
 		Size = UDim2.new(1, 0, 0, 40),
@@ -20,29 +22,46 @@ return function(page, args)
 	addCorner(buttonRow, 10)
 	addStroke(buttonRow, Color3.fromRGB(60, 60, 68), 0.65, 1)
 	
-	local label = make("TextLabel", {
-		BackgroundTransparency = 1,
-		Position = UDim2.fromOffset(14, 0),
-		Size = UDim2.new(1, - 140, 1, 0),
-		Text = tostring(buttonText),
-		TextXAlignment = Enum.TextXAlignment.Left,
-		Parent = buttonRow,
-	})
-	applyFont(label, 14, Color3.fromRGB(232, 232, 236), Enum.TextXAlignment.Left)
-	
-	local actionButton = make("TextButton", {
-		AnchorPoint = Vector2.new(1, 0.5),
-		Position = UDim2.new(1, - 12, 0.5, 0),
-		Size = UDim2.fromOffset(100, 28),
-		BackgroundColor3 = Color3.fromRGB(100, 100, 110),
-		BorderSizePixel = 0,
-		Text = "run",
-		TextColor3 = Color3.fromRGB(235, 235, 240),
-		AutoButtonColor = false,
-		Parent = buttonRow,
-	})
-	applyFont(actionButton, 13, Color3.fromRGB(235, 235, 240), Enum.TextXAlignment.Center)
-	addCorner(actionButton, 7)
+	local actionButton
+	if isVBar then
+		actionButton = make("TextButton", {
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			Position = UDim2.new(0.5, 0, 0.5, 0),
+			Size = UDim2.new(1, -24, 1, -12),
+			BackgroundColor3 = Color3.fromRGB(100, 100, 110),
+			BorderSizePixel = 0,
+			Text = tostring(buttonText),
+			TextColor3 = Color3.fromRGB(235, 235, 240),
+			AutoButtonColor = false,
+			Parent = buttonRow,
+		})
+		applyFont(actionButton, 13, Color3.fromRGB(235, 235, 240), Enum.TextXAlignment.Center)
+		addCorner(actionButton, 7)
+	else
+		local label = make("TextLabel", {
+			BackgroundTransparency = 1,
+			Position = UDim2.fromOffset(14, 0),
+			Size = UDim2.new(1, - 140, 1, 0),
+			Text = tostring(buttonText),
+			TextXAlignment = Enum.TextXAlignment.Left,
+			Parent = buttonRow,
+		})
+		applyFont(label, 14, Color3.fromRGB(232, 232, 236), Enum.TextXAlignment.Left)
+		
+		actionButton = make("TextButton", {
+			AnchorPoint = Vector2.new(1, 0.5),
+			Position = UDim2.new(1, - 12, 0.5, 0),
+			Size = UDim2.fromOffset(100, 28),
+			BackgroundColor3 = Color3.fromRGB(100, 100, 110),
+			BorderSizePixel = 0,
+			Text = "run",
+			TextColor3 = Color3.fromRGB(235, 235, 240),
+			AutoButtonColor = false,
+			Parent = buttonRow,
+		})
+		applyFont(actionButton, 13, Color3.fromRGB(235, 235, 240), Enum.TextXAlignment.Center)
+		addCorner(actionButton, 7)
+	end
 	
 	actionButton.MouseEnter:Connect(function()
 		tween(actionButton, {

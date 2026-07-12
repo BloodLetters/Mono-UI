@@ -54,18 +54,18 @@
                 <div class="nav-group">
                     <span class="group-title">Core</span>
                     <!-- SIDEBAR_CORE_START -->
-                    <a href="#add-cleanup" class="nav-item" id="nav-cleanup"><i
-                            class="fa-solid fa-trash-can"></i> AddCleanup</a>
-                    <a href="#control-hud" class="nav-item" id="nav-hud"><i
-                            class="fa-solid fa-sliders"></i> CreateControlHUD</a>
-                    <a href="#create-timer" class="nav-item" id="nav-timer"><i
-                            class="fa-solid fa-clock"></i> CreateTimer</a>
                     <a href="#create-window" class="nav-item" id="nav-window"><i
                             class="fa-solid fa-window-maximize"></i> CreateWindow</a>
                     <a href="#notifications" class="nav-item" id="nav-notify"><i
                             class="fa-solid fa-bell"></i> Notify</a>
                     <a href="#watermark" class="nav-item" id="nav-wm"><i
                             class="fa-solid fa-chart-line"></i> SetWatermark</a>
+                    <a href="#control-hud" class="nav-item" id="nav-hud"><i
+                            class="fa-solid fa-sliders"></i> CreateControlHUD</a>
+                    <a href="#add-cleanup" class="nav-item" id="nav-cleanup"><i
+                            class="fa-solid fa-trash-can"></i> AddCleanup</a>
+                    <a href="#create-timer" class="nav-item" id="nav-timer"><i
+                            class="fa-solid fa-clock"></i> CreateTimer</a>
                     <!-- SIDEBAR_CORE_END -->
                 </div>
 
@@ -76,6 +76,10 @@
                             class="fa-solid fa-grip-lines"></i> CreateSection</a>
                     <a href="#create-tab" class="nav-item" id="nav-tab"><i
                             class="fa-solid fa-folder-open"></i> CreateTab</a>
+                    <a href="#hbar" class="nav-item" id="nav-hbar"><i
+                            class="fa-solid fa-grip"></i> CreateHBar</a>
+                    <a href="#vbar" class="nav-item" id="nav-vbar"><i
+                            class="fa-solid fa-ellipsis-vertical"></i> CreateVBar</a>
                     <!-- SIDEBAR_LAYOUT_END -->
                 </div>
 
@@ -187,159 +191,6 @@
             </section>
 
             <!-- DYNAMIC_API_START -->
-            <!-- AddCleanup -->
-            <section id="add-cleanup" class="doc-section">
-                <div class="breadcrumb">
-                    <span class="current">Core</span>
-                    <span class="sep">›</span>
-                    <span class="current">AddCleanup</span>
-                </div>
-                <div class="section-label">Core API</div>
-                <h2>AddCleanup</h2>
-                <p>Registers a thread, connection, instance, or custom callback to be automatically cleaned up/cancelled when the window is closed or destroyed.</p>
-                <table class="params-table">
-                    <thead>
-                        <tr>
-                            <th>Argument</th>
-                            <th>Type</th>
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>object</td>
-                            <td><span class="type type-string">any</span></td>
-                            <td>The thread, RBXScriptConnection, Instance, or custom clean-up function to track.</td>
-                        </tr>
-                        <tr>
-                            <td>customCleanup</td>
-                            <td><span class="type type-function">function</span></td>
-                            <td>Optional destructor function. For threads, pass <code>task.cancel</code>. For custom actions, pass a function.</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="code-lang">Lua</span>
-                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
-                    </div>
-                    <pre><code class="language-lua">-- Auto-cancel a background loop when window closes
-local myLoop = task.spawn(function()
-    while true do
-        task.wait(1)
-        print("Looping...")
-    end
-end)
-window:AddCleanup(myLoop, task.cancel)
-
--- Auto-disconnect a custom event connection
-local connection = game.Players.PlayerAdded:Connect(function(player)
-    print("Welcome", player.Name)
-end)
-window:AddCleanup(connection)</code></pre>
-                </div>
-            </section>
-
-            <!-- CreateControlHUD -->
-            <section id="control-hud" class="doc-section">
-                <div class="breadcrumb">
-                    <span class="current">Core</span>
-                    <span class="sep">›</span>
-                    <span class="current">CreateControlHUD</span>
-                </div>
-                <div class="section-label">Core API</div>
-                <h2>CreateControlHUD</h2>
-                <p>Creates a floating, draggable, compact HUD with quick toggles (perfect for keeping essential scripts visible).</p>
-                <table class="params-table">
-                    <thead>
-                        <tr>
-                            <th>Argument</th>
-                            <th>Type</th>
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>icon</td>
-                            <td><span class="type type-string">string</span></td>
-                            <td>Lucide icon name for this HUD shortcut.</td>
-                        </tr>
-                        <tr>
-                            <td>default</td>
-                            <td><span class="type type-boolean">boolean</span></td>
-                            <td>Initial active state of the shortcut button.</td>
-                        </tr>
-                        <tr>
-                            <td>callback</td>
-                            <td><span class="type type-function">function</span></td>
-                            <td>Fires with <code>active: boolean</code> on toggle.</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="code-lang">Lua</span>
-                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
-                    </div>
-                    <pre><code class="language-lua">MonoUI.CreateControlHUD({
-    { icon = "swords", default = false, callback = function(v) print("Aim:", v) end },
-    { icon = "eye",    default = true,  callback = function(v) print("ESP:", v) end },
-})</code></pre>
-                </div>
-            </section>
-
-            <!-- CreateTimer -->
-            <section id="create-timer" class="doc-section">
-                <div class="breadcrumb">
-                    <span class="current">Core</span>
-                    <span class="sep">›</span>
-                    <span class="current">CreateTimer</span>
-                </div>
-                <div class="section-label">Core API</div>
-                <h2>CreateTimer</h2>
-                <p>Creates a new Timer object from the built-in <code>sleitnick/timer</code> package. Provides a memory-safe, pauseable, and highly accurate alternative to <code>while true do</code> loops.</p>
-                <table class="params-table">
-                    <thead>
-                        <tr>
-                            <th>Argument</th>
-                            <th>Type</th>
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>interval</td>
-                            <td><span class="type type-number">number</span></td>
-                            <td>Tick interval duration in seconds (defaults to 1).</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="code-lang">Lua</span>
-                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
-                    </div>
-                    <pre><code class="language-lua">-- Create a timer that ticks every 1 second
-local myTimer = MonoUI.CreateTimer(1)
-
--- Connect logic to the Tick event
-myTimer.Tick:Connect(function()
-    print("Timer ticked!")
-end)
-
--- Register the timer with the window to automatically stop it when the GUI closes
-window:AddCleanup(myTimer)
-
--- Start the timer
-myTimer:Start()
-
--- You can also use:
--- myTimer:Pause()
--- myTimer:Resume()
--- myTimer:Stop()</code></pre>
-                </div>
-            </section>
-
             <!-- CreateWindow -->
             <section id="create-window" class="doc-section">
                 <div class="breadcrumb">
@@ -541,6 +392,159 @@ myTimer:Start()
                 </div>
             </section>
 
+            <!-- CreateControlHUD -->
+            <section id="control-hud" class="doc-section">
+                <div class="breadcrumb">
+                    <span class="current">Core</span>
+                    <span class="sep">›</span>
+                    <span class="current">CreateControlHUD</span>
+                </div>
+                <div class="section-label">Core API</div>
+                <h2>CreateControlHUD</h2>
+                <p>Creates a floating, draggable, compact HUD with quick toggles (perfect for keeping essential scripts visible).</p>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Argument</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>icon</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Lucide icon name for this HUD shortcut.</td>
+                        </tr>
+                        <tr>
+                            <td>default</td>
+                            <td><span class="type type-boolean">boolean</span></td>
+                            <td>Initial active state of the shortcut button.</td>
+                        </tr>
+                        <tr>
+                            <td>callback</td>
+                            <td><span class="type type-function">function</span></td>
+                            <td>Fires with <code>active: boolean</code> on toggle.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">MonoUI.CreateControlHUD({
+    { icon = "swords", default = false, callback = function(v) print("Aim:", v) end },
+    { icon = "eye",    default = true,  callback = function(v) print("ESP:", v) end },
+})</code></pre>
+                </div>
+            </section>
+
+            <!-- AddCleanup -->
+            <section id="add-cleanup" class="doc-section">
+                <div class="breadcrumb">
+                    <span class="current">Core</span>
+                    <span class="sep">›</span>
+                    <span class="current">AddCleanup</span>
+                </div>
+                <div class="section-label">Core API</div>
+                <h2>AddCleanup</h2>
+                <p>Registers a thread, connection, instance, or custom callback to be automatically cleaned up/cancelled when the window is closed or destroyed.</p>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Argument</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>object</td>
+                            <td><span class="type type-string">any</span></td>
+                            <td>The thread, RBXScriptConnection, Instance, or custom clean-up function to track.</td>
+                        </tr>
+                        <tr>
+                            <td>customCleanup</td>
+                            <td><span class="type type-function">function</span></td>
+                            <td>Optional destructor function. For threads, pass <code>task.cancel</code>. For custom actions, pass a function.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">-- Auto-cancel a background loop when window closes
+local myLoop = task.spawn(function()
+    while true do
+        task.wait(1)
+        print("Looping...")
+    end
+end)
+window:AddCleanup(myLoop, task.cancel)
+
+-- Auto-disconnect a custom event connection
+local connection = game.Players.PlayerAdded:Connect(function(player)
+    print("Welcome", player.Name)
+end)
+window:AddCleanup(connection)</code></pre>
+                </div>
+            </section>
+
+            <!-- CreateTimer -->
+            <section id="create-timer" class="doc-section">
+                <div class="breadcrumb">
+                    <span class="current">Core</span>
+                    <span class="sep">›</span>
+                    <span class="current">CreateTimer</span>
+                </div>
+                <div class="section-label">Core API</div>
+                <h2>CreateTimer</h2>
+                <p>Creates a new Timer object from the built-in <code>sleitnick/timer</code> package. Provides a memory-safe, pauseable, and highly accurate alternative to <code>while true do</code> loops.</p>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Argument</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>interval</td>
+                            <td><span class="type type-number">number</span></td>
+                            <td>Tick interval duration in seconds (defaults to 1).</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">-- Create a timer that ticks every 1 second
+local myTimer = MonoUI.CreateTimer(1)
+
+-- Connect logic to the Tick event
+myTimer.Tick:Connect(function()
+    print("Timer ticked!")
+end)
+
+-- Register the timer with the window to automatically stop it when the GUI closes
+window:AddCleanup(myTimer)
+
+-- Start the timer
+myTimer:Start()
+
+-- You can also use:
+-- myTimer:Pause()
+-- myTimer:Resume()
+-- myTimer:Stop()</code></pre>
+                </div>
+            </section>
+
             <!-- CreateSection -->
             <section id="create-section" class="doc-section">
                 <div class="breadcrumb">
@@ -616,6 +620,69 @@ myTimer:Start()
     text = "Combat",
     icon = "swords",
 })</code></pre>
+                </div>
+            </section>
+
+            <!-- CreateHBar -->
+            <section id="hbar" class="doc-section">
+                <div class="breadcrumb">
+                    <span class="current">Layout</span>
+                    <span class="sep">›</span>
+                    <span class="current">CreateHBar</span>
+                </div>
+                <div class="section-label">Layout</div>
+                <h2>CreateHBar</h2>
+                <p>Creates a horizontal container block (HBar) that can hold multiple vertical column stacks (VBars) side-by-side.</p>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Argument</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">local hbar = tab:CreateHBar()</code></pre>
+                </div>
+            </section>
+
+            <!-- CreateVBar -->
+            <section id="vbar" class="doc-section">
+                <div class="breadcrumb">
+                    <span class="current">Layout</span>
+                    <span class="sep">›</span>
+                    <span class="current">CreateVBar</span>
+                </div>
+                <div class="section-label">Layout</div>
+                <h2>CreateVBar</h2>
+                <p>Creates a vertical column stack (VBar) inside an HBar layout container. Allows vertical stacking of any standard components.</p>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Argument</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">local vbar1 = hbar:CreateVBar()
+vbar1:CreateToggle({ text = "Toggle in VBar" })</code></pre>
                 </div>
             </section>
 
@@ -1115,12 +1182,12 @@ log:Log("ERROR",   "Target not found.")</code></pre>
                         <tr>
                             <td>default</td>
                             <td><span class="type type-table">string | table</span></td>
-                            <td>Initially selected body part(s) (e.g. 'Head' or {'Head', 'Torso'}).</td>
+                            <td>Initially selected body part(s). Valid parts: 'Head', 'Torso', 'LeftArm', 'RightArm', 'LeftLeg', 'RightLeg'.</td>
                         </tr>
                         <tr>
                             <td>disabledParts</td>
                             <td><span class="type type-table">table</span></td>
-                            <td>List of parts that cannot be selected (e.g. {'LeftArm', 'RightArm'}).</td>
+                            <td>List of parts that cannot be selected/clicked. Valid parts: 'Head', 'Torso', 'LeftArm', 'RightArm', 'LeftLeg', 'RightLeg'.</td>
                         </tr>
                         <tr>
                             <td>flag</td>
@@ -1213,6 +1280,12 @@ log:Log("ERROR",   "Target not found.")</code></pre>
 })</code></pre>
                 </div>
             </section>
+
+
+
+
+
+
 
 
 

@@ -23,10 +23,14 @@ return function(page, args)
 	addCorner(row, 10)
 	addStroke(row, Color3.fromRGB(60, 60, 68), 0.65, 1)
 
+	local isVBar = page.Name == "VBar"
+	local btnWidth = isVBar and 76 or 100
+	local labelWidthOffset = isVBar and -110 or -140
+
 	local label = make("TextLabel", {
 		BackgroundTransparency = 1,
 		Position = UDim2.fromOffset(14, 0),
-		Size = UDim2.new(1, -140, 1, 0),
+		Size = UDim2.new(1, labelWidthOffset, 1, 0),
 		Text = tostring(bindText),
 		TextXAlignment = Enum.TextXAlignment.Left,
 		Parent = row,
@@ -36,7 +40,7 @@ return function(page, args)
 	local bindBtn = make("TextButton", {
 		AnchorPoint = Vector2.new(1, 0.5),
 		Position = UDim2.new(1, -12, 0.5, 0),
-		Size = UDim2.fromOffset(100, 28),
+		Size = UDim2.fromOffset(btnWidth, 28),
 		BackgroundColor3 = Color3.fromRGB(32, 32, 38),
 		BorderSizePixel = 0,
 		Text = "",

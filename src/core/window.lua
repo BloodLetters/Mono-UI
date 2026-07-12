@@ -468,6 +468,297 @@ local function CreateWindow(options)
 		ConfigName = configName,
 	}
 
+	local createContainerMethods
+	createContainerMethods = function(containerObj, pageFrame)
+		function containerObj:CreateToggle(tArgs)
+			tArgs = tArgs or {}
+			local originalCallback = tArgs.callback
+			if tArgs.flag then
+				tArgs.callback = function(val)
+					windowObject.Flags[tArgs.flag] = val
+					if windowObject.AutoSave then
+						windowObject:SaveConfig()
+					end
+					if originalCallback then
+						originalCallback(val)
+					end
+				end
+			end
+			local comp = Toggle(pageFrame, tArgs)
+			if tArgs.flag then
+				windowObject.Components[tArgs.flag] = comp
+				if windowObject.Flags[tArgs.flag] ~= nil then
+					comp:Set(windowObject.Flags[tArgs.flag])
+				else
+					windowObject.Flags[tArgs.flag] = comp:Get()
+				end
+			end
+			return comp
+		end
+
+		function containerObj:CreateSection(sArgs)
+			return Section(pageFrame, sArgs)
+		end
+
+		function containerObj:CreateInput(iArgs)
+			iArgs = iArgs or {}
+			local originalCallback = iArgs.callback
+			if iArgs.flag then
+				iArgs.callback = function(val)
+					windowObject.Flags[iArgs.flag] = val
+					if windowObject.AutoSave then
+						windowObject:SaveConfig()
+					end
+					if originalCallback then
+						originalCallback(val)
+					end
+				end
+			end
+			local comp = Input(pageFrame, iArgs)
+			if iArgs.flag then
+				windowObject.Components[iArgs.flag] = comp
+				if windowObject.Flags[iArgs.flag] ~= nil then
+					comp:Set(windowObject.Flags[iArgs.flag])
+				else
+					windowObject.Flags[iArgs.flag] = comp:Get()
+				end
+			end
+			return comp
+		end
+
+		function containerObj:CreateDropdown(dArgs)
+			dArgs = dArgs or {}
+			local originalCallback = dArgs.callback
+			if dArgs.flag then
+				dArgs.callback = function(val)
+					windowObject.Flags[dArgs.flag] = val
+					if windowObject.AutoSave then
+						windowObject:SaveConfig()
+					end
+					if originalCallback then
+						originalCallback(val)
+					end
+				end
+			end
+			local comp = Dropdown(pageFrame, dArgs)
+			if dArgs.flag then
+				windowObject.Components[dArgs.flag] = comp
+				if windowObject.Flags[dArgs.flag] ~= nil then
+					comp:Set(windowObject.Flags[dArgs.flag])
+				else
+					windowObject.Flags[dArgs.flag] = comp:Get()
+				end
+			end
+			return comp
+		end
+
+		function containerObj:CreateButton(bArgs)
+			return Button(pageFrame, bArgs)
+		end
+
+		function containerObj:CreateColorPicker(cArgs)
+			cArgs = cArgs or {}
+			local originalCallback = cArgs.callback
+			if cArgs.flag then
+				cArgs.callback = function(color)
+					windowObject.Flags[cArgs.flag] = { color.R, color.G, color.B }
+					if windowObject.AutoSave then
+						windowObject:SaveConfig()
+					end
+					if originalCallback then
+						originalCallback(color)
+					end
+				end
+			end
+			local comp = ColorPicker(pageFrame, windowObject.ScreenGui, cArgs)
+			if cArgs.flag then
+				windowObject.Components[cArgs.flag] = {
+					Set = function(_, val)
+						if type(val) == "table" and #val == 3 then
+							comp:Set(Color3.new(val[1], val[2], val[3]))
+						end
+					end,
+					Get = function()
+						local color = comp:Get()
+						return { color.R, color.G, color.B }
+					end
+				}
+				if windowObject.Flags[cArgs.flag] ~= nil then
+					local val = windowObject.Flags[cArgs.flag]
+					comp:Set(Color3.new(val[1], val[2], val[3]))
+				else
+					local color = comp:Get()
+					windowObject.Flags[cArgs.flag] = { color.R, color.G, color.B }
+				end
+			end
+			return comp
+		end
+
+		function containerObj:CreateSlider(slArgs)
+			slArgs = slArgs or {}
+			local originalCallback = slArgs.callback
+			if slArgs.flag then
+				slArgs.callback = function(val)
+					windowObject.Flags[slArgs.flag] = val
+					if windowObject.AutoSave then
+						windowObject:SaveConfig()
+					end
+					if originalCallback then
+						originalCallback(val)
+					end
+				end
+			end
+			local comp = Slider(pageFrame, slArgs)
+			if slArgs.flag then
+				windowObject.Components[slArgs.flag] = comp
+				if windowObject.Flags[slArgs.flag] ~= nil then
+					comp:Set(windowObject.Flags[slArgs.flag])
+				else
+					windowObject.Flags[slArgs.flag] = comp:Get()
+				end
+			end
+			return comp
+		end
+
+		function containerObj:CreateTargetBody(tbArgs)
+			tbArgs = tbArgs or {}
+			local originalCallback = tbArgs.callback
+			if tbArgs.flag then
+				tbArgs.callback = function(parts)
+					windowObject.Flags[tbArgs.flag] = parts
+					if windowObject.AutoSave then
+						windowObject:SaveConfig()
+					end
+					if originalCallback then
+						originalCallback(parts)
+					end
+				end
+			end
+			local comp = TargetBody(pageFrame, tbArgs)
+			if tbArgs.flag then
+				windowObject.Components[tbArgs.flag] = comp
+				if windowObject.Flags[tbArgs.flag] ~= nil then
+					comp:Set(windowObject.Flags[tbArgs.flag])
+				else
+					windowObject.Flags[tbArgs.flag] = comp:Get()
+				end
+			end
+			return comp
+		end
+
+		function containerObj:CreateKeybind(kbArgs)
+			kbArgs = kbArgs or {}
+			local originalCallback = kbArgs.callback
+			if kbArgs.flag then
+				kbArgs.callback = function(key)
+					windowObject.Flags[kbArgs.flag] = key.Name
+					if windowObject.AutoSave then
+						windowObject:SaveConfig()
+					end
+					if originalCallback then
+						originalCallback(key)
+					end
+				end
+			end
+			local comp = Keybind(pageFrame, kbArgs)
+			if kbArgs.flag then
+				windowObject.Components[kbArgs.flag] = {
+					Set = function(_, keyName)
+						pcall(function()
+							comp:Set(Enum.KeyCode[keyName])
+						end)
+					end,
+					Get = function()
+						return comp:Get().Name
+					end
+				}
+				if windowObject.Flags[kbArgs.flag] ~= nil then
+					local keyName = windowObject.Flags[kbArgs.flag]
+					pcall(function()
+						comp:Set(Enum.KeyCode[keyName])
+					end)
+				else
+					windowObject.Flags[kbArgs.flag] = comp:Get().Name
+				end
+			end
+			return comp
+		end
+
+		function containerObj:CreateLogger(lgArgs)
+			local comp = Logger(pageFrame, lgArgs)
+			windowObject.LoggerComponent = comp
+			for _, item in ipairs(windowObject.QueuedLogs) do
+				comp:Log(item.level, item.message)
+			end
+			windowObject.QueuedLogs = {}
+			return comp
+		end
+
+		function containerObj:CreatePlayerList(plArgs)
+			return PlayerList(pageFrame, plArgs)
+		end
+
+		function containerObj:CreateHBar(hbarArgs)
+			hbarArgs = hbarArgs or {}
+			local hbarFrame = make("Frame", {
+				Name = "HBar",
+				Size = UDim2.new(1, 0, 0, 0),
+				AutomaticSize = Enum.AutomaticSize.Y,
+				BackgroundTransparency = 1,
+				BorderSizePixel = 0,
+				Parent = pageFrame,
+			})
+			
+			local hbarLayout = Instance.new("UIListLayout")
+			hbarLayout.FillDirection = Enum.FillDirection.Horizontal
+			hbarLayout.SortOrder = Enum.SortOrder.LayoutOrder
+			hbarLayout.Padding = UDim.new(0, 8)
+			hbarLayout.Parent = hbarFrame
+
+			local hbar = {
+				Frame = hbarFrame,
+				VBars = {},
+			}
+
+			function hbar:CreateVBar(vbarArgs)
+				vbarArgs = vbarArgs or {}
+				local vbarFrame = make("Frame", {
+					Name = "VBar",
+					Size = UDim2.new(1, 0, 0, 0),
+					AutomaticSize = Enum.AutomaticSize.Y,
+					BackgroundTransparency = 1,
+					BorderSizePixel = 0,
+					Parent = hbarFrame,
+				})
+
+				local vbarLayout = Instance.new("UIListLayout")
+				vbarLayout.FillDirection = Enum.FillDirection.Vertical
+				vbarLayout.SortOrder = Enum.SortOrder.LayoutOrder
+				vbarLayout.Padding = UDim.new(0, 8)
+				vbarLayout.Parent = vbarFrame
+
+				local vbar = {
+					Frame = vbarFrame,
+				}
+
+				createContainerMethods(vbar, vbarFrame)
+
+				table.insert(hbar.VBars, vbarFrame)
+
+				local numColumns = #hbar.VBars
+				local scale = 1 / numColumns
+				local offset = -((numColumns - 1) * 8) / numColumns
+				for _, colFrame in ipairs(hbar.VBars) do
+					colFrame.Size = UDim2.new(scale, offset, 0, 0)
+				end
+
+				return vbar
+			end
+
+			return hbar
+		end
+	end
+
 	function windowObject:QueueLog(level, message)
 		table.insert(self.QueuedLogs, { level = level, message = message })
 		if self.LoggerComponent then
@@ -720,233 +1011,7 @@ end
 			Page = page,
 		}
 		
-		function tab:CreateToggle(tArgs)
-			tArgs = tArgs or {}
-			local originalCallback = tArgs.callback
-			if tArgs.flag then
-				tArgs.callback = function(val)
-					windowObject.Flags[tArgs.flag] = val
-					if windowObject.AutoSave then
-						windowObject:SaveConfig()
-					end
-					if originalCallback then
-						originalCallback(val)
-					end
-				end
-			end
-			local comp = Toggle(self.Page, tArgs)
-			if tArgs.flag then
-				windowObject.Components[tArgs.flag] = comp
-				if windowObject.Flags[tArgs.flag] ~= nil then
-					comp:Set(windowObject.Flags[tArgs.flag])
-				else
-					windowObject.Flags[tArgs.flag] = comp:Get()
-				end
-			end
-			return comp
-		end
-		
-		function tab:CreateSection(sArgs)
-			return Section(self.Page, sArgs)
-		end
-		
-		function tab:CreateInput(iArgs)
-			iArgs = iArgs or {}
-			local originalCallback = iArgs.callback
-			if iArgs.flag then
-				iArgs.callback = function(val)
-					windowObject.Flags[iArgs.flag] = val
-					if windowObject.AutoSave then
-						windowObject:SaveConfig()
-					end
-					if originalCallback then
-						originalCallback(val)
-					end
-				end
-			end
-			local comp = Input(self.Page, iArgs)
-			if iArgs.flag then
-				windowObject.Components[iArgs.flag] = comp
-				if windowObject.Flags[iArgs.flag] ~= nil then
-					comp:Set(windowObject.Flags[iArgs.flag])
-				else
-					windowObject.Flags[iArgs.flag] = comp:Get()
-				end
-			end
-			return comp
-		end
-		
-		function tab:CreateDropdown(dArgs)
-			dArgs = dArgs or {}
-			local originalCallback = dArgs.callback
-			if dArgs.flag then
-				dArgs.callback = function(val)
-					windowObject.Flags[dArgs.flag] = val
-					if windowObject.AutoSave then
-						windowObject:SaveConfig()
-					end
-					if originalCallback then
-						originalCallback(val)
-					end
-				end
-			end
-			local comp = Dropdown(self.Page, dArgs)
-			if dArgs.flag then
-				windowObject.Components[dArgs.flag] = comp
-				if windowObject.Flags[dArgs.flag] ~= nil then
-					comp:Set(windowObject.Flags[dArgs.flag])
-				else
-					windowObject.Flags[dArgs.flag] = comp:Get()
-				end
-			end
-			return comp
-		end
-		
-		function tab:CreateButton(bArgs)
-			return Button(self.Page, bArgs)
-		end
-		
-		function tab:CreateColorPicker(cArgs)
-			cArgs = cArgs or {}
-			local originalCallback = cArgs.callback
-			if cArgs.flag then
-				cArgs.callback = function(color)
-					windowObject.Flags[cArgs.flag] = { color.R, color.G, color.B }
-					if windowObject.AutoSave then
-						windowObject:SaveConfig()
-					end
-					if originalCallback then
-						originalCallback(color)
-					end
-				end
-			end
-			local comp = ColorPicker(self.Page, windowObject.ScreenGui, cArgs)
-			if cArgs.flag then
-				windowObject.Components[cArgs.flag] = {
-					Set = function(_, val)
-						if type(val) == "table" and #val == 3 then
-							comp:Set(Color3.new(val[1], val[2], val[3]))
-						end
-					end,
-					Get = function()
-						local color = comp:Get()
-						return { color.R, color.G, color.B }
-					end
-				}
-				if windowObject.Flags[cArgs.flag] ~= nil then
-					local val = windowObject.Flags[cArgs.flag]
-					comp:Set(Color3.new(val[1], val[2], val[3]))
-				else
-					local color = comp:Get()
-					windowObject.Flags[cArgs.flag] = { color.R, color.G, color.B }
-				end
-			end
-			return comp
-		end
-		
-		function tab:CreateSlider(slArgs)
-			slArgs = slArgs or {}
-			local originalCallback = slArgs.callback
-			if slArgs.flag then
-				slArgs.callback = function(val)
-					windowObject.Flags[slArgs.flag] = val
-					if windowObject.AutoSave then
-						windowObject:SaveConfig()
-					end
-					if originalCallback then
-						originalCallback(val)
-					end
-				end
-			end
-			local comp = Slider(self.Page, slArgs)
-			if slArgs.flag then
-				windowObject.Components[slArgs.flag] = comp
-				if windowObject.Flags[slArgs.flag] ~= nil then
-					comp:Set(windowObject.Flags[slArgs.flag])
-				else
-					windowObject.Flags[slArgs.flag] = comp:Get()
-				end
-			end
-			return comp
-		end
-
-		function tab:CreateTargetBody(tbArgs)
-			tbArgs = tbArgs or {}
-			local originalCallback = tbArgs.callback
-			if tbArgs.flag then
-				tbArgs.callback = function(parts)
-					windowObject.Flags[tbArgs.flag] = parts
-					if windowObject.AutoSave then
-						windowObject:SaveConfig()
-					end
-					if originalCallback then
-						originalCallback(parts)
-					end
-				end
-			end
-			local comp = TargetBody(self.Page, tbArgs)
-			if tbArgs.flag then
-				windowObject.Components[tbArgs.flag] = comp
-				if windowObject.Flags[tbArgs.flag] ~= nil then
-					comp:Set(windowObject.Flags[tbArgs.flag])
-				else
-					windowObject.Flags[tbArgs.flag] = comp:Get()
-				end
-			end
-			return comp
-		end
-
-		function tab:CreateKeybind(kbArgs)
-			kbArgs = kbArgs or {}
-			local originalCallback = kbArgs.callback
-			if kbArgs.flag then
-				kbArgs.callback = function(key)
-					windowObject.Flags[kbArgs.flag] = key.Name
-					if windowObject.AutoSave then
-						windowObject:SaveConfig()
-					end
-					if originalCallback then
-						originalCallback(key)
-					end
-				end
-			end
-			local comp = Keybind(self.Page, kbArgs)
-			if kbArgs.flag then
-				windowObject.Components[kbArgs.flag] = {
-					Set = function(_, keyName)
-						pcall(function()
-							comp:Set(Enum.KeyCode[keyName])
-						end)
-					end,
-					Get = function()
-						return comp:Get().Name
-					end
-				}
-				if windowObject.Flags[kbArgs.flag] ~= nil then
-					local keyName = windowObject.Flags[kbArgs.flag]
-					pcall(function()
-						comp:Set(Enum.KeyCode[keyName])
-					end)
-				else
-					windowObject.Flags[kbArgs.flag] = comp:Get().Name
-				end
-			end
-			return comp
-		end
-
-		function tab:CreateLogger(lgArgs)
-			local comp = Logger(self.Page, lgArgs)
-			windowObject.LoggerComponent = comp
-			for _, item in ipairs(windowObject.QueuedLogs) do
-				comp:Log(item.level, item.message)
-			end
-			windowObject.QueuedLogs = {}
-			return comp
-		end
-
-		function tab:CreatePlayerList(plArgs)
-			return PlayerList(self.Page, plArgs)
-		end
+		createContainerMethods(tab, page)
 
 		tabButton.Activated:Connect(function()
 			showTab(tab)

@@ -39,10 +39,14 @@ return function(page, screenGui, args)
 	addCorner(pickerRow, 10)
 	addStroke(pickerRow, Color3.fromRGB(60, 60, 68), 0.65, 1)
 
+	local isVBar = page.Name == "VBar"
+	local boxWidth = isVBar and 76 or 100
+	local labelWidthOffset = isVBar and -110 or -140
+
 	local label = make("TextLabel", {
 		BackgroundTransparency = 1,
 		Position = UDim2.fromOffset(14, 0),
-		Size = UDim2.new(1, -140, 1, 0),
+		Size = UDim2.new(1, labelWidthOffset, 1, 0),
 		Text = tostring(pickerText or "Color"),
 		TextXAlignment = Enum.TextXAlignment.Left,
 		Parent = pickerRow,
@@ -52,7 +56,7 @@ return function(page, screenGui, args)
 	local colorBox = make("TextButton", {
 		AnchorPoint = Vector2.new(1, 0.5),
 		Position = UDim2.new(1, -12, 0.5, 0),
-		Size = UDim2.fromOffset(100, 28),
+		Size = UDim2.fromOffset(boxWidth, 28),
 		BackgroundColor3 = currentColor,
 		BorderSizePixel = 0,
 		Text = "",

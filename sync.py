@@ -186,6 +186,29 @@ myTimer:Start()
         },
         "example": 'tab:CreateSection({ text = "Combat Hacks" })'
     },
+    "CreateHBar": {
+        "group": "Layout",
+        "label": "Layout",
+        "display_name": "HBar",
+        "id": "hbar",
+        "nav_id": "nav-hbar",
+        "icon": "fa-grip",
+        "description": "Creates a horizontal container block (HBar) that can hold multiple vertical column stacks (VBars) side-by-side.",
+        "params": {},
+        "example": "local hbar = tab:CreateHBar()"
+    },
+    "CreateVBar": {
+        "group": "Layout",
+        "label": "Layout",
+        "display_name": "VBar",
+        "id": "vbar",
+        "nav_id": "nav-vbar",
+        "icon": "fa-ellipsis-vertical",
+        "description": "Creates a vertical column stack (VBar) inside an HBar layout container. Allows vertical stacking of any standard components.",
+        "params": {},
+        "example": """local vbar1 = hbar:CreateVBar()
+vbar1:CreateToggle({ text = "Toggle in VBar" })"""
+    },
 
     "CreateToggle": {
         "group": "Components",
@@ -365,8 +388,8 @@ myTimer:Start()
         "params": {
             "text": {"type": "string", "description": "Label for the hitbox selector."},
             "multiple": {"type": "boolean", "description": "Allows selecting multiple body parts."},
-            "default": {"type": "string | table", "description": "Initially selected body part(s) (e.g. 'Head' or {'Head', 'Torso'})."},
-            "disabledParts": {"type": "table", "description": "List of parts that cannot be selected (e.g. {'LeftArm', 'RightArm'})."},
+            "default": {"type": "string | table", "description": "Initially selected body part(s). Valid parts: 'Head', 'Torso', 'LeftArm', 'RightArm', 'LeftLeg', 'RightLeg'."},
+            "disabledParts": {"type": "table", "description": "List of parts that cannot be selected/clicked. Valid parts: 'Head', 'Torso', 'LeftArm', 'RightArm', 'LeftLeg', 'RightLeg'."},
             "flag": {"type": "string", "description": "Unique key for config saving."},
             "callback": {"type": "function", "description": "Fires with a table of currently active body parts."}
         },
@@ -486,7 +509,7 @@ def extract_all_functions():
         create_tab_match = re.search(r"function windowObject:CreateTab\(([^)]+)\)", content)
         if create_tab_match:
             tab_block_start = content.find("function windowObject:CreateTab")
-            tab_block_end = content.find("function tab:CreateToggle", tab_block_start)
+            tab_block_end = content.find("createContainerMethods(tab, page)", tab_block_start)
             tab_subcontent = content[tab_block_start:tab_block_end]
             tab_args = re.findall(r"args\.([a-zA-Z0-9_]+)", tab_subcontent)
             functions["CreateTab"] = sorted(list(set(tab_args)))
@@ -507,6 +530,8 @@ def extract_all_functions():
 
     functions["AddCleanup"] = ["object", "customCleanup"]
     functions["CreateTimer"] = ["interval"]
+    functions["CreateHBar"] = []
+    functions["CreateVBar"] = []
 
     return functions
 
@@ -547,6 +572,26 @@ def generate_dump(extracted):
 
     return dump_data
 
+def get_sort_key(name):
+    order = {
+        # Core Group Order
+        "CreateWindow": 1,
+        "Notify": 2,
+        "SetWatermark": 3,
+        "CreateControlHUD": 4,
+        "AddCleanup": 5,
+        "CreateTimer": 6,
+        
+        # Layout Group Order
+        "CreateSection": 10,
+        "CreateTab": 11,
+        "CreateHBar": 12,
+        "CreateVBar": 13,
+    }
+    if name in order:
+        return (0, order[name])
+    return (1, name)
+
 def build_sidebar_html(dump_data, group_name):
     """
     Builds the sidebar HTML link tags for a specific group (Core, Layout, Components).
@@ -555,7 +600,7 @@ def build_sidebar_html(dump_data, group_name):
     
     group_funcs = {k: v for k, v in dump_data.items() if v["type"] == group_name.lower()}
     
-    for func_name in sorted(group_funcs.keys()):
+    for func_name in sorted(group_funcs.keys(), key=get_sort_key):
         meta = METADATA.get(func_name, {})
         nav_id = meta.get("nav_id", f"nav-{func_name.lower().replace('create', '')}")
         section_id = meta.get("id", func_name.lower().replace('create', ''))
@@ -576,7 +621,7 @@ def build_content_html(dump_data):
     ordered_funcs = []
     for group in ["Core", "Layout", "Components"]:
         group_funcs = {k: v for k, v in dump_data.items() if v["type"] == group.lower()}
-        for k in sorted(group_funcs.keys()):
+        for k in sorted(group_funcs.keys(), key=get_sort_key):
             ordered_funcs.append((k, group_funcs[k]))
 
     for func_name, func_data in ordered_funcs:
@@ -733,7 +778,7 @@ def sync_mcp(dump_data):
 
     mcp_components = {}
     for func_name, data in dump_data.items():
-        if data["type"] == "components" or func_name == "CreateSection":
+        if data["type"] == "components" or func_name in ["CreateSection", "CreateHBar", "CreateVBar"]:
             comp_name = data["display_name"]
             params = []
             for arg in data["arguments"]:
@@ -866,13 +911,13 @@ def sync_mcp(dump_data):
                         "var_name": {"type": "string", "description": "Variable name to assign result to (e.g. 'myLogger' for Logger)."},
                         "text": {"type": "string", "description": "Label/display text for the component."},
                         "placeholder": {"type": "string", "description": "(Input only) Placeholder text."},
-                        "default": {"type": "string", "description": "Default value (boolean, number, string, Color3)."},
+                        "default": {"type": "string", "description": "Default value (boolean, number, string, Color3). For TargetBody, use single part ('Head') or comma-separated ('Head,Torso'). Valid parts: Head, Torso, LeftArm, RightArm, LeftLeg, RightLeg."},
                         "min": {"type": "number", "description": "(Slider only) Minimum value."},
                         "max": {"type": "number", "description": "(Slider only) Maximum value."},
                         "list": {"type": "string", "description": "(Dropdown only) Comma-separated option strings."},
                         "multiple": {"type": "boolean", "description": "(Dropdown/TargetBody) Allow multiple selections."},
                         "height": {"type": "number", "description": "(Logger/PlayerList) Height in pixels."},
-                        "disabledParts": {"type": "string", "description": "(TargetBody only) Comma-separated parts to disable."},
+                        "disabledParts": {"type": "string", "description": "(TargetBody only) Comma-separated parts that cannot be selected. Valid parts: Head, Torso, LeftArm, RightArm, LeftLeg, RightLeg."},
                         "flag": {"type": "string", "description": "Config save/load key for auto-save."},
                         "callback": {"type": "string", "description": "Luau callback code (e.g. 'function(value) print(value) end')."}
                     },

@@ -259,12 +259,12 @@
             {
                 "name": "default",
                 "type": "string | table",
-                "description": "Initially selected body part(s) (e.g. 'Head' or {'Head', 'Torso'})."
+                "description": "Initially selected body part(s). Valid parts: 'Head', 'Torso', 'LeftArm', 'RightArm', 'LeftLeg', 'RightLeg'."
             },
             {
                 "name": "disabledParts",
                 "type": "table",
-                "description": "List of parts that cannot be selected (e.g. {'LeftArm', 'RightArm'})."
+                "description": "List of parts that cannot be selected/clicked. Valid parts: 'Head', 'Torso', 'LeftArm', 'RightArm', 'LeftLeg', 'RightLeg'."
             },
             {
                 "name": "flag",
@@ -510,5 +510,21 @@
             }
         ],
         "example": "-- Create a timer that ticks every 1 second\nlocal myTimer = MonoUI.CreateTimer(1)\n\n-- Connect logic to the Tick event\nmyTimer.Tick:Connect(function()\n    print(\"Timer ticked!\")\nend)\n\n-- Register the timer with the window to automatically stop it when the GUI closes\nwindow:AddCleanup(myTimer)\n\n-- Start the timer\nmyTimer:Start()\n\n-- You can also use:\n-- myTimer:Pause()\n-- myTimer:Resume()\n-- myTimer:Stop()"
+    },
+    "CreateHBar": {
+        "type": "layout",
+        "label": "Layout",
+        "display_name": "HBar",
+        "description": "Creates a horizontal container block (HBar) that can hold multiple vertical column stacks (VBars) side-by-side.",
+        "arguments": [],
+        "example": "local hbar = tab:CreateHBar()"
+    },
+    "CreateVBar": {
+        "type": "layout",
+        "label": "Layout",
+        "display_name": "VBar",
+        "description": "Creates a vertical column stack (VBar) inside an HBar layout container. Allows vertical stacking of any standard components.",
+        "arguments": [],
+        "example": "local vbar1 = hbar:CreateVBar()\nvbar1:CreateToggle({ text = \"Toggle in VBar\" })"
     }
 }

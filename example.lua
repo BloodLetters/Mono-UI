@@ -1,4 +1,4 @@
-local MonoUI = loadstring(game:HttpGet("http://localhost:6767/mono-ui.luau"))()
+local MonoUI = loadstring(game:HttpGet("http://192.168.100.101:6767/mono-ui.luau"))()
 
 MonoUI.SetWatermark({
 	visible = true,
@@ -133,11 +133,15 @@ local tab2 = window:CreateTab({
 	icon = "settings",
 })
 
-tab2:CreateSection({
+local hbar = tab2:CreateHBar()
+local leftCol = hbar:CreateVBar()
+local rightCol = hbar:CreateVBar()
+
+leftCol:CreateSection({
 	text = "Target Configurations"
 })
 
-tab2:CreateTargetBody({
+leftCol:CreateTargetBody({
 	text = "Body Hitboxes (Multi)",
 	multiple = true,
 	default = {"Head", "Torso"},
@@ -148,21 +152,11 @@ tab2:CreateTargetBody({
 	end
 })
 
-tab2:CreateTargetBody({
-	text = "Primary Hitbox (Single)",
-	multiple = false,
-	default = "Head",
-	flag = "hitbox_single_part",
-	callback = function(parts)
-		logger:Log("INFO", "Primary hitbox: " .. table.concat(parts, ", "))
-	end
-})
-
-tab2:CreateSection({
+rightCol:CreateSection({
 	text = "UI Theme & Toggle"
 })
 
-tab2:CreateColorPicker({
+rightCol:CreateColorPicker({
 	text = "Accent Color",
 	default = Color3.fromRGB(0, 162, 255),
 	flag = "ui_theme_accent",
@@ -179,7 +173,7 @@ tab2:CreateColorPicker({
 })
 
 local visibleState = true
-tab2:CreateKeybind({
+rightCol:CreateKeybind({
 	text = "Toggle Menu Key",
 	default = Enum.KeyCode.RightControl,
 	flag = "menu_toggle_keybind",
@@ -203,6 +197,16 @@ local playersTab = window:CreateTab({
 
 playersTab:CreateSection({
 	text = "Player list ESP & Teleport"
+})
+
+playersTab:CreateTargetBody({
+	text = "Primary Hitbox (Single)",
+	multiple = false,
+	default = "Head",
+	flag = "hitbox_single_part",
+	callback = function(parts)
+		logger:Log("INFO", "Primary hitbox: " .. table.concat(parts, ", "))
+	end
 })
 
 playersTab:CreatePlayerList({

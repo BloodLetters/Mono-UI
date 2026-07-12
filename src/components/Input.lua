@@ -11,9 +11,12 @@ return function(page, args)
 	local placeholderText = args.placeholder or "type here..."
 	local callback = args.callback
 	
+	local isVBar = page.Name == "VBar"
+	local rowHeight = isVBar and 60 or 44
+
 	local inputRow = make("Frame", {
 		Name = inputText or "Input",
-		Size = UDim2.new(1, 0, 0, 44), -- Height
+		Size = UDim2.new(1, 0, 0, rowHeight), -- Height
 		BackgroundColor3 = Color3.fromRGB(24, 24, 28),
 		BorderSizePixel = 0,
 		Parent = page,
@@ -21,31 +24,63 @@ return function(page, args)
 	addCorner(inputRow, 10)
 	local rowStroke = addStroke(inputRow, Color3.fromRGB(60, 60, 68), 0.65, 1)
 
-	local label = make("TextLabel", {
-		BackgroundTransparency = 1,
-		Position = UDim2.fromOffset(14, 0),
-		Size = UDim2.new(1, -170, 1, 0),
-		Text = tostring(inputText or "Input"),
-		TextXAlignment = Enum.TextXAlignment.Left,
-		Parent = inputRow,
-	})
-	applyFont(label, 14, Color3.fromRGB(232, 232, 236), Enum.TextXAlignment.Left)
+	local label
+	local textBox
 
-	local textBox = make("TextBox", {
-		Name = "InputField",
-		AnchorPoint = Vector2.new(1, 0.5),
-		Position = UDim2.new(1, -12, 0.5, 0),
-		Size = UDim2.fromOffset(140, 26),
-		BackgroundColor3 = Color3.fromRGB(22, 22, 26),
-		BorderSizePixel = 0,
-		Text = tostring(args.default or ""),
-		PlaceholderText = tostring(placeholderText),
-		PlaceholderColor3 = Color3.fromRGB(100, 100, 110),
-		TextColor3 = Color3.fromRGB(235, 235, 240),
-		TextSize = 13,
-		ClipsDescendants = true,
-		Parent = inputRow,
-	})
+	if isVBar then
+		label = make("TextLabel", {
+			BackgroundTransparency = 1,
+			Position = UDim2.fromOffset(14, 6),
+			Size = UDim2.new(1, -28, 0, 18),
+			Text = tostring(inputText or "Input"),
+			TextXAlignment = Enum.TextXAlignment.Left,
+			Parent = inputRow,
+		})
+		applyFont(label, 14, Color3.fromRGB(232, 232, 236), Enum.TextXAlignment.Left)
+
+		textBox = make("TextBox", {
+			Name = "InputField",
+			AnchorPoint = Vector2.new(0.5, 0),
+			Position = UDim2.new(0.5, 0, 0, 28),
+			Size = UDim2.new(1, -24, 0, 26),
+			BackgroundColor3 = Color3.fromRGB(22, 22, 26),
+			BorderSizePixel = 0,
+			Text = tostring(args.default or ""),
+			PlaceholderText = tostring(placeholderText),
+			PlaceholderColor3 = Color3.fromRGB(100, 100, 110),
+			TextColor3 = Color3.fromRGB(235, 235, 240),
+			TextSize = 13,
+			ClipsDescendants = true,
+			Parent = inputRow,
+		})
+	else
+		label = make("TextLabel", {
+			BackgroundTransparency = 1,
+			Position = UDim2.fromOffset(14, 0),
+			Size = UDim2.new(1, -170, 1, 0),
+			Text = tostring(inputText or "Input"),
+			TextXAlignment = Enum.TextXAlignment.Left,
+			Parent = inputRow,
+		})
+		applyFont(label, 14, Color3.fromRGB(232, 232, 236), Enum.TextXAlignment.Left)
+
+		textBox = make("TextBox", {
+			Name = "InputField",
+			AnchorPoint = Vector2.new(1, 0.5),
+			Position = UDim2.new(1, -12, 0.5, 0),
+			Size = UDim2.fromOffset(140, 26),
+			BackgroundColor3 = Color3.fromRGB(22, 22, 26),
+			BorderSizePixel = 0,
+			Text = tostring(args.default or ""),
+			PlaceholderText = tostring(placeholderText),
+			PlaceholderColor3 = Color3.fromRGB(100, 100, 110),
+			TextColor3 = Color3.fromRGB(235, 235, 240),
+			TextSize = 13,
+			ClipsDescendants = true,
+			Parent = inputRow,
+		})
+	end
+
 	addCorner(textBox, 8)
 	local boxStroke = addStroke(textBox, Color3.fromRGB(52, 52, 60), 0.6, 1)
 	applyFont(textBox, 13, Color3.fromRGB(235, 235, 240), Enum.TextXAlignment.Center)
