@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mono-UI - Documentation</title>
+    <meta name="description" content="Official API documentation for Mono-UI - a premium Roblox UI library.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght=0,300;0,400;0,500;0,600;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-one-dark.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <header class="navbar" id="navbar">
+        <div class="nav-left">
+            <div class="brand">
+                <i class="fa-solid fa-shield-halved brand-logo"></i>
+                <span class="brand-name">Mono<span>UI</span></span>
+            </div>
+            <!-- VERSION_START --><span class="badge">v1.5</span><!-- VERSION_END -->
+        </div>
+        <div class="nav-right">
+            <div class="search-wrapper">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="doc-search" placeholder="Search docs...">
+            </div>
+            <a href="https://github.com/BloodLetters/Mono-UI" target="_blank" class="github-link" id="github-link">
+                <i class="fa-brands fa-github"></i> GitHub
+            </a>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <nav class="sidebar-nav">
+
+                <div class="nav-group">
+                    <span class="group-title">Getting Started</span>
+                    <a href="index.html#introduction" class="nav-item" id="nav-intro"><i
+                            class="fa-solid fa-circle-info"></i> Introduction</a>
+                    <a href="index.html#getting-started" class="nav-item" id="nav-boot"><i
+                            class="fa-solid fa-rocket"></i> Quick
+                        Start</a>
+                    <a href="index.html#features" class="nav-item" id="nav-feat"><i class="fa-solid fa-star"></i>
+                        Features</a>
+                </div>
+
+                <div class="nav-group">
+                    <span class="group-title">Core</span>
+                    <!-- SIDEBAR_CORE_START -->
+                    <a href="CreateWindow.html" class="nav-item" id="nav-window"><i
+                            class="fa-solid fa-window-maximize"></i> CreateWindow</a>
+                    <a href="Notify.html" class="nav-item" id="nav-notify"><i class="fa-solid fa-bell"></i> Notify</a>
+                    <a href="SetWatermark.html" class="nav-item" id="nav-wm"><i class="fa-solid fa-chart-line"></i>
+                        SetWatermark</a>
+                    <a href="CreateControlHUD.html" class="nav-item" id="nav-hud"><i class="fa-solid fa-sliders"></i>
+                        CreateControlHUD</a>
+                    <a href="AddCleanup.html" class="nav-item" id="nav-cleanup"><i class="fa-solid fa-trash-can"></i>
+                        AddCleanup</a>
+                    <a href="CreateTimer.html" class="nav-item" id="nav-timer"><i class="fa-solid fa-clock"></i>
+                        CreateTimer</a>
+                    <a href="RegisterIcon.html" class="nav-item" id="nav-registericon"><i class="fa-solid fa-image"></i>
+                        RegisterIcon</a>
+                    <a href="RegisterIconPack.html" class="nav-item" id="nav-registericonpack"><i
+                            class="fa-solid fa-images"></i> RegisterIconPack</a>
+                    <!-- SIDEBAR_CORE_END -->
+                </div>
+
+                <div class="nav-group">
+                    <span class="group-title">Layout</span>
+                    <!-- SIDEBAR_LAYOUT_START -->
+                    <a href="CreateSection.html" class="nav-item" id="nav-section"><i
+                            class="fa-solid fa-grip-lines"></i> CreateSection</a>
+                    <a href="CreateTab.html" class="nav-item" id="nav-tab"><i class="fa-solid fa-folder-open"></i>
+                        CreateTab</a>
+                    <a href="CreateHBar.html" class="nav-item" id="nav-hbar"><i class="fa-solid fa-grip"></i>
+                        CreateHBar</a>
+                    <a href="CreateVBar.html" class="nav-item" id="nav-vbar"><i
+                            class="fa-solid fa-ellipsis-vertical"></i> CreateVBar</a>
+                    <!-- SIDEBAR_LAYOUT_END -->
+                </div>
+
+                <div class="nav-group">
+                    <span class="group-title">Components</span>
+                    <!-- SIDEBAR_COMPONENTS_START -->
+                    <a href="CreateButton.html" class="nav-item" id="nav-button"><i
+                            class="fa-solid fa-square-check"></i> CreateButton</a>
+                    <a href="CreateColorPicker.html" class="nav-item" id="nav-color"><i class="fa-solid fa-palette"></i>
+                        CreateColorPicker</a>
+                    <a href="CreateDivider.html" class="nav-item" id="nav-divider"><i class="fa-solid fa-minus"></i>
+                        CreateDivider</a>
+                    <a href="CreateDropdown.html" class="nav-item" id="nav-dropdown"><i
+                            class="fa-solid fa-caret-down"></i> CreateDropdown</a>
+                    <a href="CreateInput.html" class="nav-item" id="nav-input"><i class="fa-solid fa-keyboard"></i>
+                        CreateInput</a>
+                    <a href="CreateKeybind.html" class="nav-item" id="nav-keybind"><i class="fa-solid fa-keyboard"></i>
+                        CreateKeybind</a>
+                    <a href="CreateLogger.html" class="nav-item" id="nav-logger"><i class="fa-solid fa-terminal"></i>
+                        CreateLogger</a>
+                    <a href="CreateParagraph.html" class="nav-item" id="nav-paragraph"><i
+                            class="fa-solid fa-paragraph"></i> CreateParagraph</a>
+                    <a href="CreatePlayerList.html" class="nav-item" id="nav-players"><i class="fa-solid fa-users"></i>
+                        CreatePlayerList</a>
+                    <a href="CreateSlider.html" class="nav-item" id="nav-slider"><i class="fa-solid fa-sliders"></i>
+                        CreateSlider</a>
+                    <a href="CreateTargetBody.html" class="nav-item" id="nav-body"><i class="fa-solid fa-child"></i>
+                        CreateTargetBody</a>
+                    <a href="CreateToggle.html" class="nav-item" id="nav-toggle"><i class="fa-solid fa-toggle-on"></i>
+                        CreateToggle</a>
+                    <!-- SIDEBAR_COMPONENTS_END -->
+                </div>
+
+                <div class="nav-group">
+                    <span class="group-title">Modules</span>
+                    <!-- SIDEBAR_MODULES_START -->
+                    <a href="Module.html" class="nav-item active" id="nav-module-profile"><i
+                            class="fa-solid fa-user-circle"></i> Profile</a>
+                    <!-- SIDEBAR_MODULES_END -->
+                </div>
+
+                <div class="nav-group">
+                    <span class="group-title">Examples</span>
+                    <a href="FullScript.html" class="nav-item" id="nav-example"><i class="fa-solid fa-code"></i> Full
+                        Script</a>
+                </div>
+
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content-container">
+
+            <!-- MAIN_CONTENT_START -->
+
+            <!-- Modules Overview -->
+            <section id="modules-overview" class="doc-section">
+                <div class="breadcrumb">
+                    <span class="current">Modules</span>
+                </div>
+                <div class="section-label">Overview</div>
+                <h2>Modules</h2>
+                <p>Modules are optional add-ons that enhance the MonoUI window with extra UI components. They are
+                    <strong>off by default</strong> and must be activated manually before creating the window.
+                </p>
+                <div class="alert note">
+                    <i class="fa-solid fa-lightbulb alert-icon"></i>
+                    <div>You must declare <code>MonoUI.module</code> <strong>before</strong> calling
+                        <code>MonoUI.CreateWindow()</code> for modules to take effect.
+                    </div>
+                </div>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">-- Declare which modules to activate BEFORE creating the window
+MonoUI.module = {
+    profile = true,
+}
+
+local window = MonoUI.CreateWindow({
+    Title    = "mono ui",
+    Subtitle = "premium modular library",
+    Size     = UDim2.fromOffset(600, 400),
+})</code></pre>
+                </div>
+            </section>
+
+            <!-- Profile Module -->
+            <section id="module-profile" class="doc-section">
+                <div class="breadcrumb">
+                    <a href="Module.html">Modules</a>
+                    <span class="sep">›</span>
+                    <span class="current">Profile</span>
+                </div>
+                <div class="section-label">Module API</div>
+                <h2>Profile</h2>
+                <p>Renders a player profile widget at the bottom of the sidebar. Displays the local player's avatar
+                    (round headshot), display name, and username. Automatically reads <code>Players.LocalPlayer</code>
+                    — no extra setup needed.</p>
+
+                <div class="alert note">
+                    <i class="fa-solid fa-lightbulb alert-icon"></i>
+                    <div>All fields are optional. If omitted, the module reads the live local player data at runtime.
+                    </div>
+                </div>
+
+                <h3>Options</h3>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>CustomName</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td><code>player.DisplayName</code></td>
+                            <td>Override the display name shown in the profile widget.</td>
+                        </tr>
+                        <tr>
+                            <td>CustomUsername</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td><code>"@" .. player.Name</code></td>
+                            <td>Override the username handle (shown in muted colour below the name).</td>
+                        </tr>
+                        <tr>
+                            <td>CustomAvatar</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td><code>rbxthumb AvatarHeadShot</code></td>
+                            <td>A custom asset/URL to use as the avatar image instead of the auto-generated headshot
+                                thumbnail.</td>
+                        </tr>
+                        <tr>
+                            <td>Height</td>
+                            <td><span class="type type-number">number</span></td>
+                            <td><code>48</code></td>
+                            <td>Height in pixels of the profile footer area.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Activation</h3>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">-- Enable before CreateWindow
+MonoUI.module = {
+    profile = true,
+}
+
+local window = MonoUI.CreateWindow({
+    Title    = "mono ui",
+    Subtitle = "premium modular library",
+    Size     = UDim2.fromOffset(600, 400),
+})</code></pre>
+                </div>
+
+                <h3>Custom Override Example</h3>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">-- Override name, username and avatar manually
+MonoUI.module = {
+    profile = {
+        CustomName     = "BloodLetters",
+        CustomUsername = "@bloodletters",
+        CustomAvatar   = "rbxassetid://12345678",
+        Height         = 56,
+    },
+}
+
+local window = MonoUI.CreateWindow({
+    Title    = "mono ui",
+    Subtitle = "premium modular library",
+    Size     = UDim2.fromOffset(600, 400),
+})</code></pre>
+                </div>
+
+                <h3>Notes</h3>
+                <div class="alert note">
+                    <i class="fa-solid fa-circle-info alert-icon"></i>
+                    <div>
+                        <ul style="margin: 0; padding-left: 1.2em;">
+                            <li>The profile widget shrinks the tab list height to make room — the sidebar divider line
+                                stays continuous and never clips, even with many tabs.</li>
+                            <li>Setting <code>profile = true</code> uses all defaults. Alternatively pass a table of
+                                options as the value to override specific fields.</li>
+                            <li>The avatar is displayed as a circle (rounded) with a subtle stroke border.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MAIN_CONTENT_END -->
+
+        </main>
+    </div>
+
+    <footer class="footer">
+        &copy; 2026 MonoUI — MIT License
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-lua.min.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
