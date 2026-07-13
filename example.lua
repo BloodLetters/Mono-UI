@@ -1,4 +1,5 @@
-local MonoUI = loadstring(game:HttpGet("http://192.168.100.101:6767/mono-ui.luau"))()
+local MonoUI = loadstring(game:HttpGet("http://localhost:6767/mono-ui.luau"))()
+
 
 MonoUI.SetWatermark({
 	visible = true,
@@ -29,6 +30,12 @@ task.spawn(function()
 	})
 end)
 
+MonoUI.module = {
+	profile = true
+}
+
+
+
 local window = MonoUI.CreateWindow({
 	Title = "mono ui",
 	Subtitle = "premium modular library",
@@ -38,6 +45,7 @@ local window = MonoUI.CreateWindow({
 	AutoSave = true,
 	AutoExec = true,
 })
+
 
 local consoleTab = window:CreateTab({
 	text = "Console",
@@ -288,6 +296,38 @@ window:CreateTab({
 	text = "Favorites",
 	icon = "star",
 })
+
+window:CreateTab({
+	text = "Favorites",
+	icon = "star",
+})
+
+window:CreateTab({
+	text = "Favorites",
+	icon = "star",
+})
+
+window:CreateTab({
+	text = "Favorites",
+	icon = "star",
+})
+
+window:CreateTab({
+	text = "Favorites",
+	icon = "star",
+})
+
+
+window:CreateTab({
+	text = "Favorites",
+	icon = "star",
+})
+
+window:CreateTab({
+	text = "Favorites",
+	icon = "star",
+})
+
 
 logger:Log("SUCCESS", "All tabs loaded successfully!")
 

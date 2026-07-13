@@ -281,12 +281,11 @@ local function CreateWindow(options)
 	sidebar.ZIndex = 3
 	local sidebarRight = make("Frame", {
 		Name = "SidebarDivider",
-		AnchorPoint = Vector2.new(1, 0),
-		Position = UDim2.new(1, - 2, 0, 0),
+		Position = UDim2.new(0, 118, 0, 0),
 		Size = UDim2.new(0, 1, 1, 0),
 		BackgroundColor3 = Color3.fromRGB(45, 45, 52),
 		BorderSizePixel = 0,
-		Parent = sidebar,
+		Parent = layoutRoot,
 	})
 	sidebarRight.ZIndex = 4
 	local tabList = make("Frame", {
