@@ -136,6 +136,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     else if (funcName === "CreateSlider") icon = "fa-sliders";
                     else if (funcName === "CreateTargetBody") icon = "fa-child";
                     else if (funcName === "CreateToggle") icon = "fa-toggle-on";
+                    else if (funcName === "CreateParagraph") icon = "fa-paragraph";
+                    else if (funcName === "CreateDivider") icon = "fa-minus";
                 }
 
                 searchData.push({

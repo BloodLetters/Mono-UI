@@ -28,6 +28,8 @@ local TargetBody = require("../components/TargetBody")
 local Keybind = require("../components/Keybind")
 local Logger = require("../components/Logger")
 local PlayerList = require("../components/PlayerList")
+local Paragraph = require("../components/Paragraph")
+local Divider = require("../components/Divider")
 
 local function CreateWindow(options)
 	options = options or {}
@@ -696,6 +698,14 @@ local function CreateWindow(options)
 
 		function containerObj:CreatePlayerList(plArgs)
 			return PlayerList(pageFrame, plArgs)
+		end
+
+		function containerObj:CreateParagraph(pArgs)
+			return Paragraph(pageFrame, pArgs)
+		end
+
+		function containerObj:CreateDivider(dArgs)
+			return Divider(pageFrame, dArgs)
 		end
 
 		function containerObj:CreateHBar(hbarArgs)

@@ -456,6 +456,44 @@ log:Log("INFO",    "Script loaded.")
 log:Log("SUCCESS", "ESP enabled.")
 log:Log("WARNING", "High ping detected.")
 log:Log("ERROR",   "Target not found.")"""
+    },
+    "CreateParagraph": {
+        "group": "Components",
+        "label": "Components",
+        "display_name": "Paragraph",
+        "id": "paragraph",
+        "nav_id": "nav-paragraph",
+        "icon": "fa-paragraph",
+        "description": "Renders a beautifully formatted, auto-wrapping text block with rich text support.",
+        "params": {
+            "text": {"type": "string", "description": "The paragraph text to display. Supports RichText tags."},
+            "size": {"type": "number", "description": "Font size (defaults to 12)."},
+            "color": {"type": "Color3", "description": "Text color (defaults to light gray)."},
+            "align": {"type": "Enum.TextXAlignment", "description": "Horizontal alignment (defaults to Left)."},
+            "font": {"type": "Font", "description": "Custom FontFace to apply."}
+        },
+        "example": """tab:CreateParagraph({
+    text  = "<b>MonoUI</b> is a premium, modular Roblox UI library. Supports <i>RichText</i> formatting out of the box!",
+    size  = 13,
+    color = Color3.fromRGB(242, 242, 242),
+})"""
+    },
+    "CreateDivider": {
+        "group": "Components",
+        "label": "Components",
+        "display_name": "Divider",
+        "id": "divider",
+        "nav_id": "nav-divider",
+        "icon": "fa-minus",
+        "description": "Creates a layout spacing buffer (spacer) or a horizontal separator line between components.",
+        "params": {
+            "height": {"type": "number", "description": "Spacing height in pixels (defaults to 12)."},
+            "line": {"type": "boolean", "description": "Whether to render a subtle visible divider line (defaults to false)."}
+        },
+        "example": """tab:CreateDivider({
+    height = 16,
+    line   = true,
+})"""
     }
 }
 

@@ -259,9 +259,29 @@ playersTab:CreatePlayerList({
 	}
 })
 
-window:CreateTab({
+local profileTab = window:CreateTab({
 	text = "Profile",
 	icon = "user",
+})
+
+profileTab:CreateSection({
+	text = "User Profile"
+})
+
+profileTab:CreateParagraph({
+	text = "Welcome to <b>MonoUI</b>! This is a dynamic paragraph component showing auto-wrapped text. Supports <i>RichText</i> formatting, including <b>bold</b>, <i>italics</i>, and <font color='#00a2ff'>custom colors</font>.",
+	size = 15,
+})
+
+profileTab:CreateDivider({
+	height = 20,
+	line = true,
+})
+
+profileTab:CreateParagraph({
+	text = "This second paragraph is separated from the first one by a Divider component with a visual separation line.",
+	size = 14,
+	color = Color3.fromRGB(150, 150, 160)
 })
 
 window:CreateTab({

@@ -182,6 +182,18 @@ tabStandard:CreateButton({
     end,
 })
 
+tabStandard:CreateDivider({
+    height = 24,
+    line = true,
+})
+
+tabStandard:CreateSection({ text = "Information Panel" })
+
+tabStandard:CreateParagraph({
+    text = "<b>MonoUI Info:</b> This standard full-width tab demonstrates various widget controls. You can separate layout zones dynamically using the new <code>CreateDivider</code> component, or display formatted notices using the new <code>CreateParagraph</code> component.",
+    size = 14,
+})
+
 
 -- TAB 3: Console & Players
 local tabWidgets = window:CreateTab({

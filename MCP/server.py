@@ -73,6 +73,23 @@ COMPONENT_DOCS = {
             },
         ],
     },
+    'Divider': {
+        'description': 'Creates a layout spacing buffer (spacer) or a horizontal separator line between components.',
+        'params': [
+            {
+                'default': 'nil',
+                'desc': 'Spacing height in pixels (defaults to 12).',
+                'name': 'height',
+                'type': 'number',
+            },
+            {
+                'default': 'nil',
+                'desc': 'Whether to render a subtle visible divider line (defaults to false).',
+                'name': 'line',
+                'type': 'boolean',
+            },
+        ],
+    },
     'Dropdown': {
         'description': 'A selection menu for single or multi-value selections. Supports search filtering inside dropdown items.',
         'params': [
@@ -201,6 +218,41 @@ COMPONENT_DOCS = {
             {
                 'default': '"Console Logs"',
                 'desc': 'Console panel header label.',
+                'name': 'text',
+                'type': 'string',
+            },
+        ],
+    },
+    'Paragraph': {
+        'description': 'Renders a beautifully formatted, auto-wrapping text block with rich text support.',
+        'params': [
+            {
+                'default': 'nil',
+                'desc': 'Horizontal alignment (defaults to Left).',
+                'name': 'align',
+                'type': 'Enum.TextXAlignment',
+            },
+            {
+                'default': 'nil',
+                'desc': 'Text color (defaults to light gray).',
+                'name': 'color',
+                'type': 'Color3',
+            },
+            {
+                'default': 'nil',
+                'desc': 'Custom FontFace to apply.',
+                'name': 'font',
+                'type': 'Font',
+            },
+            {
+                'default': 'nil',
+                'desc': 'Font size (defaults to 12).',
+                'name': 'size',
+                'type': 'number',
+            },
+            {
+                'default': 'nil',
+                'desc': 'The paragraph text to display. Supports RichText tags.',
                 'name': 'text',
                 'type': 'string',
             },
