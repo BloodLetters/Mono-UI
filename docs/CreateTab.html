@@ -44,7 +44,7 @@
 
                 <div class="nav-group">
                     <span class="group-title">Getting Started</span>
-                    <a href="index.html#introduction" class="nav-item active" id="nav-intro"><i
+                    <a href="index.html#introduction" class="nav-item" id="nav-intro"><i
                             class="fa-solid fa-circle-info"></i> Introduction</a>
                     <a href="index.html#getting-started" class="nav-item" id="nav-boot"><i class="fa-solid fa-rocket"></i> Quick
                         Start</a>
@@ -74,7 +74,7 @@
                     <!-- SIDEBAR_LAYOUT_START -->
                     <a href="CreateSection.html" class="nav-item" id="nav-section"><i
                             class="fa-solid fa-grip-lines"></i> CreateSection</a>
-                    <a href="CreateTab.html" class="nav-item" id="nav-tab"><i
+                    <a href="CreateTab.html" class="nav-item active" id="nav-tab"><i
                             class="fa-solid fa-folder-open"></i> CreateTab</a>
                     <a href="CreateHBar.html" class="nav-item" id="nav-hbar"><i
                             class="fa-solid fa-grip"></i> CreateHBar</a>
@@ -122,75 +122,72 @@
         <main class="content-container">
 
             <!-- MAIN_CONTENT_START -->
-            <!-- Introduction -->
-            <section id="introduction" class="doc-section">
+            <!-- CreateTab -->
+            <section id="create-tab" class="doc-section">
                 <div class="breadcrumb">
-                    <span class="current">Getting Started</span>
-                </div>
-                <div class="section-label">Overview</div>
-                <h1>MonoUI Documentation</h1>
-                <p class="lead-text">A premium, modular Roblox UI library with dark-mode aesthetics, auto-saving config,
-                    live search, and autoexec support.</p>
-                <div class="alert note">
-                    <i class="fa-solid fa-lightbulb alert-icon"></i>
-                    <div>All interactive components automatically sync their values to the global config when modified.
-                        Use <code>flag</code> to identify each element.</div>
-                </div>
-            </section>
-
-            <!-- Quick Start -->
-            <section id="getting-started" class="doc-section">
-                <div class="breadcrumb">
-                    <a href="index.html#introduction">Getting Started</a>
+                    <a href="index.html#introduction">Layout</a>
                     <span class="sep">›</span>
-                    <span class="current">Quick Start</span>
+                    <span class="current">CreateTab</span>
                 </div>
-                <div class="section-label">Setup</div>
-                <h2>Quick Start</h2>
-                <p>Paste the loadstring bootstrapper into your script to initialize MonoUI.</p>
+                <div class="section-label">Layout</div>
+                <h2>CreateTab</h2>
+                <p>Appends a navigation tab to the window sidebar. Returns a tab object used to add components.</p>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Argument</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>icon</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Lucide icon shown next to the label.</td>
+                        </tr>
+                        <tr>
+                            <td>text</td>
+                            <td><span class="type type-string">string</span></td>
+                            <td>Label displayed in the sidebar.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h3>Code Snippet</h3>
                 <div class="code-container">
                     <div class="code-header">
                         <span class="code-lang">Lua</span>
                         <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
                     </div>
-                    <pre><code class="language-lua">local MonoUI = loadstring(game:HttpGet("https://github.com/BloodLetters/mono-ui/releases/latest/download/Release.luau"))()</code></pre>
+                    <pre><code class="language-lua">local tab = window:CreateTab({
+    text = "Combat",
+    icon = "swords",
+})</code></pre>
+                </div>
+                <h3>Complete Script Usage</h3>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Lua (Full Setup)</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">-- Load the MonoUI Library
+local MonoUI = loadstring(game:HttpGet("https://github.com/BloodLetters/mono-ui/releases/latest/download/Release.luau"))()
+
+-- Create the main Window
+local window = MonoUI.CreateWindow({
+    Title      = "mono ui",
+    ConfigName = "mono_config",
+    AutoSave   = true,
+})
+
+local tab = window:CreateTab({
+    text = "Combat",
+    icon = "swords",
+})</code></pre>
                 </div>
             </section>
 
-            <!-- Features -->
-            <section id="features" class="doc-section">
-                <div class="breadcrumb">
-                    <a href="index.html#introduction">Getting Started</a>
-                    <span class="sep">›</span>
-                    <span class="current">Features</span>
-                </div>
-                <div class="section-label">Overview</div>
-                <h2>Features</h2>
-                <p>MonoUI ships with a full suite of UI primitives and productivity features out of the box.</p>
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <i class="fa-solid fa-magnifying-glass feature-icon"></i>
-                        <h3>Live Search</h3>
-                        <p>Built-in search bar filters components in real-time as you type.</p>
-                    </div>
-                    <div class="feature-card">
-                        <i class="fa-solid fa-floppy-disk feature-icon"></i>
-                        <h3>Auto Save & Load</h3>
-                        <p>Serializes all component states including Color3 and KeyCodes.</p>
-                    </div>
-                    <div class="feature-card">
-                        <i class="fa-solid fa-rotate feature-icon"></i>
-                        <h3>AutoExec</h3>
-                        <p>Queues script re-execution on server teleport automatically.</p>
-                    </div>
-                    <div class="feature-card">
-                        <i class="fa-solid fa-arrows-to-eye feature-icon"></i>
-                        <h3>Control HUD</h3>
-                        <p>Draggable floating quick-toggle HUD with icon-only buttons.</p>
-                    </div>
-                </div>
-            </section>
-            <!-- MAIN_CONTENT_END -->
+<!-- MAIN_CONTENT_END -->
 
         </main>
     </div>

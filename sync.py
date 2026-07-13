@@ -592,6 +592,57 @@ def get_sort_key(name):
         return (0, order[name])
     return (1, name)
 
+FULL_SCRIPT_CONTENT = """            <!-- Full Example -->
+            <section id="full-code" class="doc-section">
+                <div class="breadcrumb">
+                    <span class="current">Examples</span>
+                    <span class="sep">›</span>
+                    <span class="current">Full Script</span>
+                </div>
+                <div class="section-label">Examples</div>
+                <h2>Full Script</h2>
+                <p>A complete working example using all major MonoUI features.</p>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Lua</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">local MonoUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/YOUR_USERNAME/mono-ui/main/dist/mono-ui.luau"))()
+
+MonoUI.SetWatermark({ visible = true, text = "MonoUI Premium" })
+
+local window = MonoUI.CreateWindow({
+    Title      = "mono ui",
+    Subtitle   = "premium modular library",
+    Size       = UDim2.fromOffset(600, 400),
+    Icon       = "shield",
+    ConfigName = "my_config",
+    AutoSave   = true,
+    AutoExec   = true,
+})
+
+-- Console tab
+local consoleTab = window:CreateTab({ text = "Console", icon = "terminal" })
+consoleTab:CreateSection({ text = "System Logs" })
+local logger = consoleTab:CreateLogger({ text = "Output", height = 280 })
+
+-- Combat tab
+local combatTab = window:CreateTab({ text = "Combat", icon = "swords" })
+combatTab:CreateSection({ text = "Aimbot" })
+combatTab:CreateToggle({
+    text = "Silent Aim", default = false, flag = "silent_aim",
+    callback = function(v) logger:Log("INFO", "Silent Aim: " .. tostring(v)) end,
+})
+combatTab:CreateSlider({
+    text = "FOV", min = 10, max = 200, default = 90, flag = "fov",
+    callback = function(v) logger:Log("INFO", "FOV: " .. v) end,
+})
+
+logger:Log("SUCCESS", "All tabs loaded.")</code></pre>
+                </div>
+            </section>
+"""
+
 def build_sidebar_html(dump_data, group_name):
     """
     Builds the sidebar HTML link tags for a specific group (Core, Layout, Components).
@@ -603,77 +654,123 @@ def build_sidebar_html(dump_data, group_name):
     for func_name in sorted(group_funcs.keys(), key=get_sort_key):
         meta = METADATA.get(func_name, {})
         nav_id = meta.get("nav_id", f"nav-{func_name.lower().replace('create', '')}")
-        section_id = meta.get("id", func_name.lower().replace('create', ''))
         icon = meta.get("icon", "fa-cube")
-        display_name = group_funcs[func_name]["display_name"]
         
-        html_lines.append(f'                    <a href="#{section_id}" class="nav-item" id="{nav_id}"><i\n'
+        html_lines.append(f'                    <a href="{func_name}.html" class="nav-item" id="{nav_id}"><i\n'
                            f'                            class="fa-solid {icon}"></i> {func_name}</a>')
                            
     return "\n".join(html_lines)
 
-def build_content_html(dump_data):
+def generate_full_context_example(func_name, basic_example):
     """
-    Builds the main content HTML sections.
+    Generates a complete, runnable boilerplate script for a given function.
     """
-    sections = []
+    loadstring_line = '-- Load the MonoUI Library\nlocal MonoUI = loadstring(game:HttpGet("https://github.com/BloodLetters/mono-ui/releases/latest/download/Release.luau"))()'
     
-    ordered_funcs = []
-    for group in ["Core", "Layout", "Components"]:
-        group_funcs = {k: v for k, v in dump_data.items() if v["type"] == group.lower()}
-        for k in sorted(group_funcs.keys(), key=get_sort_key):
-            ordered_funcs.append((k, group_funcs[k]))
-
-    for func_name, func_data in ordered_funcs:
-        meta = METADATA.get(func_name, {})
-        section_id = meta.get("id", func_name.lower().replace('create', ''))
-        group = func_data["type"].capitalize()
-        display_name = func_data["display_name"]
-        label = func_data["label"]
-        desc = func_data["description"]
-        example = func_data["example"]
+    if func_name == "CreateWindow":
+        return f"{loadstring_line}\n\n{basic_example}"
         
-        breadcrumb = (
-            f'                <div class="breadcrumb">\n'
-            f'                    <span class="current">{group}</span>\n'
-            f'                    <span class="sep">›</span>\n'
-            f'                    <span class="current">{func_name}</span>\n'
-            f'                </div>'
+    elif func_name in ["Notify", "SetWatermark", "CreateControlHUD"]:
+        return f"{loadstring_line}\n\n{basic_example}"
+        
+    elif func_name in ["AddCleanup", "CreateTimer", "CreateTab"]:
+        return (
+            f"{loadstring_line}\n\n"
+            f"-- Create the main Window\n"
+            f"local window = MonoUI.CreateWindow({{\n"
+            f"    Title      = \"mono ui\",\n"
+            f"    ConfigName = \"mono_config\",\n"
+            f"    AutoSave   = true,\n"
+            f"}})\n\n"
+            f"{basic_example}"
         )
-
-        table_rows = []
-        for arg in func_data["arguments"]:
-            name = arg["name"]
-            arg_type = arg["type"]
-            arg_desc = arg["description"]
-            
-            type_class = "type-string"
-            if "boolean" in arg_type:
-                type_class = "type-boolean"
-            elif "number" in arg_type:
-                type_class = "type-number"
-            elif "function" in arg_type:
-                type_class = "type-function"
-            elif "table" in arg_type or "array" in arg_type:
-                type_class = "type-table"
-
-            table_rows.append(
-                f'                        <tr>\n'
-                f'                            <td>{name}</td>\n'
-                f'                            <td><span class="type {type_class}">{arg_type}</span></td>\n'
-                f'                            <td>{arg_desc}</td>\n'
-                f'                        </tr>'
+        
+    else:
+        # Layout and components
+        if "local MonoUI" in basic_example:
+            return basic_example
+        
+        # Check if it needs hbar
+        if func_name == "CreateVBar":
+            return (
+                f"{loadstring_line}\n\n"
+                f"-- Create the main Window\n"
+                f"local window = MonoUI.CreateWindow({{\n"
+                f"    Title      = \"mono ui\",\n"
+                f"    ConfigName = \"mono_config\",\n"
+                f"    AutoSave   = true,\n"
+                f"}})\n\n"
+                f"-- Create a Tab\n"
+                f"local tab = window:CreateTab({{ text = \"Main\", icon = \"home\" }})\n\n"
+                f"-- Create a Horizontal Column stack (HBar)\n"
+                f"local hbar = tab:CreateHBar()\n\n"
+                f"-- Create the VBar\n"
+                f"{basic_example}"
+            )
+        else:
+            return (
+                f"{loadstring_line}\n\n"
+                f"-- Create the main Window\n"
+                f"local window = MonoUI.CreateWindow({{\n"
+                f"    Title      = \"mono ui\",\n"
+                f"    ConfigName = \"mono_config\",\n"
+                f"    AutoSave   = true,\n"
+                f"}})\n\n"
+                f"-- Create a Tab\n"
+                f"local tab = window:CreateTab({{ text = \"Main\", icon = \"home\" }})\n\n"
+                f"-- Create the component\n"
+                f"{basic_example}"
             )
 
-        rows_html = "\n".join(table_rows)
+def build_single_content_html(func_name, func_data):
+    """
+    Builds the main content HTML section for a single function.
+    """
+    meta = METADATA.get(func_name, {})
+    section_id = meta.get("id", func_name.lower().replace('create', ''))
+    group = func_data["type"].capitalize()
+    label = func_data["label"]
+    desc = func_data["description"]
+    example = func_data["example"]
+    full_context = generate_full_context_example(func_name, example)
+    
+    breadcrumb = (
+        f'                <div class="breadcrumb">\n'
+        f'                    <a href="index.html#introduction">{group}</a>\n'
+        f'                    <span class="sep">›</span>\n'
+        f'                    <span class="current">{func_name}</span>\n'
+        f'                </div>'
+    )
 
-        section_html = (
-            f'            <!-- {func_name} -->\n'
-            f'            <section id="{section_id}" class="doc-section">\n'
-            f'{breadcrumb}\n'
-            f'                <div class="section-label">{label}</div>\n'
-            f'                <h2>{func_name}</h2>\n'
-            f'                <p>{desc}</p>\n'
+    table_rows = []
+    for arg in func_data["arguments"]:
+        name = arg["name"]
+        arg_type = arg["type"]
+        arg_desc = arg["description"]
+        
+        type_class = "type-string"
+        if "boolean" in arg_type:
+            type_class = "type-boolean"
+        elif "number" in arg_type:
+            type_class = "type-number"
+        elif "function" in arg_type:
+            type_class = "type-function"
+        elif "table" in arg_type or "array" in arg_type:
+            type_class = "type-table"
+
+        table_rows.append(
+            f'                        <tr>\n'
+            f'                            <td>{name}</td>\n'
+            f'                            <td><span class="type {type_class}">{arg_type}</span></td>\n'
+            f'                            <td>{arg_desc}</td>\n'
+            f'                        </tr>'
+        )
+
+    rows_html = "\n".join(table_rows)
+
+    table_html = ""
+    if table_rows:
+        table_html = (
             f'                <table class="params-table">\n'
             f'                    <thead>\n'
             f'                        <tr>\n'
@@ -686,24 +783,42 @@ def build_content_html(dump_data):
             f'{rows_html}\n'
             f'                    </tbody>\n'
             f'                </table>\n'
-            f'                <div class="code-container">\n'
-            f'                    <div class="code-header">\n'
-            f'                        <span class="code-lang">Lua</span>\n'
-            f'                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>\n'
-            f'                    </div>\n'
-            f'                    <pre><code class="language-lua">{example}</code></pre>\n'
-            f'                </div>\n'
-            f'            </section>\n'
         )
-        sections.append(section_html)
 
-    return "\n".join(sections)
+    section_html = (
+        f'            <!-- {func_name} -->\n'
+        f'            <section id="{section_id}" class="doc-section">\n'
+        f'{breadcrumb}\n'
+        f'                <div class="section-label">{label}</div>\n'
+        f'                <h2>{func_name}</h2>\n'
+        f'                <p>{desc}</p>\n'
+        f'{table_html}'
+        f'                <h3>Code Snippet</h3>\n'
+        f'                <div class="code-container">\n'
+        f'                    <div class="code-header">\n'
+        f'                        <span class="code-lang">Lua</span>\n'
+        f'                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>\n'
+        f'                    </div>\n'
+        f'                    <pre><code class="language-lua">{example}</code></pre>\n'
+        f'                </div>\n'
+        f'                <h3>Complete Script Usage</h3>\n'
+        f'                <div class="code-container">\n'
+        f'                    <div class="code-header">\n'
+        f'                        <span class="code-lang">Lua (Full Setup)</span>\n'
+        f'                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>\n'
+        f'                    </div>\n'
+        f'                    <pre><code class="language-lua">{full_context}</code></pre>\n'
+        f'                </div>\n'
+        f'            </section>\n'
+    )
+    return section_html
 
 def get_latest_release():
     """
     Queries GitHub API to fetch the latest release tag.
     """
     import urllib.request
+    import json
     url = "https://api.github.com/repos/BloodLetters/Mono-UI/releases/latest"
     req = urllib.request.Request(url, headers={"User-Agent": "MonoUI-Sync-Script"})
     try:
@@ -714,7 +829,7 @@ def get_latest_release():
         print(f"[WARNING] Failed to fetch latest release version from GitHub: {e}")
         return "v1.1.0"
 
-def update_index_html(sidebar_core, sidebar_layout, sidebar_components, main_content, version):
+def update_index_html(sidebar_core, sidebar_layout, sidebar_components, version):
     """
     Replaces sections inside index.html using placeholders.
     """
@@ -724,20 +839,35 @@ def update_index_html(sidebar_core, sidebar_layout, sidebar_components, main_con
     version_pattern = r"(<!-- VERSION_START -->).*?(<!-- VERSION_END -->)"
     content = re.sub(version_pattern, rf'\1<span class="badge">{version}</span>\2', content, flags=re.DOTALL)
 
-    core_pattern = r"(<!-- SIDEBAR_CORE_START -->\n).*?(\n\s*<!-- SIDEBAR_CORE_END -->)"
-    content = re.sub(core_pattern, rf"\1{sidebar_core}\2", content, flags=re.DOTALL)
+    core_pattern = r"(<!-- SIDEBAR_CORE_START -->).*?(<!-- SIDEBAR_CORE_END -->)"
+    content = re.sub(core_pattern, rf"\1\n{sidebar_core}\n\2", content, flags=re.DOTALL)
 
-    layout_pattern = r"(<!-- SIDEBAR_LAYOUT_START -->\n).*?(\n\s*<!-- SIDEBAR_LAYOUT_END -->)"
-    content = re.sub(layout_pattern, rf"\1{sidebar_layout}\2", content, flags=re.DOTALL)
+    layout_pattern = r"(<!-- SIDEBAR_LAYOUT_START -->).*?(<!-- SIDEBAR_LAYOUT_END -->)"
+    content = re.sub(layout_pattern, rf"\1\n{sidebar_layout}\n\2", content, flags=re.DOTALL)
 
-    comp_pattern = r"(<!-- SIDEBAR_COMPONENTS_START -->\n).*?(\n\s*<!-- SIDEBAR_COMPONENTS_END -->)"
-    content = re.sub(comp_pattern, rf"\1{sidebar_components}\2", content, flags=re.DOTALL)
-
-    content_pattern = r"(<!-- DYNAMIC_API_START -->\n).*?(\n\s*<!-- DYNAMIC_API_END -->)"
-    content = re.sub(content_pattern, rf"\1{main_content}\2", content, flags=re.DOTALL)
+    comp_pattern = r"(<!-- SIDEBAR_COMPONENTS_START -->).*?(<!-- SIDEBAR_COMPONENTS_END -->)"
+    content = re.sub(comp_pattern, rf"\1\n{sidebar_components}\n\2", content, flags=re.DOTALL)
 
     with open(INDEX_HTML, "w", encoding="utf-8") as f:
         f.write(content)
+
+def make_page(template_html, content_html, active_nav_id=None):
+    """
+    Constructs a separate HTML page by substituting content and sidebar highlights.
+    """
+    main_content_pattern = r"(<!-- MAIN_CONTENT_START -->).*?(<!-- MAIN_CONTENT_END -->)"
+    page_html = re.sub(main_content_pattern, rf"\1\n{content_html}\n\2", template_html, flags=re.DOTALL)
+    
+    # Deactivate nav-intro
+    page_html = page_html.replace('class="nav-item active" id="nav-intro"', 'class="nav-item" id="nav-intro"')
+    page_html = page_html.replace('id="nav-intro" class="nav-item active"', 'id="nav-intro" class="nav-item"')
+    
+    # Activate correct link
+    if active_nav_id:
+        page_html = page_html.replace(f'class="nav-item" id="{active_nav_id}"', f'class="nav-item active" id="{active_nav_id}"')
+        page_html = page_html.replace(f'id="{active_nav_id}" class="nav-item"', f'id="{active_nav_id}" class="nav-item active"')
+        
+    return page_html
 
 def sync_mcp(dump_data):
     """
@@ -1081,15 +1211,38 @@ def main():
     sidebar_core = build_sidebar_html(dump_data, "Core")
     sidebar_layout = build_sidebar_html(dump_data, "Layout")
     sidebar_components = build_sidebar_html(dump_data, "Components")
-    main_content = build_content_html(dump_data)
 
     print("[SYNC] Fetching latest release version from GitHub...")
     version = get_latest_release()
     print(f"[SYNC] Latest release version is: {version}")
 
-    print("[SYNC] Injecting documentation into 'index.html'...")
-    update_index_html(sidebar_core, sidebar_layout, sidebar_components, main_content, version)
-    print("[SUCCESS] HTML documentation has been synchronized!")
+    print("[SYNC] Updating 'index.html' template...")
+    update_index_html(sidebar_core, sidebar_layout, sidebar_components, version)
+    print("[SUCCESS] Template index.html has been updated!")
+
+    # Read the compiled index.html to use as our layout template
+    with open(INDEX_HTML, "r", encoding="utf-8") as f:
+        template_html = f.read()
+
+    print("[SYNC] Generating individual API pages...")
+    for func_name, func_data in dump_data.items():
+        meta = METADATA.get(func_name, {})
+        nav_id = meta.get("nav_id", f"nav-{func_name.lower().replace('create', '')}")
+        
+        single_content = build_single_content_html(func_name, func_data)
+        page_html = make_page(template_html, single_content, nav_id)
+        
+        page_file = os.path.join(DOCS_DIR, f"{func_name}.html")
+        with open(page_file, "w", encoding="utf-8") as f:
+            f.write(page_html)
+        print(f"[SUCCESS] Generated: {func_name}.html")
+
+    print("[SYNC] Generating 'FullScript.html'...")
+    examples_html = make_page(template_html, FULL_SCRIPT_CONTENT, "nav-example")
+    examples_file = os.path.join(DOCS_DIR, "FullScript.html")
+    with open(examples_file, "w", encoding="utf-8") as f:
+        f.write(examples_html)
+    print("[SUCCESS] Generated: FullScript.html")
 
     sync_mcp(dump_data)
 

@@ -44,7 +44,7 @@
 
                 <div class="nav-group">
                     <span class="group-title">Getting Started</span>
-                    <a href="index.html#introduction" class="nav-item active" id="nav-intro"><i
+                    <a href="index.html#introduction" class="nav-item" id="nav-intro"><i
                             class="fa-solid fa-circle-info"></i> Introduction</a>
                     <a href="index.html#getting-started" class="nav-item" id="nav-boot"><i class="fa-solid fa-rocket"></i> Quick
                         Start</a>
@@ -64,7 +64,7 @@
                             class="fa-solid fa-sliders"></i> CreateControlHUD</a>
                     <a href="AddCleanup.html" class="nav-item" id="nav-cleanup"><i
                             class="fa-solid fa-trash-can"></i> AddCleanup</a>
-                    <a href="CreateTimer.html" class="nav-item" id="nav-timer"><i
+                    <a href="CreateTimer.html" class="nav-item active" id="nav-timer"><i
                             class="fa-solid fa-clock"></i> CreateTimer</a>
 <!-- SIDEBAR_CORE_END -->
                 </div>
@@ -122,75 +122,95 @@
         <main class="content-container">
 
             <!-- MAIN_CONTENT_START -->
-            <!-- Introduction -->
-            <section id="introduction" class="doc-section">
+            <!-- CreateTimer -->
+            <section id="create-timer" class="doc-section">
                 <div class="breadcrumb">
-                    <span class="current">Getting Started</span>
-                </div>
-                <div class="section-label">Overview</div>
-                <h1>MonoUI Documentation</h1>
-                <p class="lead-text">A premium, modular Roblox UI library with dark-mode aesthetics, auto-saving config,
-                    live search, and autoexec support.</p>
-                <div class="alert note">
-                    <i class="fa-solid fa-lightbulb alert-icon"></i>
-                    <div>All interactive components automatically sync their values to the global config when modified.
-                        Use <code>flag</code> to identify each element.</div>
-                </div>
-            </section>
-
-            <!-- Quick Start -->
-            <section id="getting-started" class="doc-section">
-                <div class="breadcrumb">
-                    <a href="index.html#introduction">Getting Started</a>
+                    <a href="index.html#introduction">Core</a>
                     <span class="sep">›</span>
-                    <span class="current">Quick Start</span>
+                    <span class="current">CreateTimer</span>
                 </div>
-                <div class="section-label">Setup</div>
-                <h2>Quick Start</h2>
-                <p>Paste the loadstring bootstrapper into your script to initialize MonoUI.</p>
+                <div class="section-label">Core API</div>
+                <h2>CreateTimer</h2>
+                <p>Creates a new Timer object from the built-in <code>sleitnick/timer</code> package. Provides a memory-safe, pauseable, and highly accurate alternative to <code>while true do</code> loops.</p>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Argument</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>interval</td>
+                            <td><span class="type type-number">number</span></td>
+                            <td>Tick interval duration in seconds (defaults to 1).</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h3>Code Snippet</h3>
                 <div class="code-container">
                     <div class="code-header">
                         <span class="code-lang">Lua</span>
                         <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
                     </div>
-                    <pre><code class="language-lua">local MonoUI = loadstring(game:HttpGet("https://github.com/BloodLetters/mono-ui/releases/latest/download/Release.luau"))()</code></pre>
+                    <pre><code class="language-lua">-- Create a timer that ticks every 1 second
+local myTimer = MonoUI.CreateTimer(1)
+
+-- Connect logic to the Tick event
+myTimer.Tick:Connect(function()
+    print("Timer ticked!")
+end)
+
+-- Register the timer with the window to automatically stop it when the GUI closes
+window:AddCleanup(myTimer)
+
+-- Start the timer
+myTimer:Start()
+
+-- You can also use:
+-- myTimer:Pause()
+-- myTimer:Resume()
+-- myTimer:Stop()</code></pre>
+                </div>
+                <h3>Complete Script Usage</h3>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Lua (Full Setup)</span>
+                        <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-lua">-- Load the MonoUI Library
+local MonoUI = loadstring(game:HttpGet("https://github.com/BloodLetters/mono-ui/releases/latest/download/Release.luau"))()
+
+-- Create the main Window
+local window = MonoUI.CreateWindow({
+    Title      = "mono ui",
+    ConfigName = "mono_config",
+    AutoSave   = true,
+})
+
+-- Create a timer that ticks every 1 second
+local myTimer = MonoUI.CreateTimer(1)
+
+-- Connect logic to the Tick event
+myTimer.Tick:Connect(function()
+    print("Timer ticked!")
+end)
+
+-- Register the timer with the window to automatically stop it when the GUI closes
+window:AddCleanup(myTimer)
+
+-- Start the timer
+myTimer:Start()
+
+-- You can also use:
+-- myTimer:Pause()
+-- myTimer:Resume()
+-- myTimer:Stop()</code></pre>
                 </div>
             </section>
 
-            <!-- Features -->
-            <section id="features" class="doc-section">
-                <div class="breadcrumb">
-                    <a href="index.html#introduction">Getting Started</a>
-                    <span class="sep">›</span>
-                    <span class="current">Features</span>
-                </div>
-                <div class="section-label">Overview</div>
-                <h2>Features</h2>
-                <p>MonoUI ships with a full suite of UI primitives and productivity features out of the box.</p>
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <i class="fa-solid fa-magnifying-glass feature-icon"></i>
-                        <h3>Live Search</h3>
-                        <p>Built-in search bar filters components in real-time as you type.</p>
-                    </div>
-                    <div class="feature-card">
-                        <i class="fa-solid fa-floppy-disk feature-icon"></i>
-                        <h3>Auto Save & Load</h3>
-                        <p>Serializes all component states including Color3 and KeyCodes.</p>
-                    </div>
-                    <div class="feature-card">
-                        <i class="fa-solid fa-rotate feature-icon"></i>
-                        <h3>AutoExec</h3>
-                        <p>Queues script re-execution on server teleport automatically.</p>
-                    </div>
-                    <div class="feature-card">
-                        <i class="fa-solid fa-arrows-to-eye feature-icon"></i>
-                        <h3>Control HUD</h3>
-                        <p>Draggable floating quick-toggle HUD with icon-only buttons.</p>
-                    </div>
-                </div>
-            </section>
-            <!-- MAIN_CONTENT_END -->
+<!-- MAIN_CONTENT_END -->
 
         </main>
     </div>
