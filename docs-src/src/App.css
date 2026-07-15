@@ -2,7 +2,7 @@
    MonoUI Docs — Minimalist Dark, JetBrains Mono
    ========================================================= */
 
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght=0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
 
 :root {
     --bg: #0a0a0a;
@@ -239,6 +239,7 @@ body {
     font-weight: 400;
     transition: color var(--t), background var(--t);
     position: relative;
+    cursor: pointer;
 }
 
 .nav-item:hover {
@@ -302,13 +303,14 @@ body {
     font-weight: 400;
 }
 
-.breadcrumb a {
+.breadcrumb a, .breadcrumb span.link-span {
     color: var(--text-3);
     text-decoration: none;
     transition: color var(--t);
+    cursor: pointer;
 }
 
-.breadcrumb a:hover {
+.breadcrumb a:hover, .breadcrumb span.link-span:hover {
     color: var(--text-2);
 }
 

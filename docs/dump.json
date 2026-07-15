@@ -1,22 +1,76 @@
 {
-    "CreateButton": {
+    "CreateSlider": {
         "type": "components",
         "label": "Components",
-        "display_name": "Button",
-        "description": "An interactive button that runs a custom function when clicked.",
+        "display_name": "Slider",
+        "description": "A draggable range input with min/max bounds and optional decimal precision.",
         "arguments": [
             {
                 "name": "callback",
                 "type": "function",
-                "description": "Fires when the button is clicked."
+                "description": "Fires with the current numeric value."
+            },
+            {
+                "name": "default",
+                "type": "number",
+                "description": "Initial value."
+            },
+            {
+                "name": "flag",
+                "type": "string",
+                "description": "Unique key for config saving."
+            },
+            {
+                "name": "max",
+                "type": "number",
+                "description": "Maximum value of the range."
+            },
+            {
+                "name": "min",
+                "type": "number",
+                "description": "Minimum value of the range."
             },
             {
                 "name": "text",
                 "type": "string",
-                "description": "Text displayed on the button."
+                "description": "Label for the slider row."
             }
         ],
-        "example": "tab:CreateButton({\n    text     = \"Force Teleport\",\n    callback = function()\n        print(\"Teleport button pressed.\")\n    end,\n})"
+        "example": "tab:CreateSlider({\n    text     = \"FOV Range\",\n    min      = 10,\n    max      = 200,\n    default  = 90,\n    flag     = \"aimbot_fov\",\n    callback = function(value)\n        print(\"FOV:\", value)\n    end,\n})"
+    },
+    "CreateParagraph": {
+        "type": "components",
+        "label": "Components",
+        "display_name": "Paragraph",
+        "description": "Renders a beautifully formatted, auto-wrapping text block with rich text support.",
+        "arguments": [
+            {
+                "name": "align",
+                "type": "Enum.TextXAlignment",
+                "description": "Horizontal alignment (defaults to Left)."
+            },
+            {
+                "name": "color",
+                "type": "Color3",
+                "description": "Text color (defaults to light gray)."
+            },
+            {
+                "name": "font",
+                "type": "Font",
+                "description": "Custom FontFace to apply."
+            },
+            {
+                "name": "size",
+                "type": "number",
+                "description": "Font size (defaults to 12)."
+            },
+            {
+                "name": "text",
+                "type": "string",
+                "description": "The paragraph text to display. Supports RichText tags."
+            }
+        ],
+        "example": "tab:CreateParagraph({\n    text  = \"<b>MonoUI</b> is a premium, modular Roblox UI library. Supports <i>RichText</i> formatting out of the box!\",\n    size  = 13,\n    color = Color3.fromRGB(242, 242, 242),\n})"
     },
     "CreateColorPicker": {
         "type": "components",
@@ -47,6 +101,49 @@
         ],
         "example": "tab:CreateColorPicker({\n    text     = \"ESP Color\",\n    default  = Color3.fromRGB(255, 0, 0),\n    flag     = \"esp_color\",\n    callback = function(color)\n        print(\"Color changed:\", color)\n    end,\n})"
     },
+    "CreateKeybind": {
+        "type": "components",
+        "label": "Components",
+        "display_name": "Keybind",
+        "description": "Allows the user to bind a keybind shortcut to toggle/trigger functions. Click to rebind, press Escape to unbind.",
+        "arguments": [
+            {
+                "name": "callback",
+                "type": "function",
+                "description": "Fires with the new KeyCode when bound/triggered."
+            },
+            {
+                "name": "default",
+                "type": "Enum.KeyCode",
+                "description": "Initial bound KeyCode."
+            },
+            {
+                "name": "flag",
+                "type": "string",
+                "description": "Unique key for config saving."
+            },
+            {
+                "name": "text",
+                "type": "string",
+                "description": "Label for the keybind."
+            }
+        ],
+        "example": "tab:CreateKeybind({\n    text     = \"Toggle GUI\",\n    default  = Enum.KeyCode.RightControl,\n    flag     = \"gui_toggle\",\n    callback = function(key)\n        print(\"Keybind triggered:\", key.Name)\n    end,\n})"
+    },
+    "CreateSection": {
+        "type": "layout",
+        "label": "Layout",
+        "display_name": "CreateSection",
+        "description": "Inserts a visual section divider with a label to group related components.",
+        "arguments": [
+            {
+                "name": "text",
+                "type": "string",
+                "description": "Section heading label."
+            }
+        ],
+        "example": "tab:CreateSection({ text = \"Combat Hacks\" })"
+    },
     "CreateDivider": {
         "type": "components",
         "label": "Components",
@@ -65,6 +162,54 @@
             }
         ],
         "example": "tab:CreateDivider({\n    height = 16,\n    line   = true,\n})"
+    },
+    "CreateLogger": {
+        "type": "components",
+        "label": "Components",
+        "display_name": "Logger",
+        "description": "An in-app console widget that displays color-coded activity logs. Supports INFO, SUCCESS, WARNING, and ERROR levels.",
+        "arguments": [
+            {
+                "name": "height",
+                "type": "number",
+                "description": "Pixel height of the log area."
+            },
+            {
+                "name": "text",
+                "type": "string",
+                "description": "Console panel header label."
+            }
+        ],
+        "example": "local log = tab:CreateLogger({ text = \"Console\", height = 280 })\n\nlog:Log(\"INFO\",    \"Script loaded.\")\nlog:Log(\"SUCCESS\", \"ESP enabled.\")\nlog:Log(\"WARNING\", \"High ping detected.\")\nlog:Log(\"ERROR\",   \"Target not found.\")"
+    },
+    "CreateToggle": {
+        "type": "components",
+        "label": "Components",
+        "display_name": "Toggle",
+        "description": "A checkbox-style switch for boolean values. State is persisted to config when a flag is provided.",
+        "arguments": [
+            {
+                "name": "callback",
+                "type": "function",
+                "description": "Fires with the new boolean state."
+            },
+            {
+                "name": "default",
+                "type": "boolean",
+                "description": "Initial state (true/false)."
+            },
+            {
+                "name": "flag",
+                "type": "string",
+                "description": "Unique key for config saving."
+            },
+            {
+                "name": "text",
+                "type": "string",
+                "description": "Label for the toggle."
+            }
+        ],
+        "example": "tab:CreateToggle({\n    text     = \"Silent Aim\",\n    default  = false,\n    flag     = \"silent_aim\",\n    callback = function(state)\n        print(\"Silent Aim:\", state)\n    end,\n})"
     },
     "CreateDropdown": {
         "type": "components",
@@ -139,87 +284,24 @@
         ],
         "example": "tab:CreateInput({\n    text        = \"Webhook URL\",\n    placeholder = \"https://discord.com/api/webhooks/...\",\n    default     = \"\",\n    flag        = \"webhook_url\",\n    callback    = function(url)\n        print(\"Webhook:\", url)\n    end,\n})"
     },
-    "CreateKeybind": {
+    "CreateButton": {
         "type": "components",
         "label": "Components",
-        "display_name": "Keybind",
-        "description": "Allows the user to bind a keybind shortcut to toggle/trigger functions. Click to rebind, press Escape to unbind.",
+        "display_name": "Button",
+        "description": "An interactive button that runs a custom function when clicked.",
         "arguments": [
             {
                 "name": "callback",
                 "type": "function",
-                "description": "Fires with the new KeyCode when bound/triggered."
-            },
-            {
-                "name": "default",
-                "type": "Enum.KeyCode",
-                "description": "Initial bound KeyCode."
-            },
-            {
-                "name": "flag",
-                "type": "string",
-                "description": "Unique key for config saving."
+                "description": "Fires when the button is clicked."
             },
             {
                 "name": "text",
                 "type": "string",
-                "description": "Label for the keybind."
+                "description": "Text displayed on the button."
             }
         ],
-        "example": "tab:CreateKeybind({\n    text     = \"Toggle GUI\",\n    default  = Enum.KeyCode.RightControl,\n    flag     = \"gui_toggle\",\n    callback = function(key)\n        print(\"Keybind triggered:\", key.Name)\n    end,\n})"
-    },
-    "CreateLogger": {
-        "type": "components",
-        "label": "Components",
-        "display_name": "Logger",
-        "description": "An in-app console widget that displays color-coded activity logs. Supports INFO, SUCCESS, WARNING, and ERROR levels.",
-        "arguments": [
-            {
-                "name": "height",
-                "type": "number",
-                "description": "Pixel height of the log area."
-            },
-            {
-                "name": "text",
-                "type": "string",
-                "description": "Console panel header label."
-            }
-        ],
-        "example": "local log = tab:CreateLogger({ text = \"Console\", height = 280 })\n\nlog:Log(\"INFO\",    \"Script loaded.\")\nlog:Log(\"SUCCESS\", \"ESP enabled.\")\nlog:Log(\"WARNING\", \"High ping detected.\")\nlog:Log(\"ERROR\",   \"Target not found.\")"
-    },
-    "CreateParagraph": {
-        "type": "components",
-        "label": "Components",
-        "display_name": "Paragraph",
-        "description": "Renders a beautifully formatted, auto-wrapping text block with rich text support.",
-        "arguments": [
-            {
-                "name": "align",
-                "type": "Enum.TextXAlignment",
-                "description": "Horizontal alignment (defaults to Left)."
-            },
-            {
-                "name": "color",
-                "type": "Color3",
-                "description": "Text color (defaults to light gray)."
-            },
-            {
-                "name": "font",
-                "type": "Font",
-                "description": "Custom FontFace to apply."
-            },
-            {
-                "name": "size",
-                "type": "number",
-                "description": "Font size (defaults to 12)."
-            },
-            {
-                "name": "text",
-                "type": "string",
-                "description": "The paragraph text to display. Supports RichText tags."
-            }
-        ],
-        "example": "tab:CreateParagraph({\n    text  = \"<b>MonoUI</b> is a premium, modular Roblox UI library. Supports <i>RichText</i> formatting out of the box!\",\n    size  = 13,\n    color = Color3.fromRGB(242, 242, 242),\n})"
+        "example": "tab:CreateButton({\n    text     = \"Force Teleport\",\n    callback = function()\n        print(\"Teleport button pressed.\")\n    end,\n})"
     },
     "CreatePlayerList": {
         "type": "components",
@@ -244,59 +326,6 @@
             }
         ],
         "example": "tab:CreatePlayerList({\n    text   = \"Active Server Players\",\n    height = 280,\n    buttons = {\n        {\n            text = \"TP\",\n            type = \"button\",\n            callback = function(player)\n                print(\"Teleporting to: \" .. player.Name)\n            end\n        },\n        {\n            text = \"ESP\",\n            type = \"toggle\",\n            callback = function(player, active)\n                print(\"ESP for \" .. player.Name .. \" set to \" .. tostring(active))\n            end\n        }\n    }\n})"
-    },
-    "CreateSection": {
-        "type": "layout",
-        "label": "Layout",
-        "display_name": "CreateSection",
-        "description": "Inserts a visual section divider with a label to group related components.",
-        "arguments": [
-            {
-                "name": "text",
-                "type": "string",
-                "description": "Section heading label."
-            }
-        ],
-        "example": "tab:CreateSection({ text = \"Combat Hacks\" })"
-    },
-    "CreateSlider": {
-        "type": "components",
-        "label": "Components",
-        "display_name": "Slider",
-        "description": "A draggable range input with min/max bounds and optional decimal precision.",
-        "arguments": [
-            {
-                "name": "callback",
-                "type": "function",
-                "description": "Fires with the current numeric value."
-            },
-            {
-                "name": "default",
-                "type": "number",
-                "description": "Initial value."
-            },
-            {
-                "name": "flag",
-                "type": "string",
-                "description": "Unique key for config saving."
-            },
-            {
-                "name": "max",
-                "type": "number",
-                "description": "Maximum value of the range."
-            },
-            {
-                "name": "min",
-                "type": "number",
-                "description": "Minimum value of the range."
-            },
-            {
-                "name": "text",
-                "type": "string",
-                "description": "Label for the slider row."
-            }
-        ],
-        "example": "tab:CreateSlider({\n    text     = \"FOV Range\",\n    min      = 10,\n    max      = 200,\n    default  = 90,\n    flag     = \"aimbot_fov\",\n    callback = function(value)\n        print(\"FOV:\", value)\n    end,\n})"
     },
     "CreateTargetBody": {
         "type": "components",
@@ -336,35 +365,6 @@
             }
         ],
         "example": "tab:CreateTargetBody({\n    text          = \"Selective Hitboxes\",\n    multiple      = true,\n    default       = {\"Head\", \"Torso\"},\n    disabledParts = {\"LeftArm\", \"RightArm\"},\n    flag          = \"target_hitboxes\",\n    callback      = function(parts)\n        print(\"Active hitboxes:\", table.concat(parts, \", \"))\n    end,\n})"
-    },
-    "CreateToggle": {
-        "type": "components",
-        "label": "Components",
-        "display_name": "Toggle",
-        "description": "A checkbox-style switch for boolean values. State is persisted to config when a flag is provided.",
-        "arguments": [
-            {
-                "name": "callback",
-                "type": "function",
-                "description": "Fires with the new boolean state."
-            },
-            {
-                "name": "default",
-                "type": "boolean",
-                "description": "Initial state (true/false)."
-            },
-            {
-                "name": "flag",
-                "type": "string",
-                "description": "Unique key for config saving."
-            },
-            {
-                "name": "text",
-                "type": "string",
-                "description": "Label for the toggle."
-            }
-        ],
-        "example": "tab:CreateToggle({\n    text     = \"Silent Aim\",\n    default  = false,\n    flag     = \"silent_aim\",\n    callback = function(state)\n        print(\"Silent Aim:\", state)\n    end,\n})"
     },
     "CreateWindow": {
         "type": "core",
@@ -579,43 +579,5 @@
         "description": "Creates a vertical column stack (VBar) inside an HBar layout container. Allows vertical stacking of any standard components.",
         "arguments": [],
         "example": "local vbar1 = hbar:CreateVBar()\nvbar1:CreateToggle({ text = \"Toggle in VBar\" })"
-    },
-    "RegisterIcon": {
-        "type": "core",
-        "label": "Core API",
-        "display_name": "RegisterIcon",
-        "description": "Registers a custom icon by mapping a name key to a Roblox asset ID.",
-        "arguments": [
-            {
-                "name": "name",
-                "type": "string",
-                "description": "The custom icon name/key (e.g. <code>my-logo</code>)."
-            },
-            {
-                "name": "assetId",
-                "type": "number | string",
-                "description": "The Roblox asset ID (e.g. <code>12345678</code> or <code>rbxassetid://12345678</code>)."
-            }
-        ],
-        "example": "MonoUI.RegisterIcon(\"sonar-crosshair\", 123456789)\n-- Use in components:\ntab:CreateToggle({ text = \"Aimbot\", icon = \"sonar-crosshair\" })"
-    },
-    "RegisterIconPack": {
-        "type": "core",
-        "label": "Core API",
-        "display_name": "RegisterIconPack",
-        "description": "Registers a custom icon pack under a namespace. Supports spritesheets.",
-        "arguments": [
-            {
-                "name": "packName",
-                "type": "string",
-                "description": "The icon pack namespace prefix (e.g. <code>sonar</code>)."
-            },
-            {
-                "name": "mapping",
-                "type": "table",
-                "description": "A dictionary mapping icon names to asset IDs or spritesheet offset tables."
-            }
-        ],
-        "example": "MonoUI.RegisterIconPack(\"sonar\", {\n    crosshair = 123456789,\n    shield = {\n        id = 987654321,\n        offset = Vector2.new(0, 0),\n        size = Vector2.new(32, 32)\n    }\n})\n-- Use in components:\ntab:CreateToggle({ text = \"Combat\", icon = \"sonar:crosshair\" })"
     }
 }

@@ -1245,43 +1245,6 @@ def main():
         json.dump(dump_data, f, indent=4)
     print(f"[SUCCESS] Saved parsed API definitions to '{DUMP_FILE}'")
 
-    print("[SYNC] Preparing HTML components...")
-    sidebar_core = build_sidebar_html(dump_data, "Core")
-    sidebar_layout = build_sidebar_html(dump_data, "Layout")
-    sidebar_components = build_sidebar_html(dump_data, "Components")
-
-    print("[SYNC] Fetching latest release version from GitHub...")
-    version = get_latest_release()
-    print(f"[SYNC] Latest release version is: {version}")
-
-    print("[SYNC] Updating 'index.html' template...")
-    update_index_html(sidebar_core, sidebar_layout, sidebar_components, version)
-    print("[SUCCESS] Template index.html has been updated!")
-
-    # Read the compiled index.html to use as our layout template
-    with open(INDEX_HTML, "r", encoding="utf-8") as f:
-        template_html = f.read()
-
-    print("[SYNC] Generating individual API pages...")
-    for func_name, func_data in dump_data.items():
-        meta = METADATA.get(func_name, {})
-        nav_id = meta.get("nav_id", f"nav-{func_name.lower().replace('create', '')}")
-        
-        single_content = build_single_content_html(func_name, func_data)
-        page_html = make_page(template_html, single_content, nav_id)
-        
-        page_file = os.path.join(DOCS_DIR, f"{func_name}.html")
-        with open(page_file, "w", encoding="utf-8") as f:
-            f.write(page_html)
-        print(f"[SUCCESS] Generated: {func_name}.html")
-
-    print("[SYNC] Generating 'FullScript.html'...")
-    examples_html = make_page(template_html, FULL_SCRIPT_CONTENT, "nav-example")
-    examples_file = os.path.join(DOCS_DIR, "FullScript.html")
-    with open(examples_file, "w", encoding="utf-8") as f:
-        f.write(examples_html)
-    print("[SUCCESS] Generated: FullScript.html")
-
     sync_mcp(dump_data)
 
 if __name__ == "__main__":

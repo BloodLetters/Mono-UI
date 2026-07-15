@@ -1,0 +1,11 @@
+- [x] Initialize the Vite React project in `docs-src/`
+- [x] Configure `package.json` and `vite.config.js` in `docs-src/`
+- [x] Create `index.html` template in `docs-src/`
+- [x] Implement `src/App.css` (copying and adapting styling)
+- [x] Implement `src/App.jsx` and `src/main.jsx`
+- [x] Modify `sync.py` to disable obsolete HTML generation
+- [x] Run `python3 sync.py` to build the new `dump.json`
+- [x] Build the React application via `npm run build`
+- [x] Delete old redundant HTML documentation files in `docs/`
+- [x] Run python3 sync.py again to write dump.json into built folder
+- [/] Perform manual and automated validation of the built site (local dev build works, but automated browser walkthrough failed due to a system environment issue with Playwright)
