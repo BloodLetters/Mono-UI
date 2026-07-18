@@ -29,12 +29,21 @@ jobs:
       - name: Fix Wally Requires for Darklua
         run: python requires.py
         
-      - name: Build with Darklua
+      - name: Build MonoUI with Darklua
         run: darklua process src/init.lua Release.luau
+
+      - name: Build Vanity with Darklua
+        run: darklua process modules/Vanity/init.lua Vanity.luau
+
+      - name: Build Lead with Darklua
+        run: darklua process modules/Lead/init.lua Lead.luau
         
-      - name: Upload Release Asset
+      - name: Upload Release Assets
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event.inputs.version || github.ref_name }}
           name: Release ${{ github.event.inputs.version || github.ref_name }}
-          files: Release.luau
+          files: |
+            Release.luau
+            Vanity.luau
+            Lead.luau

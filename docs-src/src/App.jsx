@@ -38,7 +38,9 @@ const SIDEBAR_ITEMS = {
     { id: "CreateToggle", name: "CreateToggle", icon: "fa-toggle-on", path: "#/CreateToggle" },
   ],
   modules: [
-    { id: "profile", name: "Profile", icon: "fa-user-circle", path: "#/modules/profile" }
+    { id: "profile", name: "Profile", icon: "fa-user-circle", path: "#/modules/profile" },
+    { id: "vanity", name: "Vanity", icon: "fa-eye", path: "#/modules/vanity" },
+    { id: "lead", name: "Lead", icon: "fa-crosshairs", path: "#/modules/lead" }
   ],
   examples: [
     { id: "full-script", name: "Full Script", icon: "fa-code", path: "#/examples/full-script" }
@@ -80,6 +82,20 @@ const STATIC_SEARCH_ITEMS = [
     group: "Modules",
     icon: "fa-user-circle",
     description: "Renders a player profile widget in the sidebar."
+  },
+  {
+    name: "Vanity Module",
+    url: "#/modules/vanity",
+    group: "Modules",
+    icon: "fa-eye",
+    description: "Modular ESP system — Box, Name, Health Bar, Highlight/Cham, Visibility Colors."
+  },
+  {
+    name: "Lead Module",
+    url: "#/modules/lead",
+    group: "Modules",
+    icon: "fa-crosshairs",
+    description: "Flexible combat module — Aimbot, Trigger Bot, Silent Aim with custom character support."
   }
 ];
 
@@ -332,6 +348,8 @@ export default function App() {
       return "introduction";
     }
     const cleanRoute = hash.replace("#/", "");
+    if (cleanRoute === "modules/vanity") return "vanity";
+    if (cleanRoute === "modules/lead") return "lead";
     if (cleanRoute.startsWith("modules/")) return "profile";
     if (cleanRoute.startsWith("examples/")) return "full-script";
     return cleanRoute;
@@ -632,6 +650,401 @@ local window = MonoUI.CreateWindow({
     Subtitle = "premium modular library",
     Size     = UDim2.fromOffset(600, 400),
 })`} />
+              </section>
+            </>
+          )}
+
+          {/* Modules: Vanity Page */}
+          {hash === "#/modules/vanity" && (
+            <>
+              <section id="vanity-module" className="doc-section">
+                <div className="breadcrumb">
+                  <span className="link-span" onClick={() => window.location.hash = "#/modules/profile"}>Modules</span>
+                  <span className="sep">›</span>
+                  <span className="current">Vanity</span>
+                </div>
+                <div className="section-label">Module</div>
+                <h2>Vanity ESP</h2>
+                <p>Vanity is a <strong>modular ESP system</strong> for Roblox — Box, Name, Health Bar, Highlight/Cham, and Visibility Colors. Zero external dependencies, uses only Roblox built-in APIs and <code>Drawing</code> objects.</p>
+
+                <div className="alert note">
+                  <i className="fa-solid fa-lightbulb alert-icon"></i>
+                  <div>Vanity is a standalone module — <strong>no MonoUI window required</strong>. You can use it independently or pair it with MonoUI toggles/sliders for a full GUI experience.</div>
+                </div>
+
+                <h3>Quick Start</h3>
+                <CodeBlock code={`local Vanity = loadstring(game:HttpGet("https://github.com/BloodLetters/mono-ui/releases/latest/download/Vanity.luau"))()
+
+local esp = Vanity.new({
+    BoxEnabled = true,
+    NameEnabled = true,
+    HealthEnabled = true,
+    HighlightEnabled = false,
+    VisibilityColor = false,
+    MaxDistance = 1000,
+})
+
+-- ESP runs automatically every RenderStepped`} />
+
+                <h3>API</h3>
+                <h4><code>Vanity.new(options)</code></h4>
+                <p>Creates and starts the ESP system. Accepts an optional options table.</p>
+
+                <h4>Toggles</h4>
+                <table className="params-table">
+                  <thead>
+                    <tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>BoxEnabled</td><td><span className="type type-boolean">boolean</span></td><td><code>false</code></td><td>2D box around players</td></tr>
+                    <tr><td>NameEnabled</td><td><span className="type type-boolean">boolean</span></td><td><code>false</code></td><td>Player name + distance above box</td></tr>
+                    <tr><td>HealthEnabled</td><td><span className="type type-boolean">boolean</span></td><td><code>false</code></td><td>Health bar on left side of box</td></tr>
+                    <tr><td>HighlightEnabled</td><td><span className="type type-boolean">boolean</span></td><td><code>false</code></td><td>3D highlight/cham on character</td></tr>
+                    <tr><td>MaxDistance</td><td><span className="type type-number">number</span></td><td><code>1000</code></td><td>Max render distance (studs)</td></tr>
+                    <tr><td>VisibilityColor</td><td><span className="type type-boolean">boolean</span></td><td><code>false</code></td><td>Highlight turns visible/invisible colors</td></tr>
+                  </tbody>
+                </table>
+
+                <h4>Visual Customization</h4>
+                <table className="params-table">
+                  <thead>
+                    <tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>BoxColor</td><td><span className="type type-color3">Color3</span></td><td><code>(160,160,160)</code></td><td>Box outline color</td></tr>
+                    <tr><td>BoxOutlineColor</td><td><span className="type type-color3">Color3</span></td><td><code>(60,60,60)</code></td><td>Box outer outline color</td></tr>
+                    <tr><td>NameColor</td><td><span className="type type-color3">Color3</span></td><td><code>(255,255,255)</code></td><td>Name text color</td></tr>
+                    <tr><td>NameSize</td><td><span className="type type-number">number</span></td><td><code>13</code></td><td>Name text size</td></tr>
+                    <tr><td>HighlightColor</td><td><span className="type type-color3">Color3</span></td><td><code>(0,162,255)</code></td><td>Highlight fill color</td></tr>
+                    <tr><td>VisibleColor</td><td><span className="type type-color3">Color3</span></td><td><code>(255,230,0)</code></td><td>Highlight color when visible</td></tr>
+                  </tbody>
+                </table>
+
+                <h4>Custom Player Models</h4>
+                <p>For non-standard R6/R15 characters, you can customize part names, offsets, and health class:</p>
+                <table className="params-table">
+                  <thead>
+                    <tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>RootPart</td><td><span className="type type-string">string | function</span></td><td><code>"HumanoidRootPart"</code></td><td>Part name or <code>function(char) =&gt; BasePart</code></td></tr>
+                    <tr><td>HeadPart</td><td><span className="type type-string">string | function</span></td><td><code>"Head"</code></td><td>Part name or <code>function(char) =&gt; BasePart</code></td></tr>
+                    <tr><td>HealthClass</td><td><span className="type type-string">string</span></td><td><code>"Humanoid"</code></td><td>Class name for health object</td></tr>
+                    <tr><td>BoxTopOffset</td><td><span className="type type-vector3">Vector3</span></td><td><code>(0, 3, 0)</code></td><td>Offset from RootPart for box top</td></tr>
+                    <tr><td>BoxBottomOffset</td><td><span className="type type-vector3">Vector3</span></td><td><code>(0, -3.5, 0)</code></td><td>Offset from RootPart for box bottom</td></tr>
+                    <tr><td>IsValid</td><td><span className="type type-function">function</span></td><td><code>nil</code></td><td>Custom validity: <code>function(char) =&gt; bool</code></td></tr>
+                  </tbody>
+                </table>
+
+                <h3>Custom Model Example</h3>
+                <CodeBlock code={`local esp = Vanity.new({
+    BoxEnabled = true,
+    NameEnabled = true,
+
+    -- NPC dengan part "Torso" bukan "HumanoidRootPart"
+    RootPart = "Torso",
+
+    -- Function lookup untuk head
+    HeadPart = function(char)
+        return char:FindFirstChild("Cabeza")
+            or char:FindFirstChild("Head")
+    end,
+
+    -- Custom health class
+    HealthClass = "MonsterHealth",
+
+    -- Model lebih besar
+    BoxTopOffset = Vector3.new(0, 6, 0),
+    BoxBottomOffset = Vector3.new(0, -7, 0),
+
+    -- Custom validity untuk NPC tanpa Humanoid
+    IsValid = function(char)
+        return char:FindFirstChild("IsNPC") ~= nil
+    end,
+})`} />
+
+                <h4><code>esp:UpdateOptions(options)</code></h4>
+                <p>Update settings at runtime — ideal for GUI toggles/sliders. Only pass the keys you want to change.</p>
+
+                <CodeBlock code={`esp:UpdateOptions({
+    BoxEnabled = false,
+    HighlightEnabled = true,
+    MaxDistance = 500,
+})`} />
+
+                <h4><code>esp:Destroy()</code></h4>
+                <p>Full cleanup — disconnects all events, removes Drawing objects and Highlights, stops the render loop.</p>
+
+                <CodeBlock code={`esp:Destroy()`} />
+
+                <h3>Integration with MonoUI</h3>
+                <CodeBlock code={`local Vanity = loadstring(game:HttpGet("https://github.com/BloodLetters/mono-ui/releases/latest/download/Vanity.luau"))()
+local esp = Vanity.new()
+
+-- In your GUI tab:
+visualsTab:CreateToggle({
+    text = "Box ESP",
+    default = false,
+    callback = function(state)
+        esp:UpdateOptions({ BoxEnabled = state })
+    end
+})
+
+visualsTab:CreateToggle({
+    text = "Name ESP",
+    default = false,
+    callback = function(state)
+        esp:UpdateOptions({ NameEnabled = state })
+    end
+})
+
+visualsTab:CreateToggle({
+    text = "Health ESP",
+    default = false,
+    callback = function(state)
+        esp:UpdateOptions({ HealthEnabled = state })
+    end
+})
+
+visualsTab:CreateToggle({
+    text = "Cham Highlight",
+    default = false,
+    callback = function(state)
+        esp:UpdateOptions({ HighlightEnabled = state })
+    end
+})
+
+visualsTab:CreateSlider({
+    text = "Max ESP Distance",
+    min = 100,
+    max = 5000,
+    default = 1000,
+    suffix = " studs",
+    callback = function(value)
+        esp:UpdateOptions({ MaxDistance = value })
+    end
+})`} />
+
+                <h3>Global Cleanup</h3>
+                <CodeBlock code={`getgenv().VanityCleanUp = function()
+    esp:Destroy()
+end`} />
+              </section>
+            </>
+          )}
+
+          {/* Modules: Lead Page */}
+          {hash === "#/modules/lead" && (
+            <>
+              <section id="lead-module" className="doc-section">
+                <div className="breadcrumb">
+                  <span className="current">Modules</span>
+                  <span className="sep">›</span>
+                  <span className="current">Lead</span>
+                </div>
+                <div className="section-label">Module</div>
+                <h2>Lead — Combat Module</h2>
+                <p><strong>Lead</strong> is a flexible combat module — <strong>Aimbot</strong>, <strong>Trigger Bot</strong>, and <strong>Silent Aim</strong>. Designed for custom character models, custom health classes, and custom weapon systems. Zero external dependencies.</p>
+
+                <div className="callout">
+                  <i className="fa-solid fa-crosshairs"></i>
+                  <div>Every option that targets a part, checks health, or validates players supports <strong>function callbacks</strong> — making it compatible with any game, custom NPCs, or non-standard character rigs.</div>
+                </div>
+
+                <h3>Quick Start</h3>
+                <CodeBlock code={`local Lead = loadstring(game:HttpGet("https://github.com/BloodLetters/mono-ui/releases/latest/download/Lead.luau"))()
+
+local lead = Lead.new({
+    AimEnabled = true,
+    AimKey = Enum.UserInputType.MouseButton2,
+    TargetPart = "Head",
+    FovRadius = 120,
+    Smoothness = 2.5,
+    WallCheck = true,
+    StickyTarget = true,
+
+    TriggerEnabled = true,
+    TriggerFovRadius = 30,
+    Delay = 80,
+})
+
+lead:Start()`} />
+
+                <h3>MonoUI Integration</h3>
+                <CodeBlock code={`local Lead = loadstring(game:HttpGet("https://github.com/BloodLetters/mono-ui/releases/latest/download/Lead.luau"))()
+local lead = Lead.new()
+
+combatTab:CreateToggle({
+    text = "Aimbot",
+    default = false,
+    callback = function(state)
+        lead:UpdateOptions({ AimEnabled = state })
+    end
+})
+
+combatTab:CreateToggle({
+    text = "Sticky Target",
+    default = false,
+    callback = function(state)
+        lead:UpdateOptions({ StickyTarget = state })
+    end
+})
+
+combatTab:CreateSlider({
+    text = "Smoothness",
+    min = 1,
+    max = 20,
+    default = 1,
+    callback = function(value)
+        lead:UpdateOptions({ Smoothness = value })
+    end
+})
+
+combatTab:CreateSlider({
+    text = "FOV Radius",
+    min = 30,
+    max = 500,
+    default = 150,
+    suffix = " px",
+    callback = function(value)
+        lead:UpdateOptions({ FovRadius = value })
+    end
+})
+
+combatTab:CreateToggle({
+    text = "Wall Check",
+    default = false,
+    callback = function(state)
+        lead:UpdateOptions({ WallCheck = state })
+    end
+})
+
+combatTab:CreateToggle({
+    text = "Trigger Bot",
+    default = false,
+    callback = function(state)
+        lead:UpdateOptions({ TriggerEnabled = state })
+    end
+})
+
+combatTab:CreateToggle({
+    text = "Silent Aim",
+    default = false,
+    callback = function(state)
+        lead:UpdateOptions({
+            SilentAim = state,
+            AimKey = state and "always" or Enum.UserInputType.MouseButton2,
+        })
+    end
+})`} />
+
+                <h3>Custom Character Models</h3>
+                <div className="callout info">
+                  <i className="fa-solid fa-lightbulb"></i>
+                  <div>For games with custom NPCs, monsters, or non-standard character rigs — use function lookups instead of hardcoded part names.</div>
+                </div>
+                <CodeBlock code={`lead:UpdateOptions({
+    -- Custom target part (e.g. NPC has "Chest" not "Head")
+    TargetPart = function(character)
+        return character:FindFirstChild("Chest")
+            or character:FindFirstChild("Head")
+    end,
+
+    -- Custom health class
+    HealthClass = "MonsterHealth",
+
+    -- Only target NPCs
+    IsTargetValid = function(player, character)
+        return character:FindFirstChild("IsNPC") ~= nil
+    end,
+
+    -- Custom prediction (NPCs don't always have velocity)
+    PredictionFn = function(character, targetPart)
+        local root = character:FindFirstChild("HumanoidRootPart")
+        return targetPart.Position + (root and root.CFrame.LookVector * 4 or Vector3.zero)
+    end,
+
+    -- Custom FOV shape (e.g. rectangle)
+    FovMethod = function(camPos, partPos, screenCenter, screenPos, fovRadius)
+        local dx = math.abs(screenPos.X - screenCenter.X)
+        local dy = math.abs(screenPos.Y - screenCenter.Y)
+        return dx <= fovRadius * 1.5 and dy <= fovRadius * 0.5
+    end,
+})`} />
+
+                <h3>Silent Aim</h3>
+                <CodeBlock code={`lead:UpdateOptions({
+    SilentAim = true,
+    AimKey = "always",
+    SilentAimHook = function(worldPos)
+        -- Your weapon's fire function receives this world position
+        -- e.g. FireRemote:FireServer(worldPos)
+    end,
+})`} />
+
+                <h3>Custom Fire (Remote Weapons)</h3>
+                <CodeBlock code={`lead:UpdateOptions({
+    TriggerEnabled = true,
+    Fire = function()
+        local args = { [1] = "FireBullet", [2] = mouse.Hit.Position }
+        game.ReplicatedStorage.WeaponRemote:FireServer(unpack(args))
+    end,
+    BeforeFire = function(player, character, targetPart)
+        -- Only fire if target is close enough
+        return (targetPart.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude < 200
+    end,
+})`} />
+
+                <h3>API Reference</h3>
+                <h4><code>Lead.new(options?) → Lead</code></h4>
+                <div className="params-table-wrapper">
+                  <table>
+                    <thead><tr><th>Option</th><th>Default</th><th>Type</th><th>Description</th></tr></thead>
+                    <tbody>
+                      <tr><td><code>AimEnabled</code></td><td><code>false</code></td><td>boolean</td><td>Enable aimbot</td></tr>
+                      <tr><td><code>AimKey</code></td><td><code>MouseButton2</code></td><td>EnumItem / "always" / fn</td><td>Activation input</td></tr>
+                      <tr><td><code>AimMethod</code></td><td><code>"Camera"</code></td><td>"Camera" / "Mouse" / fn</td><td>How aim is applied</td></tr>
+                      <tr><td><code>TargetPart</code></td><td><code>"Head"</code></td><td>string / fn</td><td>Body part to target</td></tr>
+                      <tr><td><code>HealthClass</code></td><td><code>"Humanoid"</code></td><td>string</td><td>Custom health class name</td></tr>
+                      <tr><td><code>IsTargetValid</code></td><td><code>nil</code></td><td>fn / nil</td><td>Custom validity check</td></tr>
+                      <tr><td><code>FovRadius</code></td><td><code>150</code></td><td>number</td><td>FOV circle radius (pixels)</td></tr>
+                      <tr><td><code>FovMethod</code></td><td><code>nil</code></td><td>fn / nil</td><td>Custom FOV shape</td></tr>
+                      <tr><td><code>Smoothness</code></td><td><code>1</code></td><td>number</td><td>Interpolation speed</td></tr>
+                      <tr><td><code>StickyTarget</code></td><td><code>false</code></td><td>boolean</td><td>Lock onto same target</td></tr>
+                      <tr><td><code>WallCheck</code></td><td><code>false</code></td><td>boolean</td><td>Skip behind walls</td></tr>
+                      <tr><td><code>WallCheckIgnoreList</code></td><td><code>nil</code></td><td>table</td><td>Instances to ignore</td></tr>
+                      <tr><td><code>MaxDistance</code></td><td><code>nil</code></td><td>number / nil</td><td>Max studs distance</td></tr>
+                      <tr><td><code>PredictionFn</code></td><td><code>nil</code></td><td>fn / nil</td><td>Custom prediction</td></tr>
+                      <tr><td><code>TargetOffset</code></td><td><code>nil</code></td><td>Vector3 / fn / nil</td><td>Aim offset</td></tr>
+                      <tr><td><code>SilentAim</code></td><td><code>false</code></td><td>boolean</td><td>Redirect bullet silently</td></tr>
+                      <tr><td><code>SilentAimHook</code></td><td><code>nil</code></td><td>fn / nil</td><td>Receive world position</td></tr>
+                      <tr><td><code>TriggerEnabled</code></td><td><code>false</code></td><td>boolean</td><td>Enable trigger bot</td></tr>
+                      <tr><td><code>TriggerKey</code></td><td><code>nil</code></td><td>EnumItem / fn / nil</td><td>Trigger activation</td></tr>
+                      <tr><td><code>TriggerTargetPart</code></td><td><code>nil</code></td><td>string / fn / nil</td><td>Trigger target part</td></tr>
+                      <tr><td><code>TriggerFovRadius</code></td><td><code>50</code></td><td>number</td><td>Trigger FOV</td></tr>
+                      <tr><td><code>TriggerMaxDistance</code></td><td><code>1000</code></td><td>number</td><td>Trigger max distance</td></tr>
+                      <tr><td><code>TriggerWallCheck</code></td><td><code>false</code></td><td>boolean</td><td>Wall check trigger</td></tr>
+                      <tr><td><code>Delay</code></td><td><code>50</code></td><td>number</td><td>Fire rate (ms)</td></tr>
+                      <tr><td><code>Fire</code></td><td><code>nil</code></td><td>fn / nil</td><td>Custom fire function</td></tr>
+                      <tr><td><code>BeforeFire</code></td><td><code>nil</code></td><td>fn / nil</td><td>Pre-fire callback</td></tr>
+                      <tr><td><code>AfterFire</code></td><td><code>nil</code></td><td>fn / nil</td><td>Post-fire callback</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <h4>Methods</h4>
+                <div className="params-table-wrapper">
+                  <table>
+                    <thead><tr><th>Method</th><th>Description</th></tr></thead>
+                    <tbody>
+                      <tr><td><code>:Start()</code></td><td>Start aimbot + trigger bot loops</td></tr>
+                      <tr><td><code>:Stop()</code></td><td>Stop all loops</td></tr>
+                      <tr><td><code>:UpdateOptions(opts)</code></td><td>Partial option update at runtime</td></tr>
+                      <tr><td><code>:GetSilentAimPosition()</code></td><td>Get current silent aim world position</td></tr>
+                      <tr><td><code>:Destroy()</code></td><td>Full cleanup, disconnect all</td></tr>
+                    </tbody>
+                  </table>
+                </div>
               </section>
             </>
           )}

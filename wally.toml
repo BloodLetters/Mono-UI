@@ -7,3 +7,5 @@ realm = "dev"
 [dependencies]
 janitor = "howmanysmall/janitor@1.17.0"
 Timer = "sleitnick/timer@2.0.0"
+Vanity = "ashesh/vanity@0.1.0"
+Lead = "ashesh/lead@0.1.0"

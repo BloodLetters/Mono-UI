@@ -584,6 +584,201 @@ def generate_control_hud(buttons: list) -> str:
     return "\n".join(lines)
 
 
+def generate_vanity_new(options: dict = None) -> str:
+    """Generate a Vanity.new() snippet with all configurable options."""
+    opts = options or {}
+    lines = [
+        'local Vanity = loadstring(game:HttpGet("https://github.com/BloodLetters/mono-ui/releases/latest/download/Vanity.luau"))()',
+        "",
+        "local esp = Vanity.new({",
+    ]
+    toggles = [
+        ("BoxEnabled", False), ("NameEnabled", False), ("HealthEnabled", False),
+        ("HighlightEnabled", False), ("VisibilityColor", False),
+    ]
+    for key, default in toggles:
+        val = _luau_value(opts.get(key, default))
+        lines.append(f"\t{key} = {val},")
+
+    if "MaxDistance" in opts:
+        lines.append(f"\tMaxDistance = {opts['MaxDistance']},")
+
+    custom_opts = ["RootPart", "HeadPart", "HealthClass", "IsValid",
+                    "BoxTopOffset", "BoxBottomOffset",
+                    "BoxColor", "BoxOutlineColor", "NameColor",
+                    "HighlightColor", "VisibleColor", "NameSize"]
+    for key in custom_opts:
+        if key in opts:
+            lines.append(f"\t{key} = {_luau_value(opts[key])},")
+
+    lines.append("})")
+    return "\n".join(lines)
+
+
+def generate_vanity_integration(tab_var: str = "visualsTab",
+                                 include_distance_slider: bool = False) -> str:
+    """Generate MonoUI toggle/slider integration code for Vanity."""
+    code = f"""-- Vanity ESP Integration with MonoUI
+local Vanity = loadstring(game:HttpGet("https://github.com/BloodLetters/mono-ui/releases/latest/download/Vanity.luau"))()
+local esp = Vanity.new()
+
+{tab_var}:CreateToggle({{
+    text = "Box ESP",
+    default = false,
+    callback = function(state)
+        esp:UpdateOptions({{ BoxEnabled = state }})
+    end
+}})
+
+{tab_var}:CreateToggle({{
+    text = "Name ESP",
+    default = false,
+    callback = function(state)
+        esp:UpdateOptions({{ NameEnabled = state }})
+    end
+}})
+
+{tab_var}:CreateToggle({{
+    text = "Health ESP",
+    default = false,
+    callback = function(state)
+        esp:UpdateOptions({{ HealthEnabled = state }})
+    end
+}})
+
+{tab_var}:CreateToggle({{
+    text = "Cham Highlight",
+    default = false,
+    callback = function(state)
+        esp:UpdateOptions({{ HighlightEnabled = state }})
+    end
+}})
+
+{tab_var}:CreateToggle({{
+    text = "Visibility Colors",
+    default = false,
+    callback = function(state)
+        esp:UpdateOptions({{ VisibilityColor = state }})
+    end
+}})"""
+    if include_distance_slider:
+        code += f"""
+
+{tab_var}:CreateSlider({{
+    text = "Max ESP Distance",
+    min = 100,
+    max = 5000,
+    default = 1000,
+    suffix = " studs",
+    callback = function(value)
+        esp:UpdateOptions({{ MaxDistance = value }})
+    end
+}})"""
+    return code
+
+
+def generate_lead_new(options: dict = None) -> str:
+    """Generate a Lead.new() snippet with all configurable options."""
+    opts = options or {}
+    lines = [
+        'local Lead = loadstring(game:HttpGet("https://github.com/BloodLetters/mono-ui/releases/latest/download/Lead.luau"))()',
+        "",
+        "local lead = Lead.new({",
+    ]
+    toggles = [
+        ("AimEnabled", False), ("TriggerEnabled", False),
+        ("SilentAim", False), ("StickyTarget", False), ("WallCheck", False),
+        ("TriggerWallCheck", False),
+    ]
+    for key, default in toggles:
+        val = _luau_value(opts.get(key, default))
+        lines.append(f"\t{key} = {val},")
+
+    for key in ["AimKey", "AimMethod", "TargetPart", "HealthClass",
+                 "FovRadius", "Smoothness", "MaxDistance", "Delay",
+                 "TriggerTargetPart", "TriggerFovRadius", "TriggerMaxDistance",
+                 "TargetOffset", "PredictionFn", "SilentAimHook",
+                 "IsTargetValid", "FovMethod", "WallCheckIgnoreList",
+                 "BeforeFire", "AfterFire", "Fire"]:
+        if key in opts:
+            lines.append(f"\t{key} = {_luau_value(opts[key])},")
+
+    lines.append("})")
+    lines.append("lead:Start()")
+    return "\n".join(lines)
+
+
+def generate_lead_integration(tab_var: str = "combatTab") -> str:
+    """Generate MonoUI toggle/slider integration code for Lead."""
+    return f"""-- Lead Combat Integration with MonoUI
+local Lead = loadstring(game:HttpGet("https://github.com/BloodLetters/mono-ui/releases/latest/download/Lead.luau"))()
+local lead = Lead.new()
+
+{tab_var}:CreateToggle({{
+    text = "Aimbot",
+    default = false,
+    callback = function(state)
+        lead:UpdateOptions({{ AimEnabled = state }})
+    end
+}})
+
+{tab_var}:CreateToggle({{
+    text = "Sticky Target",
+    default = false,
+    callback = function(state)
+        lead:UpdateOptions({{ StickyTarget = state }})
+    end
+}})
+
+{tab_var}:CreateToggle({{
+    text = "Wall Check",
+    default = false,
+    callback = function(state)
+        lead:UpdateOptions({{ WallCheck = state }})
+    end
+}})
+
+{tab_var}:CreateSlider({{
+    text = "Smoothness",
+    min = 1,
+    max = 20,
+    default = 1,
+    callback = function(value)
+        lead:UpdateOptions({{ Smoothness = value }})
+    end
+}})
+
+{tab_var}:CreateSlider({{
+    text = "FOV Radius",
+    min = 30,
+    max = 500,
+    default = 150,
+    suffix = " px",
+    callback = function(value)
+        lead:UpdateOptions({{ FovRadius = value }})
+    end
+}})
+
+{tab_var}:CreateToggle({{
+    text = "Trigger Bot",
+    default = false,
+    callback = function(state)
+        lead:UpdateOptions({{ TriggerEnabled = state }})
+    end
+}})
+
+{tab_var}:CreateToggle({{
+    text = "Silent Aim",
+    default = false,
+    callback = function(state)
+        lead:UpdateOptions({{
+            SilentAim = state,
+            AimKey = state and "always" or Enum.UserInputType.MouseButton2,
+        }})
+    end
+}})"""
+
+
 def generate_full_example(title: str = "Mono UI", config_name: str = "mono_config",
                           include_watermark: bool = False,
                           include_notifications: bool = False,
@@ -972,6 +1167,93 @@ async def list_tools():
                 "required": [],
             },
         ),
+        Tool(
+            name="generate-vanity-new",
+            description="Generate Luau code to create a Vanity ESP instance with all configurable toggles and options.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "BoxEnabled": {"type": "boolean", "description": "Enable 2D box ESP around players."},
+                    "NameEnabled": {"type": "boolean", "description": "Enable player name + distance ESP above box."},
+                    "HealthEnabled": {"type": "boolean", "description": "Enable health bar ESP on left side of box."},
+                    "HighlightEnabled": {"type": "boolean", "description": "Enable 3D highlight/cham on characters."},
+                    "VisibilityColor": {"type": "boolean", "description": "Highlight changes color based on visibility."},
+                    "MaxDistance": {"type": "number", "description": "Max render distance in studs."},
+                    "BoxColor": {"type": "string", "description": "Box outline Color3 (e.g. 'Color3.fromRGB(160,160,160)')."},
+                    "BoxOutlineColor": {"type": "string", "description": "Box outer outline Color3."},
+                    "NameColor": {"type": "string", "description": "Name text Color3."},
+                    "NameSize": {"type": "number", "description": "Name text size.", "default": 13},
+                    "HighlightColor": {"type": "string", "description": "Highlight fill Color3."},
+                    "VisibleColor": {"type": "string", "description": "Highlight Color3 when target is visible (with VisibilityColor on)."},
+                    "RootPart": {"type": "string", "description": "Custom root part name or function lookup for box anchor."},
+                    "HeadPart": {"type": "string", "description": "Custom head part name or function lookup."},
+                    "HealthClass": {"type": "string", "description": "Custom health class name (e.g. 'MonsterHealth')."},
+                    "BoxTopOffset": {"type": "string", "description": "Vector3 offset from root for box top."},
+                    "BoxBottomOffset": {"type": "string", "description": "Vector3 offset from root for box bottom."},
+                    "IsValid": {"type": "string", "description": "Custom validity function (e.g. 'function(c) return c:FindFirstChild(\"IsNPC\") ~= nil end')."},
+                },
+                "required": [],
+            },
+        ),
+        Tool(
+            name="generate-vanity-integration",
+            description="Generate Luau code for integrating Vanity ESP with MonoUI toggles and sliders inside a tab.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "tab_var": {"type": "string", "description": "Variable name of the tab to add Vanity controls to.", "default": "visualsTab"},
+                    "include_distance_slider": {"type": "boolean", "description": "Include a Max Distance slider.", "default": False},
+                },
+                "required": [],
+            },
+        ),
+        Tool(
+            name="generate-lead-new",
+            description="Generate Luau code to create a Lead combat instance with all configurable aimbot, trigger bot, and silent aim options.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "AimEnabled": {"type": "boolean", "description": "Enable aimbot."},
+                    "TriggerEnabled": {"type": "boolean", "description": "Enable trigger bot."},
+                    "SilentAim": {"type": "boolean", "description": "Enable silent aim mode."},
+                    "StickyTarget": {"type": "boolean", "description": "Keep locked on same target."},
+                    "WallCheck": {"type": "boolean", "description": "Skip targets behind walls."},
+                    "TriggerWallCheck": {"type": "boolean", "description": "Wall check for trigger bot."},
+                    "AimKey": {"type": "string", "description": "Activation: 'always', Enum.KeyCode.LeftShift, etc."},
+                    "AimMethod": {"type": "string", "description": "'Camera', 'Mouse', or custom function."},
+                    "TargetPart": {"type": "string", "description": "Part name or function lookup."},
+                    "HealthClass": {"type": "string", "description": "Custom health class (e.g. 'MonsterHealth')."},
+                    "FovRadius": {"type": "number", "description": "FOV circle radius in pixels."},
+                    "Smoothness": {"type": "number", "description": "Aim interpolation (1 = instant)."},
+                    "MaxDistance": {"type": "number", "description": "Max target distance in studs."},
+                    "Delay": {"type": "number", "description": "Fire rate delay in ms."},
+                    "TriggerTargetPart": {"type": "string", "description": "Trigger bot target part."},
+                    "TriggerFovRadius": {"type": "number", "description": "Trigger FOV radius."},
+                    "TriggerMaxDistance": {"type": "number", "description": "Trigger max distance."},
+                    "TargetOffset": {"type": "string", "description": "Aim offset Vector3 or function."},
+                    "PredictionFn": {"type": "string", "description": "Custom prediction function."},
+                    "SilentAimHook": {"type": "string", "description": "Silent aim position receiver."},
+                    "IsTargetValid": {"type": "string", "description": "Custom validity check."},
+                    "FovMethod": {"type": "string", "description": "Custom FOV shape function."},
+                    "WallCheckIgnoreList": {"type": "string", "description": "Extra instances to ignore."},
+                    "BeforeFire": {"type": "string", "description": "Pre-fire callback."},
+                    "AfterFire": {"type": "string", "description": "Post-fire callback."},
+                    "Fire": {"type": "string", "description": "Custom fire function (e.g. remote)."},
+                },
+                "required": [],
+            },
+        ),
+        Tool(
+            name="generate-lead-integration",
+            description="Generate Luau code for integrating Lead combat module with MonoUI toggles and sliders inside a tab.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "tab_var": {"type": "string", "description": "Variable name of the tab to add Lead controls to.", "default": "combatTab"},
+                },
+                "required": [],
+            },
+        ),
     ]
 
 
@@ -1143,6 +1425,23 @@ async def call_tool(name: str, arguments: dict):
             row = AVAILABLE_ICONS[i:i + per_row]
             lines.append("| " + " | ".join(f"`{icon}`" for icon in row) + " |")
         result = "\n".join(lines)
+
+    elif name == "generate-vanity-new":
+        result = generate_vanity_new(arguments)
+
+    elif name == "generate-vanity-integration":
+        result = generate_vanity_integration(
+            tab_var=arguments.get("tab_var", "visualsTab"),
+            include_distance_slider=arguments.get("include_distance_slider", False),
+        )
+
+    elif name == "generate-lead-new":
+        result = generate_lead_new(arguments)
+
+    elif name == "generate-lead-integration":
+        result = generate_lead_integration(
+            tab_var=arguments.get("tab_var", "combatTab"),
+        )
 
     else:
         result = f"Unknown tool: {name}"
