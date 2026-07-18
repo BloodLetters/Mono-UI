@@ -164,5 +164,4 @@ Full cleanup — disconnects all events, stops loops.
 | `AfterFire` | `nil` | `function` / `nil` |
 
 ## License
-
 MIT - Part of the [MonoUI](https://github.com/BloodLetters/mono-ui) ecosystem.
