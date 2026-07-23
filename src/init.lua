@@ -14,13 +14,17 @@ local MonoUI = {
 	module = {},
 }
 
-local activeWindow = nil
+local activeWindows = {}
 
 local getgenv = getgenv
 if not getgenv then
 	getgenv = function()
 		return _G
 	end
+end
+
+local function getActiveWindow()
+	return activeWindows[#activeWindows]
 end
 
 local monouiEnv = setmetatable({}, {
@@ -30,6 +34,7 @@ local monouiEnv = setmetatable({}, {
 			return libVal
 		end
 		
+		local activeWindow = getActiveWindow()
 		if activeWindow then
 			if key == "title" then
 				return activeWindow.TitleLabel and activeWindow.TitleLabel.Text or activeWindow.Title
@@ -65,6 +70,7 @@ local monouiEnv = setmetatable({}, {
 		return nil
 	end,
 	__newindex = function(self, key, value)
+		local activeWindow = getActiveWindow()
 		if activeWindow then
 			if key == "title" then
 				if activeWindow.TitleLabel then
@@ -87,20 +93,23 @@ local monouiEnv = setmetatable({}, {
 	end
 })
 
-getgenv().monoui = monouiEnv
-
 local originalCreateWindow = window.CreateWindow
 local function CreateWindow(options)
 	local windowObject = originalCreateWindow(options)
-	activeWindow = windowObject
+	table.insert(activeWindows, windowObject)
+	getgenv().monoui = monouiEnv
 	
-	local originalDestroy = windowObject.Destroy
-	windowObject.Destroy = function(self)
-		if activeWindow == windowObject then
-			activeWindow = nil
+	windowObject:AddCleanup(function()
+		for i, win in ipairs(activeWindows) do
+			if win == windowObject then
+				table.remove(activeWindows, i)
+				break
+			end
 		end
-		originalDestroy(self)
-	end
+		if #activeWindows == 0 then
+			getgenv().monoui = nil
+		end
+	end)
 	
 	if MonoUI.module and MonoUI.module.profile then
 		local profile = require("./module/profile")
