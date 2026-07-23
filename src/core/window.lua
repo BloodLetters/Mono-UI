@@ -467,6 +467,10 @@ local function CreateWindow(options)
 		QueuedLogs = {},
 		AutoSave = autoSave,
 		ConfigName = configName,
+		Title = options.Title or "mono window",
+		Subtitle = options.Subtitle or "minimal tabbed gui",
+		TitleLabel = title,
+		SubtitleLabel = subtitle,
 	}
 
 	local createContainerMethods

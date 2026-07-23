@@ -5,7 +5,8 @@ const SIDEBAR_ITEMS = {
   gettingStarted: [
     { id: "introduction", name: "Introduction", icon: "fa-circle-info", path: "#/introduction" },
     { id: "getting-started", name: "Quick Start", icon: "fa-rocket", path: "#/getting-started" },
-    { id: "features", name: "Features", icon: "fa-star", path: "#/features" }
+    { id: "features", name: "Features", icon: "fa-star", path: "#/features" },
+    { id: "global-env", name: "Global Environment", icon: "fa-earth-americas", path: "#/global-env" }
   ],
   core: [
     { id: "CreateWindow", name: "CreateWindow", icon: "fa-window-maximize", path: "#/CreateWindow" },
@@ -556,6 +557,70 @@ export default function App() {
                 </div>
               </section>
             </>
+          )}
+
+          {/* Getting Started: Global Environment Page */}
+          {hash === "#/global-env" && (
+            <section id="global-env" className="doc-section">
+              <div className="breadcrumb">
+                <span className="current">Getting Started</span>
+                <span className="sep">›</span>
+                <span className="current">Global Environment</span>
+              </div>
+              <div className="section-label">Environment</div>
+              <h2>Global Environment</h2>
+              <p>MonoUI automatically registers a global environment table <code>getgenv().monoui</code>. This allows scripts to dynamically read, query, and modify properties of the active UI from anywhere in the execution context.</p>
+
+              <h3>Available Properties</h3>
+              <div className="table-container">
+                <table className="doc-table">
+                  <thead>
+                    <tr><th>Property</th><th>Type</th><th>Access</th><th>Description</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td><code>title</code></td><td>string</td><td>Read & Write</td><td>Gets or sets the main window title.</td></tr>
+                    <tr><td><code>subtitle</code></td><td>string</td><td>Read & Write</td><td>Gets or sets the main window subtitle.</td></tr>
+                    <tr><td><code>visible</code></td><td>boolean</td><td>Read & Write</td><td>Gets or sets the window visibility (opens/minimizes).</td></tr>
+                    <tr><td><code>flags</code></td><td>table</td><td>Read Only</td><td>Retrieves the key-value dictionary of all component configurations.</td></tr>
+                    <tr><td><code>components</code></td><td>table</td><td>Read Only</td><td>Retrieves the dictionary of instantiated components.</td></tr>
+                    <tr><td><code>activeTab</code></td><td>string</td><td>Read Only</td><td>Gets the name of the currently visible tab.</td></tr>
+                    <tr><td><code>window</code></td><td>table</td><td>Read Only</td><td>Gets the raw active window object.</td></tr>
+                    <tr><td><code>close()</code></td><td>function</td><td>Execute</td><td>Closes and completely destroys the window.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h3>Code Examples</h3>
+              
+              <h4>Read & Modify Title/Subtitle</h4>
+              <CodeBlock code={`local MonoUI = loadstring(game:HttpGet("https://github.com/BloodLetters/mono-ui/releases/latest/download/Release.luau"))()
+local window = MonoUI.CreateWindow({
+    Title = "Original Title",
+    Subtitle = "Original Subtitle"
+})
+
+task.wait(2)
+-- Read properties
+print(getgenv().monoui.title) -- Prints "Original Title"
+
+-- Update properties dynamically
+getgenv().monoui.title = "Updated Title"
+getgenv().monoui.subtitle = "Updated Subtitle"
+`} />
+
+              <h4>Change Visibility & Close UI</h4>
+              <CodeBlock code={`-- Hide the UI
+getgenv().monoui.visible = false
+
+task.wait(1)
+-- Show the UI again
+getgenv().monoui.visible = true
+
+task.wait(1)
+-- Destroy/Close the UI completely
+getgenv().monoui.close()
+`} />
+            </section>
           )}
 
           {/* Modules: Profile Page */}
