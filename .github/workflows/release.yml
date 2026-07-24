@@ -37,6 +37,9 @@ jobs:
 
       - name: Build Lead with Darklua
         run: darklua process modules/Lead/init.lua Lead.luau
+
+      - name: Build Guard with Darklua
+        run: darklua process modules/Guard/init.lua Guard.luau
         
       - name: Upload Release Assets
         uses: softprops/action-gh-release@v2
@@ -47,3 +50,4 @@ jobs:
             Release.luau
             Vanity.luau
             Lead.luau
+            Guard.luau

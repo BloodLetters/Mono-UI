@@ -677,6 +677,67 @@ local esp = Vanity.new()
     return code
 
 
+def generate_guard_new(options: dict = None) -> str:
+    """Generate a Guard.new() snippet with all configurable options."""
+    opts = options or {}
+    lines = [
+        'local Guard = loadstring(game:HttpGet("https://github.com/BloodLetters/mono-ui/releases/latest/download/Guard.luau"))()',
+        "",
+        "local guard = Guard.new({",
+    ]
+    keys = ["Title", "Subtitle", "Logo", "GetKeyUrl", "DiscordUrl", "ConfigName", "Key", "AccentColor"]
+    for key in keys:
+        if key in opts:
+            lines.append(f"\t{key} = {_luau_value(opts[key])},")
+            
+    if "OnSuccess" not in opts:
+        lines.append("\tOnSuccess = function()")
+        lines.append('\t\tprint("Key verified successfully! Loading main script...")')
+        lines.append("\t\t-- Place your main script or MonoUI initialization here")
+        lines.append("\tend,")
+    else:
+        lines.append(f"\tOnSuccess = {opts['OnSuccess']},")
+        
+    lines.append("})")
+    return "\n".join(lines)
+
+
+def generate_guard_integration(tab_var: str = "settingsTab", config_name: str = "guard_default") -> str:
+    """Generate MonoUI settings tab integration code for Guard."""
+    return f"""-- Guard Key System Integration with MonoUI Settings Tab
+{tab_var}:CreateButton({{
+    text = "Reset Saved Security Key",
+    callback = function()
+        local filename = "guard_key_{config_name}.txt"
+        if delfile then
+            local ok = pcall(delfile, filename)
+            if ok then
+                MonoUI.Notify({{
+                    title = "Key Reset",
+                    content = "Your cached security key has been cleared.",
+                    icon = "trash",
+                    duration = 3
+                }})
+            else
+                MonoUI.Notify({{
+                    title = "Reset Failed",
+                    content = "Could not delete cached key file.",
+                    icon = "x-circle",
+                    duration = 3
+                }})
+            end
+        else
+            MonoUI.Notify({{
+                title = "Not Supported",
+                content = "Your executor does not support deleting files.",
+                icon = "alert-triangle",
+                duration = 3
+            }})
+        end
+    end
+}})"""
+
+
 def generate_lead_new(options: dict = None) -> str:
     """Generate a Lead.new() snippet with all configurable options."""
     opts = options or {}
@@ -1254,6 +1315,37 @@ async def list_tools():
                 "required": [],
             },
         ),
+        Tool(
+            name="generate-guard-new",
+            description="Generate Luau code to create a Guard Key System instance with all configurable options.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "Title": {"type": "string", "description": "Header title of the Key System."},
+                    "Subtitle": {"type": "string", "description": "Header subtitle of the Key System."},
+                    "Logo": {"type": "string", "description": "Logo icon name: 'lock', 'key', 'shield', 'shield-check', 'shield-x', 'shield-alert'."},
+                    "GetKeyUrl": {"type": "string", "description": "URL to get the security key."},
+                    "DiscordUrl": {"type": "string", "description": "Discord invitation link."},
+                    "Key": {"type": "string", "description": "The expected valid key (or array of keys/validation function code string)."},
+                    "ConfigName": {"type": "string", "description": "Unique key cache file identifier.", "default": "guard_default"},
+                    "AccentColor": {"type": "string", "description": "Accent Color3 value (e.g. 'Color3.fromRGB(0,162,255)')."},
+                    "OnSuccess": {"type": "string", "description": "Custom OnSuccess callback code string."},
+                },
+                "required": [],
+            },
+        ),
+        Tool(
+            name="generate-guard-integration",
+            description="Generate Luau code for integrating Guard Key System cache-reset option inside a MonoUI Settings tab.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "tab_var": {"type": "string", "description": "Variable name of the tab to add the reset button to.", "default": "settingsTab"},
+                    "config_name": {"type": "string", "description": "ConfigName matching the Guard instance to reset.", "default": "guard_default"},
+                },
+                "required": [],
+            },
+        ),
     ]
 
 
@@ -1441,6 +1533,15 @@ async def call_tool(name: str, arguments: dict):
     elif name == "generate-lead-integration":
         result = generate_lead_integration(
             tab_var=arguments.get("tab_var", "combatTab"),
+        )
+
+    elif name == "generate-guard-new":
+        result = generate_guard_new(arguments)
+
+    elif name == "generate-guard-integration":
+        result = generate_guard_integration(
+            tab_var=arguments.get("tab_var", "settingsTab"),
+            config_name=arguments.get("config_name", "guard_default"),
         )
 
     else:

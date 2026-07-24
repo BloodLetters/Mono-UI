@@ -20,6 +20,18 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
                     self.wfile.write(f.read())
             else:
                 self.send_error(404, 'File Not Found: dist/mono-ui.luau')
+        elif self.path == '/Guard.luau':
+            # Serve the bundled Guard Key System file
+            file_path = os.path.join(DIRECTORY, 'dist', 'Guard.luau')
+            if os.path.exists(file_path):
+                self.send_response(200)
+                self.send_header('Content-type', 'text/plain; charset=utf-8')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                with open(file_path, 'rb') as f:
+                    self.wfile.write(f.read())
+            else:
+                self.send_error(404, 'File Not Found: dist/Guard.luau')
         elif self.path == '/sniper-arena':
             # Serve the Sniper Arena script
             sniper_path = os.path.join(DIRECTORY, 'Sniper-arena.lua')
