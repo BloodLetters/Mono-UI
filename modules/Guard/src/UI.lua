@@ -157,6 +157,7 @@ function UI.build(self)
 		Position = UDim2.fromOffset(15, 55),
 		Size = UDim2.fromOffset(190, 60),
 		BackgroundTransparency = 1,
+		ClipsDescendants = true,
 		Parent = mainFrame,
 	})
 
@@ -178,6 +179,7 @@ function UI.build(self)
 		Size = UDim2.new(1, 0, 0, 32),
 		BackgroundColor3 = Color3.fromRGB(20, 20, 24),
 		BorderSizePixel = 0,
+		ClipsDescendants = true,
 		Parent = leftCol,
 	})
 	Util.addCorner(inputContainer, 6)
@@ -196,6 +198,8 @@ function UI.build(self)
 		TextSize = 12,
 		FontFace = cleanFont,
 		ClearTextOnFocus = false,
+		ClipsDescendants = true,
+		TextTruncate = Enum.TextTruncate.AtEnd,
 		Parent = inputContainer,
 	})
 
