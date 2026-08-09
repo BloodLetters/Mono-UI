@@ -36,7 +36,7 @@ Initializes and starts the Key System. It checks the local cache first. If a pre
 | `GetKeyUrl` | string | `""` | URL to get the key. If omitted, the "Get Key" button is hidden. |
 | `DiscordUrl` | string | `""` | Discord invite link. If omitted, the "Join Discord" button is hidden. |
 | `ConfigName` | string | `"guard_default"` | Unique configuration ID to name the cache file (`guard_key_<ConfigName>.txt`). |
-| `AccentColor` | Color3 | `Color3.fromRGB(0, 162, 255)` | Color of the verify button and active input border. |
+| `AccentColor` | Color3 | `Color3.fromRGB(240, 240, 245)` | Color of the verify button accent and active input border. |
 | `OnSuccess` | function | `nil` | Callback function fired immediately when the key is successfully verified. |
 
 ---

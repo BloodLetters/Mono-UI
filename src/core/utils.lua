@@ -159,9 +159,25 @@ function utils.connectDrag(handle, target)
 		if input.UserInputType ~= Enum.UserInputType.MouseMovement and input.UserInputType ~= Enum.UserInputType.Touch then
 			return
 		end
+		local camera = Workspace.CurrentCamera
+		local viewport = camera and camera.ViewportSize or Vector2.new(1920, 1080)
 		local delta = input.Position - dragStart
-		target.Position = UDim2.new(
-			startPosition.X.Scale, startPosition.X.Offset + delta.X, startPosition.Y.Scale, startPosition.Y.Offset + delta.Y)
+
+		local rawX = startPosition.X.Scale * viewport.X + startPosition.X.Offset + delta.X
+		local rawY = startPosition.Y.Scale * viewport.Y + startPosition.Y.Offset + delta.Y
+
+		local absSize = target.AbsoluteSize
+		local anchor = target.AnchorPoint
+
+		local minX = absSize.X * anchor.X
+		local maxX = viewport.X - absSize.X * (1 - anchor.X)
+		local minY = absSize.Y * anchor.Y
+		local maxY = viewport.Y - absSize.Y * (1 - anchor.Y)
+
+		local clampedX = (maxX >= minX) and math.clamp(rawX, minX, maxX) or rawX
+		local clampedY = (maxY >= minY) and math.clamp(rawY, minY, maxY) or rawY
+
+		target.Position = UDim2.fromOffset(clampedX, clampedY)
 	end)
 	UserInputService.InputEnded:Connect(function(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then

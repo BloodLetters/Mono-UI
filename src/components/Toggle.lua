@@ -27,6 +27,7 @@ return function(page, args)
 		Size = UDim2.new(1, - 80, 1, 0),
 		Text = tostring(toggleText or "Toggle"),
 		TextXAlignment = Enum.TextXAlignment.Left,
+		TextTruncate = Enum.TextTruncate.AtEnd,
 		Parent = toggleRow,
 	})
 	applyFont(label, 14, Color3.fromRGB(232, 232, 236), Enum.TextXAlignment.Left)
@@ -70,10 +71,17 @@ return function(page, args)
 	
 	render()
 	
+	if callback and defaultValue ~= nil then
+		task.spawn(callback, state)
+	end
+	
 	return {
-		Set = function(_, value)
+		Set = function(_, value, fireCallback)
 			state = value == true
 			render()
+			if fireCallback ~= false and callback then
+				task.spawn(callback, state)
+			end
 		end,
 		Get = function()
 			return state

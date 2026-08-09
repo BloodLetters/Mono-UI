@@ -33,6 +33,7 @@ return function(page, args)
 		Size = UDim2.new(1, labelWidthOffset, 1, 0),
 		Text = tostring(bindText),
 		TextXAlignment = Enum.TextXAlignment.Left,
+		TextTruncate = Enum.TextTruncate.AtEnd,
 		Parent = row,
 	})
 	applyFont(label, 14, Color3.fromRGB(232, 232, 236), Enum.TextXAlignment.Left)
@@ -118,10 +119,17 @@ return function(page, args)
 		end
 	end)
 
+	if callback and defaultKey ~= nil then
+		task.spawn(callback, currentKey)
+	end
+
 	return {
-		Set = function(_, key)
+		Set = function(_, key, fireCallback)
 			currentKey = key
 			updateBtnText()
+			if fireCallback ~= false and callback then
+				task.spawn(callback, currentKey)
+			end
 		end,
 		Get = function()
 			return currentKey

@@ -12,7 +12,7 @@ MonoUI.Notify({
 local window = MonoUI.CreateWindow({
     Title = "MonoUI Ultimate Testing",
     Subtitle = "Full Component & Grid Test",
-    Size = UDim2.fromOffset(620, 420),
+    Size = UDim2.fromOffset(720, 480),
     Icon = "shield",
     ConfigName = "mono_ultimate_test_config",
     AutoSave = true,
@@ -44,7 +44,7 @@ local rightCol = row1:CreateVBar()
 leftCol:CreateSection({ text = "Left Column (Target)" })
 leftCol:CreateToggle({
     text = "Aimbot Active",
-    default = false,
+    default = true,
     flag = "grid_aimbot_enabled",
     callback = function(state)
         if logger then logger:Log("INFO", "Aimbot Active: " .. tostring(state)) end
@@ -69,16 +69,16 @@ leftCol:CreateDropdown({
 })
 
 -- Right Column Elements
-rightCol:CreateSection({ text = "Right Column (Visuals)" })
-rightCol:CreateColorPicker({
-    text = "Accent Color",
-    default = Color3.fromRGB(0, 162, 255),
-    flag = "grid_visual_color",
-    callback = function(color)
-        MonoUI.SetThemeColor("AccentColor", color)
-        if logger then logger:Log("SUCCESS", "Accent Theme Color Updated!") end
-    end,
-})
+-- rightCol:CreateSection({ text = "Right Column (Visuals)" })
+-- rightCol:CreateColorPicker({
+--     text = "Accent Color",
+--     default = Color3.fromRGB(255, 162, 255),
+--     flag = "grid_visual_color",
+--     callback = function(color)
+--         MonoUI.SetThemeColor("AccentColor", color)
+--         if logger then logger:Log("SUCCESS", "Accent Theme Color Updated!") end
+--     end,
+-- })
 rightCol:CreateKeybind({
     text = "Toggle GUI Key",
     default = Enum.KeyCode.RightControl,
@@ -258,7 +258,7 @@ tabWidgets:CreatePlayerList({
 MonoUI.CreateControlHUD({
     {
         icon = "shield",
-        default = false,
+        default = true,
         callback = function(active)
             if logger then logger:Log("INFO", "HUD Aimbot State: " .. (active and "ON" or "OFF")) end
         end

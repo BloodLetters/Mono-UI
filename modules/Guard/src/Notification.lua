@@ -25,7 +25,7 @@ function Notification.new(options)
 	local content = options.Content or ""
 	local duration = options.Duration or 4
 	local notifType = options.Type or "Info" -- "Info", "Success", "Error"
-	local accentColor = options.AccentColor or Color3.fromRGB(0, 162, 255)
+	local accentColor = options.AccentColor or Color3.fromRGB(240, 240, 245)
 
 	local parentGui = Util.getGuiParent()
 	if not parentGui then return end
@@ -53,29 +53,29 @@ function Notification.new(options)
 		-- Start off-screen to the right
 		Position = UDim2.new(1, frameWidth + 20, 1, -20),
 		Size = UDim2.fromOffset(frameWidth, frameHeight),
-		BackgroundColor3 = Color3.fromRGB(20, 20, 24),
+		BackgroundColor3 = Color3.fromRGB(30, 30, 30),
 		BorderSizePixel = 0,
 		Parent = notifGui
 	})
 
 	Util.addCorner(frame, 8)
-	Util.addStroke(frame, Color3.fromRGB(45, 45, 52), 0.3, 1)
+	Util.addStroke(frame, Color3.fromRGB(51, 51, 51), 0.3, 1)
 
-	-- Icon & Left border accent color
-	local typeColor = Color3.fromRGB(140, 140, 145) -- Info default
+	-- Monochromatic Soft White Icon & Accent Bar
+	local typeColor = Color3.fromRGB(208, 208, 208) -- Soft White #D0D0D0
 	local iconAsset = "rbxassetid://16898613509"
 	local iconRectOffset = Vector2.new(820, 257) -- shield / check info
 
 	if notifType == "Success" then
-		typeColor = Color3.fromRGB(80, 220, 80)
+		typeColor = Color3.fromRGB(240, 240, 240)
 		iconAsset = "rbxassetid://16898613777"
 		iconRectOffset = Vector2.new(820, 257) -- check
 	elseif notifType == "Error" then
-		typeColor = Color3.fromRGB(220, 80, 80)
+		typeColor = Color3.fromRGB(180, 180, 180)
 		iconAsset = "rbxassetid://16898613777"
 		iconRectOffset = Vector2.new(514, 820) -- cross
 	elseif notifType == "Info" then
-		typeColor = accentColor
+		typeColor = Color3.fromRGB(208, 208, 208)
 	end
 
 	-- Left vertical line indicator
@@ -101,16 +101,16 @@ function Notification.new(options)
 		Parent = frame
 	})
 
-	local cleanFont = Font.fromEnum(Enum.Font.Montserrat)
-	local cleanFontBold = Font.fromEnum(Enum.Font.MontserratBold)
+	local cleanFont = Font.new("rbxasset://fonts/families/Montserrat.json", Enum.FontWeight.Regular, Enum.FontStyle.Normal)
+	local cleanFontBold = Font.new("rbxasset://fonts/families/Montserrat.json", Enum.FontWeight.Bold, Enum.FontStyle.Normal)
 
-	-- Title Label
+	-- Title Label (#F5F5F5)
 	local titleLabel = Util.make("TextLabel", {
 		Name = "Title",
 		Position = UDim2.fromOffset(48, 12),
 		Size = UDim2.new(1, -60, 0, 16),
 		Text = title,
-		TextColor3 = Color3.fromRGB(255, 255, 255),
+		TextColor3 = Color3.fromRGB(245, 245, 245),
 		TextXAlignment = Enum.TextXAlignment.Left,
 		TextSize = 13,
 		FontFace = cleanFontBold,
@@ -118,13 +118,13 @@ function Notification.new(options)
 		Parent = frame
 	})
 
-	-- Content Label
+	-- Content Label (#A0A0A0)
 	local contentLabel = Util.make("TextLabel", {
 		Name = "Content",
 		Position = UDim2.fromOffset(48, 30),
 		Size = UDim2.new(1, -60, 0, 24),
 		Text = content,
-		TextColor3 = Color3.fromRGB(140, 140, 145),
+		TextColor3 = Color3.fromRGB(160, 160, 160),
 		TextXAlignment = Enum.TextXAlignment.Left,
 		TextYAlignment = Enum.TextYAlignment.Top,
 		TextSize = 11,

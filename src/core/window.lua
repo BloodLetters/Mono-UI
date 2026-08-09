@@ -80,6 +80,11 @@ local function CreateWindow(options)
 		Parent = screenGui,
 	})
 	
+	local windowScale = Instance.new("UIScale")
+	windowScale.Name = "WindowScale"
+	windowScale.Scale = 1
+	windowScale.Parent = window
+	
 	task.defer(function()
 		local t = utils.TweenService:Create(window, TweenInfo.new(0.5, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {Size = normalSize})
 		t:Play()
@@ -325,6 +330,9 @@ local function CreateWindow(options)
 	})
 	pageHolder.ZIndex = 1
 	local function updateWindowSize()
+		local camera = Workspace.CurrentCamera
+		local viewport = camera and camera.ViewportSize or Vector2.new(1920, 1080)
+
 		if options.Size == nil then
 			local newSize = getResponsiveWindowSize()
 			if animatingIntro then
@@ -333,8 +341,28 @@ local function CreateWindow(options)
 				window.Size = newSize
 			end
 		end
+
+		local targetSize = window.Size
+		local targetW = targetSize.X.Offset + (viewport.X * targetSize.X.Scale)
+		local targetH = targetSize.Y.Offset + (viewport.Y * targetSize.Y.Scale)
+
+		if targetW > 0 and targetH > 0 then
+			local marginX = 24
+			local marginY = 24
+			local maxW = math.max(100, viewport.X - marginX)
+			local maxH = math.max(100, viewport.Y - marginY)
+
+			local scaleX = maxW / targetW
+			local scaleY = maxH / targetH
+
+			local fitScale = math.min(scaleX, scaleY)
+			fitScale = math.clamp(fitScale, 0.3, 1)
+
+			windowScale.Scale = fitScale
+		end
 	end
 	updateWindowSize()
+	windowJanitor:Add(window:GetPropertyChangedSignal("Size"):Connect(updateWindowSize))
 	if Workspace.CurrentCamera then
 		windowJanitor:Add(Workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(updateWindowSize))
 	end
@@ -735,19 +763,35 @@ local function CreateWindow(options)
 
 			function hbar:CreateVBar(vbarArgs)
 				vbarArgs = vbarArgs or {}
+				local hasCard = vbarArgs.card ~= false
+
 				local vbarFrame = make("Frame", {
 					Name = "VBar",
 					Size = UDim2.new(1, 0, 0, 0),
 					AutomaticSize = Enum.AutomaticSize.Y,
-					BackgroundTransparency = 1,
+					BackgroundColor3 = Color3.fromRGB(16, 16, 20),
+					BackgroundTransparency = hasCard and 0.25 or 1,
 					BorderSizePixel = 0,
 					Parent = hbarFrame,
 				})
 
+				if hasCard then
+					addCorner(vbarFrame, 10)
+					local vbarStroke = addStroke(vbarFrame, Color3.fromRGB(48, 48, 56), 0.5, 1)
+					utils.registerTheme(vbarStroke, "Color", "BorderColor")
+
+					local vbarPadding = Instance.new("UIPadding")
+					vbarPadding.PaddingTop = UDim.new(0, 8)
+					vbarPadding.PaddingBottom = UDim.new(0, 8)
+					vbarPadding.PaddingLeft = UDim.new(0, 8)
+					vbarPadding.PaddingRight = UDim.new(0, 8)
+					vbarPadding.Parent = vbarFrame
+				end
+
 				local vbarLayout = Instance.new("UIListLayout")
 				vbarLayout.FillDirection = Enum.FillDirection.Vertical
 				vbarLayout.SortOrder = Enum.SortOrder.LayoutOrder
-				vbarLayout.Padding = UDim.new(0, 8)
+				vbarLayout.Padding = UDim.new(0, 6)
 				vbarLayout.Parent = vbarFrame
 
 				local vbar = {
@@ -755,6 +799,11 @@ local function CreateWindow(options)
 				}
 
 				createContainerMethods(vbar, vbarFrame)
+
+				local titleText = vbarArgs.text or vbarArgs.title
+				if titleText then
+					vbar:CreateSection({ text = tostring(titleText) })
+				end
 
 				table.insert(hbar.VBars, vbarFrame)
 

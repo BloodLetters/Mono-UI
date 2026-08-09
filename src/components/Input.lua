@@ -34,6 +34,7 @@ return function(page, args)
 			Size = UDim2.new(1, -28, 0, 18),
 			Text = tostring(inputText or "Input"),
 			TextXAlignment = Enum.TextXAlignment.Left,
+			TextTruncate = Enum.TextTruncate.AtEnd,
 			Parent = inputRow,
 		})
 		applyFont(label, 14, Color3.fromRGB(232, 232, 236), Enum.TextXAlignment.Left)
@@ -60,6 +61,7 @@ return function(page, args)
 			Size = UDim2.new(1, -170, 1, 0),
 			Text = tostring(inputText or "Input"),
 			TextXAlignment = Enum.TextXAlignment.Left,
+			TextTruncate = Enum.TextTruncate.AtEnd,
 			Parent = inputRow,
 		})
 		applyFont(label, 14, Color3.fromRGB(232, 232, 236), Enum.TextXAlignment.Left)
@@ -105,9 +107,16 @@ return function(page, args)
 		end
 	end)
 
+	if callback and args.default ~= nil then
+		task.spawn(callback, textBox.Text, false)
+	end
+
 	return {
-		Set = function(_, text)
+		Set = function(_, text, fireCallback)
 			textBox.Text = tostring(text)
+			if fireCallback ~= false and callback then
+				task.spawn(callback, textBox.Text, false)
+			end
 		end,
 		Get = function()
 			return textBox.Text

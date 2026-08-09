@@ -42,27 +42,48 @@ local function getHUDGui()
 
 	container = make("Frame", {
 		Name = "HUDContainer",
-		Position = UDim2.new(0.5, -60, 0, 70),
-		Size = UDim2.fromOffset(120, 48),
+		Position = UDim2.new(0.5, 0, 0, 40),
+		AnchorPoint = Vector2.new(0.5, 0),
+		Size = UDim2.fromOffset(120, 40),
 		BackgroundColor3 = Color3.fromRGB(18, 18, 22),
 		BackgroundTransparency = 0.05,
 		BorderSizePixel = 0,
 		Parent = screenGui,
 	})
-	addCorner(container, 10)
+	addCorner(container, 8)
 	local stroke = addStroke(container, Color3.fromRGB(60, 60, 68), 0.6, 1)
 	utils.registerTheme(stroke, "Color", "BorderColor")
+
+	local hudScale = Instance.new("UIScale")
+	hudScale.Name = "HUDScale"
+	hudScale.Scale = 1
+	hudScale.Parent = container
+
+	local function updateHUDScale()
+		local camera = utils.Workspace.CurrentCamera
+		local viewport = camera and camera.ViewportSize or Vector2.new(1920, 1080)
+		local scale = 1
+		if viewport.X < 768 or viewport.Y < 480 then
+			scale = math.clamp(math.min(viewport.X / 750, viewport.Y / 480), 0.65, 1)
+		end
+		hudScale.Scale = scale
+	end
+
+	updateHUDScale()
+	if utils.Workspace.CurrentCamera then
+		utils.Workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(updateHUDScale)
+	end
 
 	local layout = Instance.new("UIListLayout")
 	layout.FillDirection = Enum.FillDirection.Horizontal
 	layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 	layout.VerticalAlignment = Enum.VerticalAlignment.Center
-	layout.Padding = UDim.new(0, 8)
+	layout.Padding = UDim.new(0, 6)
 	layout.Parent = container
 
 	local padding = Instance.new("UIPadding")
-	padding.PaddingLeft = UDim.new(0, 8)
-	padding.PaddingRight = UDim.new(0, 8)
+	padding.PaddingLeft = UDim.new(0, 6)
+	padding.PaddingRight = UDim.new(0, 6)
 	padding.Parent = container
 
 	connectDrag(container, container)
@@ -86,7 +107,7 @@ function controlHUD.create(buttons)
 	buttonsList = {}
 
 	local buttonCount = #buttons
-	hudContainer.Size = UDim2.fromOffset(buttonCount * 42 + 16, 48)
+	hudContainer.Size = UDim2.fromOffset(buttonCount * 36 + 12, 40)
 
 	for i, btnArgs in ipairs(buttons) do
 		local iconName = btnArgs.icon or "setting"
@@ -95,14 +116,14 @@ function controlHUD.create(buttons)
 
 		local btn = make("TextButton", {
 			Name = "Button_" .. i,
-			Size = UDim2.fromOffset(34, 34),
+			Size = UDim2.fromOffset(30, 30),
 			BackgroundColor3 = Color3.fromRGB(28, 28, 34),
 			BorderSizePixel = 0,
 			Text = "",
 			AutoButtonColor = false,
 			Parent = hudContainer,
 		})
-		addCorner(btn, 8)
+		addCorner(btn, 7)
 		local btnStroke = addStroke(btn, Color3.fromRGB(50, 50, 58), 0.5, 1)
 
 		local iconContainer = make("Frame", {
@@ -128,7 +149,7 @@ function controlHUD.create(buttons)
 				child:Destroy()
 			end
 
-			utils.createIcon(iconName, iconContainer, UDim2.fromOffset(18, 18), UDim2.fromOffset(8, 8), targetIcon)
+			utils.createIcon(iconName, iconContainer, UDim2.fromOffset(16, 16), UDim2.fromOffset(7, 7), targetIcon)
 
 			if animate then
 				tween(btn, { BackgroundColor3 = targetBg }, 0.12):Play()
@@ -159,10 +180,24 @@ function controlHUD.create(buttons)
 				local delta = input.Position - dragStartPos
 				if delta.Magnitude > 4 then
 					dragMoved = true
-					hudContainer.Position = UDim2.new(
-						startPos.X.Scale, startPos.X.Offset + delta.X,
-						startPos.Y.Scale, startPos.Y.Offset + delta.Y
-					)
+					local camera = utils.Workspace.CurrentCamera
+					local viewport = camera and camera.ViewportSize or Vector2.new(1920, 1080)
+
+					local rawX = startPos.X.Scale * viewport.X + startPos.X.Offset + delta.X
+					local rawY = startPos.Y.Scale * viewport.Y + startPos.Y.Offset + delta.Y
+
+					local absSize = hudContainer.AbsoluteSize
+					local anchor = hudContainer.AnchorPoint
+
+					local minX = absSize.X * anchor.X
+					local maxX = viewport.X - absSize.X * (1 - anchor.X)
+					local minY = absSize.Y * anchor.Y
+					local maxY = viewport.Y - absSize.Y * (1 - anchor.Y)
+
+					local clampedX = (maxX >= minX) and math.clamp(rawX, minX, maxX) or rawX
+					local clampedY = (maxY >= minY) and math.clamp(rawY, minY, maxY) or rawY
+
+					hudContainer.Position = UDim2.fromOffset(clampedX, clampedY)
 				end
 			end
 		end)
@@ -184,6 +219,10 @@ function controlHUD.create(buttons)
 
 		updateColors(false)
 
+		if callback and btnArgs.default ~= nil then
+			task.spawn(callback, state)
+		end
+
 		table.insert(buttonsList, {
 			btn = btn,
 			btnStroke = btnStroke,
@@ -192,9 +231,12 @@ function controlHUD.create(buttons)
 			conn1 = inputChangedConn,
 			conn2 = inputEndedConn,
 			getState = function() return state end,
-			setState = function(val)
+			setState = function(val, fireCallback)
 				state = val == true
 				updateColors(true)
+				if fireCallback ~= false and callback then
+					task.spawn(callback, state)
+				end
 			end
 		})
 	end

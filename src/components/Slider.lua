@@ -37,6 +37,7 @@ return function(page, args)
 			Size = UDim2.new(1, -60, 0, 18),
 			Text = tostring(sliderText),
 			TextXAlignment = Enum.TextXAlignment.Left,
+			TextTruncate = Enum.TextTruncate.AtEnd,
 			Parent = sliderRow,
 		})
 		applyFont(label, 14, Color3.fromRGB(232, 232, 236), Enum.TextXAlignment.Left)
@@ -68,6 +69,7 @@ return function(page, args)
 			Size = UDim2.new(1, - 140, 1, 0),
 			Text = tostring(sliderText),
 			TextXAlignment = Enum.TextXAlignment.Left,
+			TextTruncate = Enum.TextTruncate.AtEnd,
 			Parent = sliderRow,
 		})
 		applyFont(label, 14, Color3.fromRGB(232, 232, 236), Enum.TextXAlignment.Left)
@@ -123,7 +125,7 @@ return function(page, args)
 		return math.max(min, math.min(max, v))
 	end
 	
-	local function setValue(value)
+	local function setValue(value, fireCallback)
 		value = clamp(value)
 		currentValue = value
 		local ratio = (value - min) / (max - min)
@@ -132,8 +134,8 @@ return function(page, args)
 		fill.Size = UDim2.fromOffset(math.max(0, thumbPos), 10)
 		thumb.Position = UDim2.fromOffset(math.max(11, math.min(trackWidth - 11, thumbPos)), 5)
 		valueLabel.Text = tostring(math.floor(value * 10) / 10)
-		if callback then
-			callback(value)
+		if fireCallback ~= false and callback then
+			task.spawn(callback, value)
 		end
 	end
 	
@@ -172,12 +174,15 @@ return function(page, args)
 		end
 	end)
 	
-	task.wait()
-	setValue(clamp(defaultValue))
+	if args.default ~= nil then
+		task.spawn(function()
+			setValue(clamp(defaultValue), true)
+		end)
+	end
 	
 	return {
-		Set = function(_, value)
-			setValue(clamp(value))
+		Set = function(_, value, fireCallback)
+			setValue(clamp(value), fireCallback)
 		end,
 		Get = function()
 			return currentValue

@@ -13,7 +13,7 @@ local DEFAULT_OPTIONS = {
 	NoteText = "",
 	Key = "",
 	ConfigName = "guard_default",
-	AccentColor = Color3.fromRGB(0, 162, 255),
+	AccentColor = Color3.fromRGB(240, 240, 240), -- Monochromatic Light Gray #F0F0F0
 	OnSuccess = nil,
 }
 

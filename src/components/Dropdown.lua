@@ -43,6 +43,7 @@ return function(page, args)
 		Size = UDim2.new(1, labelWidthOffset, 1, 0),
 		Text = tostring(dropdownText or "Dropdown"),
 		TextXAlignment = Enum.TextXAlignment.Left,
+		TextTruncate = Enum.TextTruncate.AtEnd,
 		Parent = header,
 	})
 	applyFont(label, 14, Color3.fromRGB(232, 232, 236), Enum.TextXAlignment.Left)
@@ -230,8 +231,12 @@ return function(page, args)
 	setOpen(false)
 	refreshHeight()
 	
+	if callback and defaultValue ~= nil then
+		task.spawn(callback, getSelectedList())
+	end
+
 	return {
-		Set = function(_, value)
+		Set = function(_, value, fireCallback)
 			selectedMap = {}
 			if type(value) == "table" then
 				for _, item in ipairs(value) do
@@ -245,6 +250,9 @@ return function(page, args)
 				if optionButton:IsA("TextButton") then
 					updateOptionButton(optionButton, optionButton.Name)
 				end
+			end
+			if fireCallback ~= false and callback then
+				task.spawn(callback, getSelectedList())
 			end
 		end,
 		Get = function()
