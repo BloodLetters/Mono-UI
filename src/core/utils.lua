@@ -189,11 +189,11 @@ end
 function utils.getResponsiveWindowSize()
 	local camera = Workspace.CurrentCamera
 	if not camera then
-		return UDim2.fromOffset(560, 360)
+		return UDim2.fromOffset(540, 350)
 	end
 	local viewport = camera.ViewportSize
-	local width = math.clamp(math.floor(viewport.X * 0.46), 520, 780)
-	local height = math.clamp(math.floor(viewport.Y * 0.48), 340, 560)
+	local width = math.clamp(math.floor(viewport.X * 0.45), 440, 600)
+	local height = math.clamp(math.floor(viewport.Y * 0.48), 280, 400)
 	return UDim2.fromOffset(width, height)
 end
 

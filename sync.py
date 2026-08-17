@@ -98,6 +98,35 @@ METADATA = {
     { icon = "eye",    default = true,  callback = function(v) print("ESP:", v) end },
 })"""
     },
+    "Popup": {
+        "group": "Core",
+        "label": "Core API",
+        "display_name": "Popup",
+        "id": "popup",
+        "nav_id": "nav-popup",
+        "icon": "fa-window-restore",
+        "description": "Displays a modal dialog pop-up with customizable state themes, title, content, buttons, callbacks, and event listeners.",
+        "params": {
+            "state": {"type": "string", "description": "Pop-up state type ('warning', 'error', 'information', 'success')."},
+            "title": {"type": "string", "description": "Title text of the pop-up header."},
+            "content": {"type": "string", "description": "Message content displayed in the pop-up body."},
+            "callback": {"type": "table/function", "description": "Button definitions or callback handlers."}
+        },
+        "example": """local popup = MonoUI.Popup({
+    state = "warning",
+    title = "Account deleting",
+    content = "Are you sure to deleting your account?",
+    callback = {
+        { text = "Cancel", style = "secondary" },
+        { text = "Delete", style = "danger" }
+    }
+})
+
+-- Event listener on button click
+popup:On("Delete", function()
+    print("User confirmed deletion!")
+end)"""
+    },
     "AddCleanup": {
         "group": "Core",
         "label": "Core API",

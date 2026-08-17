@@ -84,6 +84,54 @@ local function CreateWindow(options)
 	windowScale.Name = "WindowScale"
 	windowScale.Scale = 1
 	windowScale.Parent = window
+
+	local function updateWindowScale()
+		local camera = Workspace.CurrentCamera
+		if not camera then return end
+		local vp = camera.ViewportSize
+		if vp.X <= 0 or vp.Y <= 0 then return end
+
+		local baseW = normalSize.X.Offset
+		if baseW <= 0 then baseW = normalSize.X.Scale * vp.X end
+		if baseW <= 0 then baseW = 580 end
+
+		local baseH = normalSize.Y.Offset
+		if baseH <= 0 then baseH = normalSize.Y.Scale * vp.Y end
+		if baseH <= 0 then baseH = 380 end
+
+		-- Ensure window never takes more than 58% width and 62% height on smaller screens
+		local maxW = vp.X * 0.58
+		local maxH = vp.Y * 0.62
+
+		local scaleX = maxW / baseW
+		local scaleY = maxH / baseH
+
+		local targetScale = math.min(1.0, scaleX, scaleY)
+
+		if type(options.Scale) == "number" and options.Scale > 0 then
+			targetScale = targetScale * options.Scale
+		end
+
+		targetScale = math.clamp(targetScale, 0.38, 1.0)
+		windowScale.Scale = targetScale
+	end
+
+	updateWindowScale()
+
+	local vpConn = nil
+	local function bindCameraViewport()
+		if vpConn then
+			vpConn:Disconnect()
+			vpConn = nil
+		end
+		if Workspace.CurrentCamera then
+			vpConn = Workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(updateWindowScale)
+			windowJanitor:Add(vpConn)
+			updateWindowScale()
+		end
+	end
+	bindCameraViewport()
+	windowJanitor:Add(Workspace:GetPropertyChangedSignal("CurrentCamera"):Connect(bindCameraViewport))
 	
 	task.defer(function()
 		local t = utils.TweenService:Create(window, TweenInfo.new(0.5, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {Size = normalSize})
@@ -840,7 +888,7 @@ local function CreateWindow(options)
 			local code
 			if autoExecUrl then
 				if type(autoExecUrl) == "string" then
-					code = string.format("loadstring(game:HttpGet('%s'))()", autoExecUrl)
+					code = string.format("loadstring(game:HttpGet(%q))()", autoExecUrl)
 				elseif type(autoExecUrl) == "table" then
 					local url = autoExecUrl.Url or autoExecUrl.url or ""
 					local method = autoExecUrl.Method or autoExecUrl.method or "GET"
@@ -851,25 +899,25 @@ local function CreateWindow(options)
 
 					if body then
 						code = string.format([[
-local req = (syn and syn.request or http_request or request)({
+local req = (syn and syn.request or http_request or request or (http and http.request) or (fluxus and fluxus.request))({
     Url = %q,
     Method = %q,
-    Headers = %s,
+    Headers = game:GetService("HttpService"):JSONDecode(%q),
     Body = %q
 })
-if req.Success and req.Body then
+if req and req.Body then
     local fn, err = loadstring(req.Body)
     if fn then fn() else warn("[MonoUI] AutoExec chunk error:", err) end
 end
 ]], url, method, headersJson, tostring(body))
 					else
 						code = string.format([[
-local req = (syn and syn.request or http_request or request)({
+local req = (syn and syn.request or http_request or request or (http and http.request) or (fluxus and fluxus.request))({
     Url = %q,
     Method = %q,
-    Headers = %s
+    Headers = game:GetService("HttpService"):JSONDecode(%q)
 })
-if req.Success and req.Body then
+if req and req.Body then
     local fn, err = loadstring(req.Body)
     if fn then fn() else warn("[MonoUI] AutoExec chunk error:", err) end
 end
@@ -1206,6 +1254,12 @@ end
 		screenGui.Enabled = value == true
 		if value == true then
 			setMinimized(false)
+		end
+	end
+	function windowObject:SetScale(scale)
+		if type(scale) == "number" and scale > 0 then
+			options.Scale = scale
+			updateWindowScale()
 		end
 	end
 

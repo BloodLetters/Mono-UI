@@ -3,6 +3,7 @@ local notification = require("./core/notification")
 local watermark = require("./core/watermark")
 local utils = require("./core/utils")
 local controlHUD = require("./core/controlHUD")
+local popup = require("./core/popup")
 local Timer = require("../Packages/Timer")
 
 local MonoUI = {
@@ -11,6 +12,8 @@ local MonoUI = {
 	SetThemeColor = utils.setThemeColor,
 	CreateControlHUD = controlHUD.create,
 	CreateTimer = Timer.new,
+	Popup = popup.create,
+	CreatePopup = popup.create,
 	module = {},
 }
 

@@ -1,4 +1,4 @@
-local MonoUI = loadstring(game:HttpGet("http://localhost:6767/mono-ui.luau"))()
+local MonoUI = loadstring(game:HttpGet("http://192.168.100.101:6767/mono-ui.luau"))()
 
 
 MonoUI.SetWatermark({
