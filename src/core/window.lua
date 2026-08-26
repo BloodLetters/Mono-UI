@@ -1256,6 +1256,21 @@ end
 			setMinimized(false)
 		end
 	end
+	function windowObject:SetMinimized(value)
+		if value == nil then
+			value = true
+		end
+		setMinimized(value == true)
+	end
+	function windowObject:Minimize()
+		setMinimized(true)
+	end
+	function windowObject:Restore()
+		setMinimized(false)
+	end
+	function windowObject:IsMinimized()
+		return floatingButton.Visible
+	end
 	function windowObject:SetScale(scale)
 		if type(scale) == "number" and scale > 0 then
 			options.Scale = scale

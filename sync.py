@@ -127,6 +127,42 @@ popup:On("Delete", function()
     print("User confirmed deletion!")
 end)"""
     },
+    "SetMinimized": {
+        "group": "Core",
+        "label": "Core API",
+        "display_name": "SetMinimized",
+        "id": "set-minimized",
+        "nav_id": "nav-minimized",
+        "icon": "fa-window-minimize",
+        "description": "Minimizes or restores the MonoUI window into/from a draggable floating button on the screen.",
+        "params": {
+            "minimized": {"type": "boolean", "description": "True to minimize into floating button, false to restore window (defaults to true)."}
+        },
+        "example": """-- Minimize GUI into floating button
+window:SetMinimized(true)
+-- or via global module
+MonoUI:SetMinimized(true)
+
+-- Restore GUI
+window:SetMinimized(false)
+-- or window:Restore() / window:Minimize()"""
+    },
+    "SetVisible": {
+        "group": "Core",
+        "label": "Core API",
+        "display_name": "SetVisible",
+        "id": "set-visible",
+        "nav_id": "nav-visible",
+        "icon": "fa-eye-slash",
+        "description": "Shows or hides the entire ScreenGui container.",
+        "params": {
+            "visible": {"type": "boolean", "description": "True to show GUI, false to hide (defaults to true)."}
+        },
+        "example": """-- Toggle visibility
+window:SetVisible(false)
+-- or via global module
+MonoUI:SetVisible(false)"""
+    },
     "AddCleanup": {
         "group": "Core",
         "label": "Core API",
@@ -1251,6 +1287,55 @@ window:AddCleanup(tempPart) -- Automatically calls :Destroy() on Instances
 window:AddCleanup(function()
     -- Custom cleanup code (e.g. resetting gravity)
     workspace.Gravity = 196.2
+end)
+```
+
+## Window Lifecycle, Minimizing & Visibility
+
+MonoUI provides full control over window state and lifecycle:
+
+### 1. Minimizing & Restoring (Floating Button)
+Minimizing hides the main window and displays a draggable floating restore button on screen:
+```lua
+-- Programmatic minimize / restore on window
+window:SetMinimized(true)   -- Minimizes GUI into floating button
+window:SetMinimized(false)  -- Restores GUI
+window:Minimize()           -- Shortcut to minimize
+window:Restore()            -- Shortcut to restore
+local isMin = window:IsMinimized() -- Returns true if currently minimized
+
+-- Or via global MonoUI / monoui
+MonoUI:SetMinimized(true)
+MonoUI:SetMinimized(false)
+MonoUI.Minimize()
+MonoUI.Restore()
+```
+
+### 2. Visibility Toggle (ScreenGui)
+```lua
+-- Toggle entire ScreenGui
+window:SetVisible(false)
+window:SetVisible(true)
+
+-- Or via global MonoUI
+MonoUI:SetVisible(false)
+MonoUI:SetVisible(true)
+```
+
+### 3. Window Lifecycle Event Hooks
+```lua
+window.event.PreOpened(function(event)
+    event.message("Loading...")
+    task.wait(1)
+    event.done()
+end)
+
+window.event.Closed(function()
+    print("GUI closed")
+end)
+
+window.event.Minimized(function()
+    print("GUI minimized")
 end)
 ```
 """

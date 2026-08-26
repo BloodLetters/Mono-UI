@@ -413,6 +413,11 @@
                 "description": "Initial screen position coordinates of the window."
             },
             {
+                "name": "Scale",
+                "type": "any",
+                "description": "Undocumented argument."
+            },
+            {
                 "name": "Size",
                 "type": "UDim2",
                 "description": "Window dimensions."

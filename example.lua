@@ -198,6 +198,13 @@ rightCol:CreateKeybind({
 	end
 })
 
+rightCol:CreateButton({
+	text = "Minimize to Floating Button",
+	callback = function()
+		MonoUI:SetMinimized(true)
+	end
+})
+
 local playersTab = window:CreateTab({
 	text = "Players",
 	icon = "users",
