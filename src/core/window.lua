@@ -30,6 +30,7 @@ local Logger = require("../components/Logger")
 local PlayerList = require("../components/PlayerList")
 local Paragraph = require("../components/Paragraph")
 local Divider = require("../components/Divider")
+local ConfigPages = require("../components/ConfigPages")
 
 local function CreateWindow(options)
 	options = options or {}
@@ -744,9 +745,9 @@ local function CreateWindow(options)
 			local comp = Keybind(pageFrame, kbArgs)
 			if kbArgs.flag then
 				windowObject.Components[kbArgs.flag] = {
-					Set = function(_, keyName)
+					Set = function(_, keyName, fireCallback)
 						pcall(function()
-							comp:Set(Enum.KeyCode[keyName])
+							comp:Set(Enum.KeyCode[keyName], fireCallback)
 						end)
 					end,
 					Get = function()
@@ -925,7 +926,7 @@ end
 					end
 				end
 			else
-				code = type(autoExec) == "string" and autoExec or "loadstring(game:HttpGet('http://localhost:6767/demo'))()"
+				code = type(autoExec) == "string" and autoExec or "loadstring(game:HttpGet('http://localhost:6768/demo'))()"
 			end
 			local Players = game:GetService("Players")
 			local LocalPlayer = Players.LocalPlayer
@@ -946,10 +947,11 @@ end
 	function windowObject:SaveConfig(name)
 		name = name or self.ConfigName or "mono_config"
 		local HttpService = game:GetService("HttpService")
+		if type(writefile) ~= "function" then
+			return false, "writefile is unavailable"
+		end
 		local success, err = pcall(function()
-			if writefile then
-				writefile(name .. ".json", HttpService:JSONEncode(self.Flags))
-			end
+			writefile(name .. ".json", HttpService:JSONEncode(self.Flags))
 		end)
 		return success, err
 	end
@@ -969,7 +971,9 @@ end
 				local comp = self.Components[flag]
 				if comp then
 					pcall(function()
-						comp:Set(value)
+						-- Restoring a config should update state without simulating
+						-- a new user interaction or firing component callbacks.
+						comp:Set(value, false)
 					end)
 				end
 			end
@@ -1153,6 +1157,10 @@ end
 			showTab(tab)
 		end
 		return tab
+	end
+
+	function windowObject:CreateConfigPages(args)
+		return ConfigPages(self, args)
 	end
 	windowJanitor:Add(function()
 		pcall(function()

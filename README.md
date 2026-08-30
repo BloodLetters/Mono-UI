@@ -28,6 +28,7 @@ local MonoUI = loadstring(game:HttpGet("https://github.com/BloodLetters/mono-ui/
 * **🎛️ Draggable Control HUD** – Compact, rounded quick-toggle bar utilizing Lucide icons with smart anti-accidental click dragging.
 * **🔄 Auto Teleport Reload** – Persistence engine that automatically re-registers and reloads your scripts upon server hopping or teleportation.
 * **📂 Auto Configuration** – Native state serialization that instantly saves/loads complex types (`Color3`, `Enum.KeyCode`, numbers, toggles) to local storage.
+* **🗂️ Config Pages** – Built-in config manager tab for naming, saving, loading, refreshing, and deleting multiple configs inside a custom directory.
 * **🔔 Sliding Notifications** – Toast notification stack in the bottom-right corner featuring smooth bounce-back easing animations.
 * **🖥️ Watermark Overlay** – Real-time performance HUD showing engine-accurate FPS, Ping, and local clock time.
 * **🎯 Skeletal Hitbox Selector** – Interactive advanced skeleton selection system for precise combat/visual configurations.
@@ -40,6 +41,20 @@ local MonoUI = loadstring(game:HttpGet("https://github.com/BloodLetters/mono-ui/
 A complete, production-ready demonstration covering all UI components, callbacks, and configuration handling can be found in the repository:
 
 👉 **[View Full Example Script (example.lua)](https://www.google.com/search?q=./example.lua)**
+
+Create a config manager page with its own storage folder:
+
+```lua
+local configPages = window:CreateConfigPages({
+    directory = "ConfigFolderMonoUI",
+})
+```
+
+The MCP server exposes the same API through `generate-config-pages`, or through
+`generate-component` with `comp_type` set to `ConfigPages`.
+
+Loading a saved config restores component state silently. Component callbacks
+remain reserved for user interaction or an explicit `Set()` call.
 
 ---
 

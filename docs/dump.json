@@ -47,6 +47,75 @@
         ],
         "example": "tab:CreateColorPicker({\n    text     = \"ESP Color\",\n    default  = Color3.fromRGB(255, 0, 0),\n    flag     = \"esp_color\",\n    callback = function(color)\n        print(\"Color changed:\", color)\n    end,\n})"
     },
+    "CreateConfigPages": {
+        "type": "core",
+        "label": "Core API",
+        "display_name": "CreateConfigPages",
+        "description": "Creates a configuration manager tab where users can name, save, load, refresh, and delete JSON configs from a dedicated folder.",
+        "arguments": [
+            {
+                "name": "Directory",
+                "type": "string",
+                "description": "PascalCase alias for directory."
+            },
+            {
+                "name": "default",
+                "type": "string",
+                "description": "Optional initial config name."
+            },
+            {
+                "name": "directory",
+                "type": "string",
+                "description": "Folder used to store the named JSON config files."
+            },
+            {
+                "name": "icon",
+                "type": "string",
+                "description": "Optional Lucide tab icon."
+            },
+            {
+                "name": "inputText",
+                "type": "string",
+                "description": "Optional label for the config-name input."
+            },
+            {
+                "name": "onDeleted",
+                "type": "function",
+                "description": "Called after a config is deleted."
+            },
+            {
+                "name": "onLoaded",
+                "type": "function",
+                "description": "Called after a config is loaded."
+            },
+            {
+                "name": "onSaved",
+                "type": "function",
+                "description": "Called after a config is saved."
+            },
+            {
+                "name": "placeholder",
+                "type": "string",
+                "description": "Optional placeholder for the config-name input."
+            },
+            {
+                "name": "section",
+                "type": "string",
+                "description": "Optional heading shown inside the config tab."
+            },
+            {
+                "name": "text",
+                "type": "string",
+                "description": "Optional tab label (defaults to Configs)."
+            },
+            {
+                "name": "title",
+                "type": "string",
+                "description": "Alias for the tab label."
+            }
+        ],
+        "example": "local configPages = window:CreateConfigPages({\n    directory = \"ConfigFolderMonoUI\",\n})\n\n-- Optional programmatic controls:\nconfigPages:Save(\"legit\")\nconfigPages:Load(\"legit\")\nconfigPages:Delete(\"legit\")\nconfigPages:Refresh()"
+    },
     "CreateDivider": {
         "type": "components",
         "label": "Components",

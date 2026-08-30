@@ -13,6 +13,7 @@ const SIDEBAR_ITEMS = {
     { id: "Notify", name: "Notify", icon: "fa-bell", path: "#/Notify" },
     { id: "SetWatermark", name: "SetWatermark", icon: "fa-chart-line", path: "#/SetWatermark" },
     { id: "CreateControlHUD", name: "CreateControlHUD", icon: "fa-sliders", path: "#/CreateControlHUD" },
+    { id: "CreateConfigPages", name: "CreateConfigPages", icon: "fa-folder-tree", path: "#/CreateConfigPages" },
     { id: "AddCleanup", name: "AddCleanup", icon: "fa-trash-can", path: "#/AddCleanup" },
     { id: "CreateTimer", name: "CreateTimer", icon: "fa-clock", path: "#/CreateTimer" },
     { id: "RegisterIcon", name: "RegisterIcon", icon: "fa-image", path: "#/RegisterIcon" },
@@ -108,7 +109,7 @@ const generateFullContextExample = (funcName, basicExample) => {
     return `${loadstringLine}\n\n${basicExample}`;
   }
   
-  if (["AddCleanup", "CreateTimer", "CreateTab"].includes(funcName)) {
+  if (["AddCleanup", "CreateTimer", "CreateTab", "CreateConfigPages"].includes(funcName)) {
     return `${loadstringLine}\n\n-- Create the main Window\nlocal window = MonoUI.CreateWindow({\n    Title      = "mono ui",\n    ConfigName = "mono_config",\n    AutoSave   = true,\n})\n\n${basicExample}`;
   }
   
@@ -259,6 +260,7 @@ export default function App() {
         else if (funcName === "Notify") icon = "fa-bell";
         else if (funcName === "SetWatermark") icon = "fa-chart-line";
         else if (funcName === "CreateControlHUD") icon = "fa-sliders";
+        else if (funcName === "CreateConfigPages") icon = "fa-folder-tree";
         else if (funcName === "AddCleanup") icon = "fa-trash-can";
         else if (funcName === "CreateTimer") icon = "fa-clock";
         else if (funcName === "RegisterIcon") icon = "fa-image";

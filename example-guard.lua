@@ -1,4 +1,4 @@
-local Guard = loadstring(game:HttpGet("http://192.168.100.101:6767/Guard.luau"))()
+local Guard = loadstring(game:HttpGet("http://192.168.100.101:6768/Guard.luau"))()
 
 -- Initialize Guard Key System with Dark Monochrome style options
 local guardInstance = Guard.new({
@@ -15,7 +15,7 @@ local guardInstance = Guard.new({
         print("[Guard] Verification success! Loading Mono-UI...")
         
         -- Load Mono-UI from Local Dev Server
-        local MonoUI = loadstring(game:HttpGet("http://localhost:6767/mono-ui.luau"))()
+        local MonoUI = loadstring(game:HttpGet("http://localhost:6768/mono-ui.luau"))()
         
         MonoUI.Notify({
             title = "Access Granted",

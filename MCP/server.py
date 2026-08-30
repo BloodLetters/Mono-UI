@@ -62,6 +62,57 @@ COMPONENT_DOCS = {
             },
         ],
     },
+    'ConfigPages': {
+        'description': 'Creates a configuration manager tab where users can name, save, load, refresh, and delete JSON configs from a dedicated folder.',
+        'methods': [
+            {
+                'desc': 'Save the current window flags under a config name.',
+                'name': 'Save',
+                'params': 'name: string?',
+            },
+            {
+                'desc': 'Load a named config into the current window.',
+                'name': 'Load',
+                'params': 'name: string?',
+            },
+            {
+                'desc': 'Delete a named config file.',
+                'name': 'Delete',
+                'params': 'name: string?',
+            },
+            {
+                'desc': 'Refresh and return the visible config list.',
+                'name': 'Refresh',
+                'params': '',
+            },
+        ],
+        'params': [
+            {
+                'default': '""',
+                'desc': 'Optional initial config name.',
+                'name': 'default',
+                'type': 'string',
+            },
+            {
+                'default': '"ConfigFolderMonoUI"',
+                'desc': 'Folder used to store the named JSON config files.',
+                'name': 'directory',
+                'type': 'string',
+            },
+            {
+                'default': '"folder-cog"',
+                'desc': 'Optional Lucide tab icon.',
+                'name': 'icon',
+                'type': 'string',
+            },
+            {
+                'default': '"Configs"',
+                'desc': 'Optional tab label (defaults to Configs).',
+                'name': 'text',
+                'type': 'string',
+            },
+        ],
+    },
     'CreateSection': {
         'description': 'Inserts a visual section divider with a label to group related components.',
         'params': [
@@ -498,6 +549,23 @@ def generate_tab(tab_var: str, window_var: str, text: str, icon: str = "") -> st
     icon_arg = f', icon = "{icon}"' if icon else ""
     return f'local {tab_var} = {window_var}:CreateTab({{\n\ttext = "{text}"{icon_arg}\n}})'
 
+
+def generate_config_pages(window_var: str = "window", var_name: str = "configPages",
+                          directory: str = "ConfigFolderMonoUI", text: str = "Configs",
+                          icon: str = "folder-cog", default: str = "") -> str:
+    """Generate a configuration manager page snippet."""
+    prefix = f"local {var_name} = " if var_name else ""
+    lines = [f"{prefix}{window_var}:CreateConfigPages({{"]
+    lines.append(f"\tdirectory = {json.dumps(str(directory), ensure_ascii=False)},")
+    if text != "Configs":
+        lines.append(f"\ttext = {json.dumps(str(text), ensure_ascii=False)},")
+    if icon != "folder-cog":
+        lines.append(f"\ticon = {json.dumps(str(icon), ensure_ascii=False)},")
+    if default:
+        lines.append(f"\tdefault = {json.dumps(str(default), ensure_ascii=False)},")
+    lines.append("})")
+    return "\n".join(lines)
+
 def generate_component(tab_var: str, comp_type: str, **kwargs) -> str:
     """Generate a component creation snippet."""
     type_map = {
@@ -845,6 +913,8 @@ def generate_full_example(title: str = "Mono UI", config_name: str = "mono_confi
                           include_notifications: bool = False,
                           include_control_hud: bool = False,
                           include_logger: bool = False,
+                          include_config_pages: bool = False,
+                          config_directory: str = "ConfigFolderMonoUI",
                           include_event_hooks: bool = False) -> str:
     """Generate a complete MonoUI example script."""
     watermark_section = ""
@@ -945,6 +1015,15 @@ MonoUI.CreateControlHUD({
     { icon = "gauge",   default = false, callback = function(active) print("Speed:", active) end },
 })"""
 
+    config_pages_section = ""
+    if include_config_pages:
+        config_pages_section = f"""
+
+-- ═══ Config Manager ═══
+local configPages = window:CreateConfigPages({{
+    directory = {json.dumps(str(config_directory), ensure_ascii=False)},
+}})"""
+
     return f"""-- ╔══════════════════════════════════════════╗
 -- ║     MonoUI - Complete Example Script    ║
 -- ╚══════════════════════════════════════════╝
@@ -970,7 +1049,7 @@ local mainTab = window:CreateTab({{
 local settingsTab = window:CreateTab({{
     text = "Settings",
     icon = "settings",
-}})
+}}){config_pages_section}
 
 -- ═══ Sections ═══
 mainTab:CreateSection({{
@@ -1134,14 +1213,32 @@ async def list_tools():
             },
         ),
         Tool(
+            name="generate-config-pages",
+            description="Generate Luau code for a MonoUI config manager tab with named save, load, refresh, and delete actions.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "window_var": {"type": "string", "description": "Window variable that receives CreateConfigPages.", "default": "window"},
+                    "var_name": {"type": "string", "description": "Variable assigned to the returned config manager.", "default": "configPages"},
+                    "directory": {"type": "string", "description": "Folder used to store JSON configs.", "default": "ConfigFolderMonoUI"},
+                    "text": {"type": "string", "description": "Config tab label.", "default": "Configs"},
+                    "icon": {"type": "string", "description": "Lucide icon for the config tab.", "default": "folder-cog"},
+                    "default": {"type": "string", "description": "Initial config name.", "default": ""},
+                },
+                "required": [],
+            },
+        ),
+        Tool(
             name="generate-component",
-            description="Generate Luau code to create a UI component (Button, Toggle, Input, Dropdown, Slider, ColorPicker, Keybind, Logger, PlayerList, TargetBody, Section) inside a tab.",
+            description="Generate Luau code to create a MonoUI component. ConfigPages targets a window; standard components target a tab.",
             inputSchema={
                 "type": "object",
                 "properties": {
                     "tab_var": {"type": "string", "description": "Variable name of the tab (e.g. 'mainTab').", "default": "tab"},
-                    "comp_type": {"type": "string", "description": "Component type: Button, Toggle, Input, Dropdown, Slider, ColorPicker, Keybind, Logger, PlayerList, TargetBody, Section."},
+                    "window_var": {"type": "string", "description": "Window variable used when comp_type is ConfigPages.", "default": "window"},
+                    "comp_type": {"type": "string", "description": "Component type, including ConfigPages."},
                     "var_name": {"type": "string", "description": "Variable name to assign result to (e.g. 'myLogger' for Logger)."},
+                    "directory": {"type": "string", "description": "(ConfigPages only) Folder used to store JSON configs."},
                     "text": {"type": "string", "description": "Label/display text for the component."},
                     "placeholder": {"type": "string", "description": "(Input only) Placeholder text."},
                     "default": {"type": "string", "description": "Default value (boolean, number, string, Color3). For TargetBody, use single part ('Head') or comma-separated ('Head,Torso'). Valid parts: Head, Torso, LeftArm, RightArm, LeftLeg, RightLeg."},
@@ -1197,7 +1294,7 @@ async def list_tools():
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "component": {"type": "string", "description": "Component name: Button, Toggle, Input, Dropdown, Slider, ColorPicker, Keybind, Logger, PlayerList, TargetBody, Section."},
+                    "component": {"type": "string", "description": "Component name, including ConfigPages."},
                 },
                 "required": ["component"],
             },
@@ -1214,6 +1311,8 @@ async def list_tools():
                     "include_notifications": {"type": "boolean", "description": "Include load notification.", "default": False},
                     "include_control_hud": {"type": "boolean", "description": "Include ControlHUD setup.", "default": False},
                     "include_logger": {"type": "boolean", "description": "Include Logger widget and callback logs.", "default": False},
+                    "include_config_pages": {"type": "boolean", "description": "Include a config manager tab.", "default": False},
+                    "config_directory": {"type": "string", "description": "Directory used by the included config manager.", "default": "ConfigFolderMonoUI"},
                     "include_event_hooks": {"type": "boolean", "description": "Include window event hooks (PreOpened, etc.).", "default": False},
                 },
                 "required": [],
@@ -1377,11 +1476,32 @@ async def call_tool(name: str, arguments: dict):
             icon=arguments.get("icon", ""),
         )
 
+    elif name == "generate-config-pages":
+        result = generate_config_pages(
+            window_var=arguments.get("window_var", "window"),
+            var_name=arguments.get("var_name", "configPages"),
+            directory=arguments.get("directory", "ConfigFolderMonoUI"),
+            text=arguments.get("text", "Configs"),
+            icon=arguments.get("icon", "folder-cog"),
+            default=arguments.get("default", ""),
+        )
+
     elif name == "generate-component":
         comp_type = arguments.get("comp_type", "Button")
         tab_var = arguments.get("tab_var", "tab")
         var_name = arguments.get("var_name")
         text = arguments.get("text")
+
+        if comp_type == "ConfigPages":
+            result = generate_config_pages(
+                window_var=arguments.get("window_var", "window"),
+                var_name=var_name or "configPages",
+                directory=arguments.get("directory", "ConfigFolderMonoUI"),
+                text=text or "Configs",
+                icon=arguments.get("icon", "folder-cog"),
+                default=arguments.get("default", ""),
+            )
+            return [TextContent(type="text", text=result)]
 
         kwargs = {}
         if text:
@@ -1484,12 +1604,15 @@ async def call_tool(name: str, arguments: dict):
             lines.append("")
             lines.append("## Code Example")
             lines.append("```lua")
-            lines.append(generate_component_with_callback(
-                tab_var="tab", comp_type=comp,
-                var_name=f"my{comp}",
-                text=f'"My {comp}"',
-                callback="function(value)\n\t\tprint(value)\n\tend" if comp != "Button" else "function()\n\t\tprint(\"clicked!\")\n\tend",
-            ))
+            if comp == "ConfigPages":
+                lines.append(generate_config_pages())
+            else:
+                lines.append(generate_component_with_callback(
+                    tab_var="tab", comp_type=comp,
+                    var_name=f"my{comp}",
+                    text=f'"My {comp}"',
+                    callback="function(value)\n\t\tprint(value)\n\tend" if comp != "Button" else "function()\n\t\tprint(\"clicked!\")\n\tend",
+                ))
             lines.append("```")
             result = "\n".join(lines)
         else:
@@ -1505,6 +1628,8 @@ async def call_tool(name: str, arguments: dict):
             include_notifications=arguments.get("include_notifications", False),
             include_control_hud=arguments.get("include_control_hud", False),
             include_logger=arguments.get("include_logger", False),
+            include_config_pages=arguments.get("include_config_pages", False),
+            config_directory=arguments.get("config_directory", "ConfigFolderMonoUI"),
             include_event_hooks=arguments.get("include_event_hooks", False),
         )
 

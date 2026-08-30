@@ -1,4 +1,4 @@
-local MonoUI = loadstring(game:HttpGet("http://192.168.100.101:6767/mono-ui.luau"))()
+local MonoUI = loadstring(game:HttpGet("http://192.168.100.101:6768/mono-ui.luau"))()
 
 
 MonoUI.SetWatermark({
@@ -297,6 +297,23 @@ profileTab:CreateParagraph({
 	text = "This second paragraph is separated from the first one by a Divider component with a visual separation line.",
 	size = 14,
 	color = Color3.fromRGB(150, 150, 160)
+})
+
+-- Config manager: save, load, refresh, and delete named configurations.
+local configPages = window:CreateConfigPages({
+	directory = "ConfigFolderMonoUI",
+	text = "Configs",
+	icon = "folder-cog",
+	default = "default",
+	onSaved = function(name, directory)
+		logger:Log("SUCCESS", "Config saved: " .. directory .. "/" .. name .. ".json")
+	end,
+	onLoaded = function(name, directory)
+		logger:Log("INFO", "Config loaded: " .. directory .. "/" .. name .. ".json")
+	end,
+	onDeleted = function(name, directory)
+		logger:Log("WARNING", "Config deleted: " .. directory .. "/" .. name .. ".json")
+	end,
 })
 
 window:CreateTab({

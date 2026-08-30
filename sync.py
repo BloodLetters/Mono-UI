@@ -98,6 +98,38 @@ METADATA = {
     { icon = "eye",    default = true,  callback = function(v) print("ESP:", v) end },
 })"""
     },
+    "CreateConfigPages": {
+        "group": "Core",
+        "label": "Core API",
+        "display_name": "CreateConfigPages",
+        "id": "config-pages",
+        "nav_id": "nav-config-pages",
+        "icon": "fa-folder-tree",
+        "description": "Creates a configuration manager tab where users can name, save, load, refresh, and delete JSON configs from a dedicated folder.",
+        "params": {
+            "directory": {"type": "string", "description": "Folder used to store the named JSON config files."},
+            "Directory": {"type": "string", "description": "PascalCase alias for directory."},
+            "text": {"type": "string", "description": "Optional tab label (defaults to Configs)."},
+            "title": {"type": "string", "description": "Alias for the tab label."},
+            "icon": {"type": "string", "description": "Optional Lucide tab icon."},
+            "section": {"type": "string", "description": "Optional heading shown inside the config tab."},
+            "inputText": {"type": "string", "description": "Optional label for the config-name input."},
+            "placeholder": {"type": "string", "description": "Optional placeholder for the config-name input."},
+            "default": {"type": "string", "description": "Optional initial config name."},
+            "onSaved": {"type": "function", "description": "Called after a config is saved."},
+            "onLoaded": {"type": "function", "description": "Called after a config is loaded."},
+            "onDeleted": {"type": "function", "description": "Called after a config is deleted."}
+        },
+        "example": """local configPages = window:CreateConfigPages({
+    directory = "ConfigFolderMonoUI",
+})
+
+-- Optional programmatic controls:
+configPages:Save("legit")
+configPages:Load("legit")
+configPages:Delete("legit")
+configPages:Refresh()"""
+    },
     "Popup": {
         "group": "Core",
         "label": "Core API",
@@ -984,11 +1016,13 @@ def sync_mcp(dump_data):
         "text": {
             "Button": '"Button"', "Toggle": '"Toggle"', "Input": '"Input"', "Dropdown": '"Dropdown"',
             "Slider": '"Slider"', "ColorPicker": '"Color"', "Keybind": '"Keybind"', "Logger": '"Console Logs"',
-            "PlayerList": '"Player List"', "TargetBody": '"Target Body Parts"', "Section": '"Section"'
+            "PlayerList": '"Player List"', "TargetBody": '"Target Body Parts"', "Section": '"Section"',
+            "ConfigPages": '"Configs"'
         },
         "default": {
             "Toggle": "false", "Input": '""', "Dropdown": "nil", "Slider": "min",
-            "ColorPicker": "Color3.fromRGB(100,100,110)", "Keybind": "Enum.KeyCode.None", "TargetBody": "nil"
+            "ColorPicker": "Color3.fromRGB(100,100,110)", "Keybind": "Enum.KeyCode.None", "TargetBody": "nil",
+            "ConfigPages": '""'
         },
         "multiple": {
             "Dropdown": "false", "TargetBody": "true"
@@ -998,6 +1032,8 @@ def sync_mcp(dump_data):
         "flag": "nil",
         "callback": "nil",
         "placeholder": '"type here..."',
+        "directory": '"ConfigFolderMonoUI"',
+        "icon": {"ConfigPages": '"folder-cog"'},
         "height": {
             "Logger": "180", "PlayerList": "200"
         }
@@ -1011,10 +1047,12 @@ def sync_mcp(dump_data):
 
     mcp_components = {}
     for func_name, data in dump_data.items():
-        if data["type"] == "components" or func_name in ["CreateSection", "CreateHBar", "CreateVBar"]:
-            comp_name = data["display_name"]
+        if data["type"] == "components" or func_name in ["CreateSection", "CreateHBar", "CreateVBar", "CreateConfigPages"]:
+            comp_name = "ConfigPages" if func_name == "CreateConfigPages" else data["display_name"]
             params = []
             for arg in data["arguments"]:
+                if comp_name == "ConfigPages" and arg["name"] not in ["directory", "text", "icon", "default"]:
+                    continue
                 params.append({
                     "name": arg["name"],
                     "type": arg["type"],
@@ -1029,6 +1067,13 @@ def sync_mcp(dump_data):
             if comp_name == "Logger":
                 comp_entry["methods"] = [
                     {"name": "Log", "params": "level: string (INFO|WARNING|SUCCESS|ERROR), message: string", "desc": "Append a log entry."}
+                ]
+            elif comp_name == "ConfigPages":
+                comp_entry["methods"] = [
+                    {"name": "Save", "params": "name: string?", "desc": "Save the current window flags under a config name."},
+                    {"name": "Load", "params": "name: string?", "desc": "Load a named config into the current window."},
+                    {"name": "Delete", "params": "name: string?", "desc": "Delete a named config file."},
+                    {"name": "Refresh", "params": "", "desc": "Refresh and return the visible config list."}
                 ]
             mcp_components[comp_name] = comp_entry
 
@@ -1133,15 +1178,33 @@ def sync_mcp(dump_data):
                     "required": ["tab_var", "text"]
                 }
             },
+            "generate-config-pages": {
+                "name": "generate-config-pages",
+                "description": "Generate Luau code for a MonoUI config manager tab with named save, load, refresh, and delete actions.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "window_var": {"type": "string", "description": "Window variable that receives CreateConfigPages.", "default": "window"},
+                        "var_name": {"type": "string", "description": "Variable assigned to the returned config manager.", "default": "configPages"},
+                        "directory": {"type": "string", "description": "Folder used to store JSON configs.", "default": "ConfigFolderMonoUI"},
+                        "text": {"type": "string", "description": "Config tab label.", "default": "Configs"},
+                        "icon": {"type": "string", "description": "Lucide icon for the config tab.", "default": "folder-cog"},
+                        "default": {"type": "string", "description": "Initial config name.", "default": ""}
+                    },
+                    "required": []
+                }
+            },
             "generate-component": {
                 "name": "generate-component",
-                "description": f"Generate Luau code to create a UI component ({components_str}) inside a tab.",
+                "description": f"Generate Luau code to create a MonoUI component ({components_str}). ConfigPages targets a window.",
                 "parameters": {
                     "type": "object",
                     "properties": {
                         "tab_var": {"type": "string", "description": "Variable name of the tab (e.g. 'mainTab').", "default": "tab"},
+                        "window_var": {"type": "string", "description": "Window variable used when comp_type is ConfigPages.", "default": "window"},
                         "comp_type": {"type": "string", "description": f"Component type: {components_str}."},
                         "var_name": {"type": "string", "description": "Variable name to assign result to (e.g. 'myLogger' for Logger)."},
+                        "directory": {"type": "string", "description": "(ConfigPages only) Folder used to store JSON configs."},
                         "text": {"type": "string", "description": "Label/display text for the component."},
                         "placeholder": {"type": "string", "description": "(Input only) Placeholder text."},
                         "default": {"type": "string", "description": "Default value (boolean, number, string, Color3). For TargetBody, use single part ('Head') or comma-separated ('Head,Torso'). Valid parts: Head, Torso, LeftArm, RightArm, LeftLeg, RightLeg."},
@@ -1214,6 +1277,8 @@ def sync_mcp(dump_data):
                         "include_notifications": {"type": "boolean", "description": "Include load notification.", "default": False},
                         "include_control_hud": {"type": "boolean", "description": "Include ControlHUD setup.", "default": False},
                         "include_logger": {"type": "boolean", "description": "Include Logger widget and callback logs.", "default": False},
+                        "include_config_pages": {"type": "boolean", "description": "Include a config manager tab.", "default": False},
+                        "config_directory": {"type": "string", "description": "Directory used by the included config manager.", "default": "ConfigFolderMonoUI"},
                         "include_event_hooks": {"type": "boolean", "description": "Include window event hooks (PreOpened, etc.).", "default": False}
                     },
                     "required": []
