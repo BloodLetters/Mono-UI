@@ -128,11 +128,10 @@ return function(page, args)
 	local function setValue(value, fireCallback)
 		value = clamp(value)
 		currentValue = value
-		local ratio = (value - min) / (max - min)
-		local trackWidth = trackHolder.AbsoluteSize.X
-		local thumbPos = ratio * trackWidth
-		fill.Size = UDim2.fromOffset(math.max(0, thumbPos), 10)
-		thumb.Position = UDim2.fromOffset(math.max(11, math.min(trackWidth - 11, thumbPos)), 5)
+		local range = max - min
+		local ratio = range ~= 0 and math.clamp((value - min) / range, 0, 1) or 0
+		fill.Size = UDim2.new(ratio, 0, 0, 10)
+		thumb.Position = UDim2.new(ratio, 11 - (22 * ratio), 0, 5)
 		valueLabel.Text = tostring(math.floor(value * 10) / 10)
 		if fireCallback ~= false and callback then
 			task.spawn(callback, value)
