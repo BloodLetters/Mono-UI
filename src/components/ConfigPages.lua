@@ -216,6 +216,15 @@ return function(windowObject, args)
 		end
 
 		nameInput:Set(cleanName, false)
+		if windowObject and windowObject.Components then
+			for flag, comp in pairs(windowObject.Components) do
+				if comp and type(comp.Get) == "function" then
+					pcall(function()
+						windowObject.Flags[flag] = comp:Get()
+					end)
+				end
+			end
+		end
 		local success, err = windowObject:SaveConfig(directory .. "/" .. cleanName)
 		if success then
 			notify("Config Saved", cleanName .. ".json was saved.", "save")
@@ -234,7 +243,7 @@ return function(windowObject, args)
 			return false
 		end
 
-		local success = windowObject:LoadConfig(directory .. "/" .. cleanName)
+		local success = windowObject:LoadConfig(directory .. "/" .. cleanName, true)
 		if success then
 			nameInput:Set(cleanName, false)
 			notify("Config Loaded", cleanName .. ".json was loaded.", "folder-open")

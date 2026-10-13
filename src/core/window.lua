@@ -951,12 +951,19 @@ end
 			return false, "writefile is unavailable"
 		end
 		local success, err = pcall(function()
+			for flag, comp in pairs(self.Components) do
+				if comp and type(comp.Get) == "function" then
+					pcall(function()
+						self.Flags[flag] = comp:Get()
+					end)
+				end
+			end
 			writefile(name .. ".json", HttpService:JSONEncode(self.Flags))
 		end)
 		return success, err
 	end
 
-	function windowObject:LoadConfig(name)
+	function windowObject:LoadConfig(name, fireCallbacks)
 		name = name or self.ConfigName or "mono_config"
 		local HttpService = game:GetService("HttpService")
 		if not readfile or not isfile or not isfile(name .. ".json") then return false end
@@ -973,7 +980,7 @@ end
 					pcall(function()
 						-- Restoring a config should update state without simulating
 						-- a new user interaction or firing component callbacks.
-						comp:Set(value, false)
+						comp:Set(value, fireCallbacks ~= false)
 					end)
 				end
 			end

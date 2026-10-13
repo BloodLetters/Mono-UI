@@ -8,10 +8,10 @@ local tween = utils.tween
 return function(page, args)
 	args = args or {}
 	local dropdownText = args.text or "Dropdown"
-	local optionList = args.list or {}
+	local optionList = args.list or args.options or args.items or {}
 	local defaultValue = args.default
 	local callback = args.callback
-	local multiple = args.multiple == true
+	local multiple = args.multiple == true or args.multi == true or args.Multiple == true
 	
 	local dropdownRow = make("Frame", {
 		Name = dropdownText,
@@ -105,23 +105,37 @@ return function(page, args)
 	local selectedMap = {}
 	
 	local function setSelected(value, enabled)
-		selectedMap[value] = enabled and true or nil
+		if value == nil then return end
+		local key = tostring(value)
+		if enabled then
+			selectedMap[value] = true
+			selectedMap[key] = true
+		else
+			selectedMap[value] = nil
+			selectedMap[key] = nil
+		end
 	end
 	
 	if type(defaultValue) == "table" then
-		for _, value in ipairs(defaultValue) do
-			setSelected(value, true)
+		for k, value in pairs(defaultValue) do
+			if type(k) == "number" then
+				setSelected(value, true)
+			elseif value == true then
+				setSelected(k, true)
+			elseif value ~= false and value ~= nil then
+				setSelected(value, true)
+			end
 		end
 	elseif defaultValue ~= nil then
 		setSelected(defaultValue, true)
-	elseif options[1] ~= nil then
+	elseif not multiple and options[1] ~= nil then
 		setSelected(options[1], true)
 	end
 	
 	local function getSelectedList()
 		local values = {}
 		for _, option in ipairs(options) do
-			if selectedMap[option] then
+			if selectedMap[option] == true or selectedMap[tostring(option)] == true then
 				table.insert(values, option)
 			end
 		end
@@ -140,7 +154,7 @@ return function(page, args)
 	end
 	
 	local function updateOptionButton(optionButton, option)
-		local selected = selectedMap[option] == true
+		local selected = selectedMap[option] == true or selectedMap[tostring(option)] == true
 		optionButton.BackgroundColor3 = selected and Color3.fromRGB(42, 42, 50) or Color3.fromRGB(26, 26, 32)
 		optionButton.TextColor3 = selected and Color3.fromRGB(236, 236, 240) or Color3.fromRGB(228, 228, 232)
 	end
@@ -184,7 +198,8 @@ return function(page, args)
 		updateOptionButton(optionButton, option)
 		
 		optionButton.MouseEnter:Connect(function()
-			if not selectedMap[option] then
+			local isSel = selectedMap[option] == true or selectedMap[tostring(option)] == true
+			if not isSel then
 				tween(optionButton, {
 					BackgroundColor3 = Color3.fromRGB(40, 40, 48)
 				}, 0.12):Play()
@@ -192,7 +207,8 @@ return function(page, args)
 		end)
 		
 		optionButton.MouseLeave:Connect(function()
-			if selectedMap[option] then
+			local isSel = selectedMap[option] == true or selectedMap[tostring(option)] == true
+			if isSel then
 				tween(optionButton, {
 					BackgroundColor3 = Color3.fromRGB(42, 42, 50)
 				}, 0.12):Play()
@@ -205,12 +221,13 @@ return function(page, args)
 		
 		optionButton.Activated:Connect(function()
 			if multiple then
-				selectedMap[option] = not selectedMap[option]
+				local isCurrentlySelected = selectedMap[option] == true or selectedMap[tostring(option)] == true
+				setSelected(option, not isCurrentlySelected)
 			else
 				for k in pairs(selectedMap) do
 					selectedMap[k] = nil
 				end
-				selectedMap[option] = true
+				setSelected(option, true)
 			end
 			updateValueLabel()
 			for _, btn in ipairs(listHolder:GetChildren()) do
@@ -235,15 +252,45 @@ return function(page, args)
 		task.spawn(callback, getSelectedList())
 	end
 
-	return {
-		Set = function(_, value, fireCallback)
+	local comp
+	comp = {
+		Set = function(self, value, fireCallback)
+			if self ~= comp and (fireCallback == nil and (type(self) == "table" or type(self) == "string" or type(self) == "number")) then
+				fireCallback = value
+				value = self
+			end
 			selectedMap = {}
-			if type(value) == "table" then
-				for _, item in ipairs(value) do
-					setSelected(item, true)
+			if not multiple then
+				if type(value) == "table" then
+					local firstVal = value[1]
+					if firstVal == nil then
+						for k, v in pairs(value) do
+							if v == true then
+								firstVal = k
+								break
+							end
+						end
+					end
+					if firstVal ~= nil then
+						setSelected(firstVal, true)
+					end
+				elseif value ~= nil then
+					setSelected(value, true)
 				end
-			elseif value ~= nil then
-				setSelected(value, true)
+			else
+				if type(value) == "table" then
+					for k, item in pairs(value) do
+						if type(k) == "number" then
+							setSelected(item, true)
+						elseif item == true then
+							setSelected(k, true)
+						elseif item ~= false and item ~= nil then
+							setSelected(item, true)
+						end
+					end
+				elseif value ~= nil then
+					setSelected(value, true)
+				end
 			end
 			updateValueLabel()
 			for _, optionButton in ipairs(listHolder:GetChildren()) do
@@ -259,4 +306,5 @@ return function(page, args)
 			return getSelectedList()
 		end,
 	}
+	return comp
 end
