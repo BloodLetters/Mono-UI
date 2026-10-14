@@ -543,6 +543,7 @@ local function CreateWindow(options)
 		Components = {},
 		QueuedLogs = {},
 		AutoSave = autoSave,
+		_configLoaded = false,
 		ConfigName = configName,
 		Title = options.Title or "mono window",
 		Subtitle = options.Subtitle or "minimal tabbed gui",
@@ -558,7 +559,7 @@ local function CreateWindow(options)
 			if tArgs.flag then
 				tArgs.callback = function(val)
 					windowObject.Flags[tArgs.flag] = val
-					if windowObject.AutoSave then
+					if windowObject.AutoSave and windowObject._configLoaded then
 						windowObject:SaveConfig()
 					end
 					if originalCallback then
@@ -570,7 +571,7 @@ local function CreateWindow(options)
 			if tArgs.flag then
 				windowObject.Components[tArgs.flag] = comp
 				if windowObject.Flags[tArgs.flag] ~= nil then
-					comp:Set(windowObject.Flags[tArgs.flag])
+					comp:Set(windowObject.Flags[tArgs.flag], false)
 				else
 					windowObject.Flags[tArgs.flag] = comp:Get()
 				end
@@ -588,7 +589,7 @@ local function CreateWindow(options)
 			if iArgs.flag then
 				iArgs.callback = function(val)
 					windowObject.Flags[iArgs.flag] = val
-					if windowObject.AutoSave then
+					if windowObject.AutoSave and windowObject._configLoaded then
 						windowObject:SaveConfig()
 					end
 					if originalCallback then
@@ -600,7 +601,7 @@ local function CreateWindow(options)
 			if iArgs.flag then
 				windowObject.Components[iArgs.flag] = comp
 				if windowObject.Flags[iArgs.flag] ~= nil then
-					comp:Set(windowObject.Flags[iArgs.flag])
+					comp:Set(windowObject.Flags[iArgs.flag], false)
 				else
 					windowObject.Flags[iArgs.flag] = comp:Get()
 				end
@@ -614,7 +615,7 @@ local function CreateWindow(options)
 			if dArgs.flag then
 				dArgs.callback = function(val)
 					windowObject.Flags[dArgs.flag] = val
-					if windowObject.AutoSave then
+					if windowObject.AutoSave and windowObject._configLoaded then
 						windowObject:SaveConfig()
 					end
 					if originalCallback then
@@ -626,7 +627,7 @@ local function CreateWindow(options)
 			if dArgs.flag then
 				windowObject.Components[dArgs.flag] = comp
 				if windowObject.Flags[dArgs.flag] ~= nil then
-					comp:Set(windowObject.Flags[dArgs.flag])
+					comp:Set(windowObject.Flags[dArgs.flag], false)
 				else
 					windowObject.Flags[dArgs.flag] = comp:Get()
 				end
@@ -644,7 +645,7 @@ local function CreateWindow(options)
 			if cArgs.flag then
 				cArgs.callback = function(color)
 					windowObject.Flags[cArgs.flag] = { color.R, color.G, color.B }
-					if windowObject.AutoSave then
+					if windowObject.AutoSave and windowObject._configLoaded then
 						windowObject:SaveConfig()
 					end
 					if originalCallback then
@@ -682,7 +683,7 @@ local function CreateWindow(options)
 			if slArgs.flag then
 				slArgs.callback = function(val)
 					windowObject.Flags[slArgs.flag] = val
-					if windowObject.AutoSave then
+					if windowObject.AutoSave and windowObject._configLoaded then
 						windowObject:SaveConfig()
 					end
 					if originalCallback then
@@ -694,7 +695,7 @@ local function CreateWindow(options)
 			if slArgs.flag then
 				windowObject.Components[slArgs.flag] = comp
 				if windowObject.Flags[slArgs.flag] ~= nil then
-					comp:Set(windowObject.Flags[slArgs.flag])
+					comp:Set(windowObject.Flags[slArgs.flag], false)
 				else
 					windowObject.Flags[slArgs.flag] = comp:Get()
 				end
@@ -708,7 +709,7 @@ local function CreateWindow(options)
 			if tbArgs.flag then
 				tbArgs.callback = function(parts)
 					windowObject.Flags[tbArgs.flag] = parts
-					if windowObject.AutoSave then
+					if windowObject.AutoSave and windowObject._configLoaded then
 						windowObject:SaveConfig()
 					end
 					if originalCallback then
@@ -720,7 +721,7 @@ local function CreateWindow(options)
 			if tbArgs.flag then
 				windowObject.Components[tbArgs.flag] = comp
 				if windowObject.Flags[tbArgs.flag] ~= nil then
-					comp:Set(windowObject.Flags[tbArgs.flag])
+					comp:Set(windowObject.Flags[tbArgs.flag], false)
 				else
 					windowObject.Flags[tbArgs.flag] = comp:Get()
 				end
@@ -734,7 +735,7 @@ local function CreateWindow(options)
 			if kbArgs.flag then
 				kbArgs.callback = function(key)
 					windowObject.Flags[kbArgs.flag] = key.Name
-					if windowObject.AutoSave then
+					if windowObject.AutoSave and windowObject._configLoaded then
 						windowObject:SaveConfig()
 					end
 					if originalCallback then
@@ -757,7 +758,7 @@ local function CreateWindow(options)
 				if windowObject.Flags[kbArgs.flag] ~= nil then
 					local keyName = windowObject.Flags[kbArgs.flag]
 					pcall(function()
-						comp:Set(Enum.KeyCode[keyName])
+						comp:Set(Enum.KeyCode[keyName], false)
 					end)
 				else
 					windowObject.Flags[kbArgs.flag] = comp:Get().Name
@@ -980,7 +981,7 @@ end
 					pcall(function()
 						-- Restoring a config should update state without simulating
 						-- a new user interaction or firing component callbacks.
-						comp:Set(value, fireCallbacks ~= false)
+						comp:Set(value, fireCallbacks == true)
 					end)
 				end
 			end
@@ -1296,6 +1297,7 @@ end
 	task.spawn(function()
 		task.wait(0.1)
 		windowObject:LoadConfig()
+		windowObject._configLoaded = true
 	end)
 
 	return windowObject
